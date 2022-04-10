@@ -8,7 +8,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
@@ -42,7 +41,10 @@ public class Community {
     @Column(name = "rule")
     private Set<String> rules = new HashSet<String>();
 
-    @OneToMany(cascade = {ALL}, fetch = LAZY)
+    @ManyToMany(cascade = {ALL}, fetch = LAZY)
+    @JoinTable(name = "communities_moderators",
+            joinColumns = @JoinColumn(name = "community_id", referencedColumnName = "community_id"),
+            inverseJoinColumns = @JoinColumn(name = "moderator_id", referencedColumnName = "user_id"))
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
     @OneToMany(cascade = {ALL}, fetch = LAZY)
