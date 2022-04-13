@@ -1,4 +1,4 @@
-package com.example.RedditClone.Model.Entity;
+package com.example.RedditClone.Model.Enum;
 
 public enum ReportReason {
     BREAKES_RULES,

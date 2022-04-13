@@ -1,5 +1,6 @@
 package com.example.RedditClone.Model.Entity;
 
+import com.example.RedditClone.Model.Enum.ReportReason;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
