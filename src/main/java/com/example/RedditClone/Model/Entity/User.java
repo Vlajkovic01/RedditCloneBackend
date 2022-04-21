@@ -34,4 +34,5 @@ public class User {
     private String avatar;
     private LocalDate registrationDate;
     private String description;
+    private String displayName;
 }

@@ -16,5 +16,6 @@ public class UserGetAllResponseDTO {
     private String avatar;
     private String description;
     private LocalDate registrationDate;
+    private String displayName;
 //    private String user_type; //TODO implement to return user type from db
 }
