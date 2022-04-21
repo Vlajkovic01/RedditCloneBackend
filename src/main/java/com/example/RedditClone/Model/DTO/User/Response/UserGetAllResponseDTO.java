@@ -1,4 +1,4 @@
-package com.example.RedditClone.Model.DTO.User.Request;
+package com.example.RedditClone.Model.DTO.User.Response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserGetAllRequestDTO {
+public class UserGetAllResponseDTO {
 
     private String username;
     private String email;

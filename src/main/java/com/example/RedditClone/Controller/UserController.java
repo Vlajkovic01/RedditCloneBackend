@@ -1,6 +1,6 @@
 package com.example.RedditClone.Controller;
 
-import com.example.RedditClone.Model.DTO.User.Request.UserGetAllRequestDTO;
+import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserLoginRequestDTO;
 import com.example.RedditClone.Util.ExtendedModelMapper;
 import com.example.RedditClone.Model.Entity.User;
@@ -25,11 +25,11 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserGetAllRequestDTO>> getUsers() {
+    public ResponseEntity<List<UserGetAllResponseDTO>> getUsers() {
 
         List<User> users = userService.findAll();
 
-        List<UserGetAllRequestDTO> usersDTO = modelMapper.mapAll(users, UserGetAllRequestDTO.class);
+        List<UserGetAllResponseDTO> usersDTO = modelMapper.mapAll(users, UserGetAllResponseDTO.class);
 
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
