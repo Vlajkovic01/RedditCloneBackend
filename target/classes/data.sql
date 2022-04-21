@@ -12,11 +12,11 @@ SELECT * FROM banned;
 SELECT * FROM communities_moderators;
 
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username)
-	VALUES ('ADMINISTRATOR', 'urlSlikeZaAvatar', 'Administrator za testiranje', 'stefan@gmail.com', '12345', '2022-04-11', 'Stefan');
+	VALUES ('ADMINISTRATOR', 'urlSlikeZaAvatar', 'Administrator za testiranje', 'stefan@gmail.com', '123456', '2022-04-11', 'Stefan');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username)
-	VALUES ('USER', 'urlSlikeZaAvatar', 'Korisnik za testiranje', 'nikola@gmail.com', '12345', '2022-04-12', 'Nikola');
+	VALUES ('USER', 'urlSlikeZaAvatar', 'Korisnik za testiranje', 'nikola@gmail.com', '123456', '2022-04-12', 'Nikola');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username)
-	VALUES ('MODERATOR', 'urlSlikeZaAvatar', 'Moderator za testiranje', 'marko@gmail.com', '12345', '2022-04-11', 'Marko');
+	VALUES ('MODERATOR', 'urlSlikeZaAvatar', 'Moderator za testiranje', 'marko@gmail.com', '123456', '2022-04-11', 'Marko');
 
 INSERT INTO flairs (name) VALUES ('Sport');
 INSERT INTO flairs (name) VALUES ('Politics');
