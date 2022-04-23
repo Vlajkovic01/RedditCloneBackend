@@ -34,10 +34,12 @@ INSERT INTO communities (name, description, creation_date, is_suspended, suspend
     
 INSERT INTO communities_moderators (community_id, moderator_id) VALUES (1, 3);
 
-INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 3);
-INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 10);
+INSERT INTO communities_flairs (community_community_id, flairs_flair_id) VALUES (1, 3);
+INSERT INTO communities_flairs (community_community_id, flairs_flair_id) VALUES (1, 10);
 
 INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
 	VALUES ('Spring Boot', 'Test post for Java Spring Boot project', '2022-04-22', null, 2, 3);
     
 INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 1);
+
+INSERT INTO community_rules (community_community_id, rule) VALUES (1, 'No bullying');

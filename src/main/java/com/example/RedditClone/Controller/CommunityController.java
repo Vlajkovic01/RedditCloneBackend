@@ -1,9 +1,12 @@
 package com.example.RedditClone.Controller;
 
 import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
+import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Community;
+import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Service.CommunityService;
 import com.example.RedditClone.Util.ExtendedModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

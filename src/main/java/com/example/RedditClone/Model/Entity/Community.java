@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -36,20 +36,20 @@ public class Community {
     @Column()
     private String suspendedReason;
 
-    @ElementCollection
+    @ElementCollection(fetch = EAGER)
     @CollectionTable(name = "community_rules")
     @Column(name = "rule")
-    private Set<String> rules = new HashSet<String>();
+    private Set<String> rules;
 
-    @ManyToMany(cascade = {ALL}, fetch = LAZY)
+    @ManyToMany(cascade = {ALL}, fetch = EAGER)
     @JoinTable(name = "communities_moderators",
             joinColumns = @JoinColumn(name = "community_id", referencedColumnName = "community_id"),
             inverseJoinColumns = @JoinColumn(name = "moderator_id", referencedColumnName = "user_id"))
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
-    @OneToMany(cascade = {ALL}, fetch = LAZY)
+    @OneToMany(cascade = {ALL}, fetch = EAGER)
     private Set<Post> posts = new HashSet<Post>();
 
-    @ManyToMany
+    @ManyToMany(fetch = EAGER)
     private Set<Flair> flairs = new HashSet<Flair>();
 }

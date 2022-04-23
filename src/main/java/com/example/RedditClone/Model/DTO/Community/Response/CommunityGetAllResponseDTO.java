@@ -1,6 +1,8 @@
 package com.example.RedditClone.Model.DTO.Community.Response;
 
+import com.example.RedditClone.Model.DTO.Flair.Response.FlairGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
+import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Flair;
 import com.example.RedditClone.Model.Entity.Moderator;
 import com.example.RedditClone.Model.Entity.Post;
@@ -22,8 +24,8 @@ public class CommunityGetAllResponseDTO {
     private LocalDate creationDate;
     private Boolean isSuspended;
     private String suspendedReason;
-//    private Set<String> rules = new HashSet<String>();
-//    private Set<Moderator> moderators = new HashSet<Moderator>();
+    private Set<String> rules = new HashSet<String>();
+    private Set<UserGetAllResponseDTO> moderators = new HashSet<UserGetAllResponseDTO>();
     private Set<PostGetAllResponseDTO> posts = new HashSet<PostGetAllResponseDTO>();
-//    private Set<Flair> flairs = new HashSet<Flair>();
+    private Set<FlairGetAllResponseDTO> flairs = new HashSet<FlairGetAllResponseDTO>();
 }
