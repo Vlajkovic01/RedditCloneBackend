@@ -5,7 +5,7 @@ SELECT * FROM communities_posts;
 SELECT * FROM comments;
 SELECT * FROM reactions;
 SELECT * FROM reports;
-SELECT * FROM rules;
+SELECT * FROM community_rules;
 SELECT * FROM flairs;
 SELECT * FROM communities_flairs;
 SELECT * FROM banned;
@@ -28,3 +28,16 @@ INSERT INTO flairs (name) VALUES ('Travel');
 INSERT INTO flairs (name) VALUES ('Food');
 INSERT INTO flairs (name) VALUES ('Music');
 INSERT INTO flairs (name) VALUES ('Engineering');
+
+INSERT INTO communities (name, description, creation_date, is_suspended, suspended_reason) 
+	VALUES ('Programming', 'Community for programmers', '2022-04-22', false, null);
+    
+INSERT INTO communities_moderators (community_id, moderator_id) VALUES (1, 3);
+
+INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 3);
+INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 10);
+
+INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
+	VALUES ('Spring Boot', 'Test post for Java Spring Boot project', '2022-04-22', null, 2, 3);
+    
+INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 1);

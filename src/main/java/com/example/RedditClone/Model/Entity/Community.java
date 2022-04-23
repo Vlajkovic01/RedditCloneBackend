@@ -37,7 +37,7 @@ public class Community {
     private String suspendedReason;
 
     @ElementCollection
-    @CollectionTable(name = "rules")
+    @CollectionTable(name = "community_rules")
     @Column(name = "rule")
     private Set<String> rules = new HashSet<String>();
 
