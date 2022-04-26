@@ -25,7 +25,10 @@ public class Report {
     private Integer id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ReportReason reason;
+
+    @Column(nullable = false)
     private LocalDate timestamp;
     private Boolean accepted;
 
@@ -34,10 +37,10 @@ public class Report {
     private User byUser;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id", nullable = false)
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id")
     private Comment comment;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private Post post;
 }

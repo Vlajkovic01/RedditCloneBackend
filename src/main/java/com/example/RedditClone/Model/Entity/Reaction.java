@@ -25,7 +25,10 @@ public class Reaction {
     private Integer id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ReactionType type;
+
+    @Column(nullable = false)
     private LocalDate timestamp;
 
     @ManyToOne
@@ -33,10 +36,10 @@ public class Reaction {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id", nullable = false)
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id")
     private Comment comment;
 }

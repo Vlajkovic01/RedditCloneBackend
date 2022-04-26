@@ -3,12 +3,12 @@ SELECT * FROM posts;
 SELECT * FROM communities;
 SELECT * FROM communities_posts;
 SELECT * FROM comments;
-SELECT * FROM reactions; #add
-SELECT * FROM reports; #add
+SELECT * FROM reactions;
+SELECT * FROM reports;
 SELECT * FROM community_rules;
 SELECT * FROM flairs;
 SELECT * FROM communities_flairs;
-SELECT * FROM banned; #add
+SELECT * FROM banned;
 SELECT * FROM communities_moderators;
 
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
@@ -21,6 +21,8 @@ INSERT INTO users (user_type, avatar, description, email, password, registration
 	VALUES ('USER', 'photoUrlForAvatar', 'User for testing2', 'darko@gmail.com', '123456', '2022-04-18', 'Darko', 'dare');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('MODERATOR', 'photoUrlForAvatar', 'Moderator for testing2', 'luka@gmail.com', '123456', '2022-04-19', 'Luka', 'lule');
+INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
+	VALUES ('USER', 'photoUrlForAvatar', 'User for banning', 'milan@gmail.com', '123456', '2022-04-22', 'Milan', 'mile');
 
 INSERT INTO flairs (name) VALUES ('Sport');
 INSERT INTO flairs (name) VALUES ('Politics');
@@ -69,20 +71,61 @@ INSERT INTO community_rules (community_community_id, rule) VALUES (2, 'Respect')
 INSERT INTO community_rules (community_community_id, rule) VALUES (2, 'No spam');
 
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Text test comment', '2022-04-23 15:48', null, 1, 4);
+	VALUES (false, 'Text test comment', '2022-04-23', null, 1, 4);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Reply on test comment', '2022-04-23 15:49', 1, 1, 2);
+	VALUES (false, 'Reply on test comment', '2022-04-23', 1, 1, 2);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Text test comment two', '2022-04-23 15:55', null, 1, 3);
+	VALUES (false, 'Text test comment two', '2022-04-23', null, 1, 3);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Text test comment one', '2022-04-23 15:57', null, 2, 1);
+	VALUES (false, 'Text test comment one', '2022-04-23', null, 2, 1);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Text test comment two', '2022-04-23 15:59', null, 2, 5);
+	VALUES (false, 'Text test comment two', '2022-04-23', null, 2, 5);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Comment one', '2022-04-24 15:48', null, 3, 4);
+	VALUES (false, 'Comment one', '2022-04-24', null, 3, 4);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Reply on comment one', '2022-04-24 15:55', 3, 3, 3);
+	VALUES (false, 'Reply on comment one', '2022-04-24', 3, 3, 3);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Comment one', '2022-04-23 15:57', null, 4, 4);
+	VALUES (false, 'Comment one', '2022-04-24', null, 4, 4);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Comment two', '2022-04-23 15:59', null, 4, 2);
+	VALUES (false, 'Comment two', '2022-04-24', null, 4, 2);
+    
+-- Reactions for posts -- 
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-22', 2, 1, null);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-23', 4, 2, null);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-23', 3, 3, null);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-24', 4, 4, null);
+
+-- Reactions for comments -- 
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-23', 4, null, 1);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-23', 2, null, 2);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-23', 3, null, 3);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-23', 1, null, 4);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-23', 5, null, 5);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-24', 4, null, 6);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-24', 3, null, 7);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-24', 4, null, 8);
+INSERT INTO reactions (type, timestamp, user_id, post_id, comment_id)
+	VALUES ('UPVOTE', '2022-04-24', 2, null, 9);
+    
+INSERT INTO banned (timestamp, moderator_id, user_id, community_id)
+	VALUES ('2022-04-26', 5, 6, 2);
+
+-- Reports for posts
+INSERT INTO reports (reason, timestamp, accepted, user_id, comment_id, post_id)
+	VALUES ('COPYRIGHT_VIOLATION', '2022-04-26', false, 2, null, 4);
+    
+-- Reports for comments --
+INSERT INTO reports (reason, timestamp, accepted, user_id, comment_id, post_id)
+	VALUES ('HATE', '2022-04-26', false, 2, 5, null);
