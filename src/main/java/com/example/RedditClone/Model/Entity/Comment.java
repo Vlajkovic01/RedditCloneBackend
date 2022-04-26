@@ -37,7 +37,7 @@ public class Comment {
     private Comment parent;
 
     @OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "parent")
-    private Set<Comment> children = new HashSet<Comment>();
+    private Set<Comment> children = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)

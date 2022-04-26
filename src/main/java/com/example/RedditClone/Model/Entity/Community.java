@@ -45,11 +45,11 @@ public class Community {
     @JoinTable(name = "communities_moderators",
             joinColumns = @JoinColumn(name = "community_id", referencedColumnName = "community_id"),
             inverseJoinColumns = @JoinColumn(name = "moderator_id", referencedColumnName = "user_id"))
-    private Set<Moderator> moderators = new HashSet<Moderator>();
+    private Set<Moderator> moderators = new HashSet<>();
 
     @OneToMany(cascade = {ALL}, fetch = EAGER)
-    private Set<Post> posts = new HashSet<Post>();
+    private Set<Post> posts = new HashSet<>();
 
     @ManyToMany(fetch = EAGER)
-    private Set<Flair> flairs = new HashSet<Flair>();
+    private Set<Flair> flairs = new HashSet<>();
 }

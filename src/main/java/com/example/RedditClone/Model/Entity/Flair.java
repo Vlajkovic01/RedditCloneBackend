@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -25,4 +28,7 @@ public class Flair {
 
     @Column(nullable = false)
     private String name;
+
+    @ManyToMany(mappedBy = "flairs", fetch = EAGER)
+    private Set<Community> communities = new HashSet<>();
 }

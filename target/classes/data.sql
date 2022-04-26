@@ -42,10 +42,10 @@ INSERT INTO communities_moderators (community_id, moderator_id) VALUES (1, 3);
 INSERT INTO communities_moderators (community_id, moderator_id) VALUES (2, 3);
 INSERT INTO communities_moderators (community_id, moderator_id) VALUES (2, 5);
 
-INSERT INTO communities_flairs (community_community_id, flairs_flair_id) VALUES (1, 3);
-INSERT INTO communities_flairs (community_community_id, flairs_flair_id) VALUES (1, 10);
-INSERT INTO communities_flairs (community_community_id, flairs_flair_id) VALUES (2, 1);
-INSERT INTO communities_flairs (community_community_id, flairs_flair_id) VALUES (2, 5);
+INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 3);
+INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 10);
+INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (2, 1);
+INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (2, 5);
 
 INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
 	VALUES ('Spring Boot', 'Test post for Java Spring Boot project', '2022-04-22', null, 2, 3);
