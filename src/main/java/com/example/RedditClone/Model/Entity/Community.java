@@ -36,11 +36,6 @@ public class Community {
     @Column()
     private String suspendedReason;
 
-    @ElementCollection(fetch = EAGER)
-    @CollectionTable(name = "community_rules")
-    @Column(name = "rule")
-    private Set<String> rules;
-
     @ManyToMany(cascade = {ALL}, fetch = EAGER)
     @JoinTable(name = "communities_moderators",
             joinColumns = @JoinColumn(name = "community_id", referencedColumnName = "community_id"),

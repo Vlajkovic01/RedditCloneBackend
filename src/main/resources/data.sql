@@ -5,7 +5,7 @@ SELECT * FROM communities_posts;
 SELECT * FROM comments;
 SELECT * FROM reactions;
 SELECT * FROM reports;
-SELECT * FROM community_rules;
+SELECT * FROM rules; 
 SELECT * FROM flairs;
 SELECT * FROM communities_flairs;
 SELECT * FROM banned;
@@ -63,12 +63,12 @@ INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1,
 INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 3);
 INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 4);
 
-INSERT INTO community_rules (community_community_id, rule) VALUES (1, 'No bullying');
-INSERT INTO community_rules (community_community_id, rule) VALUES (1, 'No racism');
-INSERT INTO community_rules (community_community_id, rule) VALUES (2, 'No bullying');
-INSERT INTO community_rules (community_community_id, rule) VALUES (2, 'No racism');
-INSERT INTO community_rules (community_community_id, rule) VALUES (2, 'Respect');
-INSERT INTO community_rules (community_community_id, rule) VALUES (2, 'No spam');
+INSERT INTO rules (description, community_id) VALUES ('No bullying', 1);
+INSERT INTO rules (description, community_id) VALUES ('No racism', 1);
+INSERT INTO rules (description, community_id) VALUES ('No bullying', 2);
+INSERT INTO rules (description, community_id) VALUES ('No racism', 2);
+INSERT INTO rules (description, community_id) VALUES ('Respect', 2);
+INSERT INTO rules (description, community_id) VALUES ('No spam', 2);
 
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
 	VALUES (false, 'Text test comment', '2022-04-23', null, 1, 4);
