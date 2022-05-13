@@ -9,18 +9,18 @@ SELECT * FROM rules;
 SELECT * FROM flairs;
 SELECT * FROM communities_flairs;
 SELECT * FROM banned;
-SELECT * FROM communities_moderators;
+SELECT * FROM moderator;
 
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('ADMINISTRATOR', 'photoUrlForAvatar', 'Admin for testing', 'stefan@gmail.com', '123456', '2022-04-11', 'Stefan', 'stefo');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('USER', 'photoUrlForAvatar', 'User for testing', 'nikola@gmail.com', '123456', '2022-04-12', 'Nikola', 'nidzo');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('MODERATOR', 'photoUrlForAvatar', 'Moderator for testing', 'marko@gmail.com', '123456', '2022-04-11', 'Marko', 'mare');
+	VALUES ('USER', 'photoUrlForAvatar', 'Moderator for testing', 'marko@gmail.com', '123456', '2022-04-11', 'Marko', 'mare');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('USER', 'photoUrlForAvatar', 'User for testing2', 'darko@gmail.com', '123456', '2022-04-18', 'Darko', 'dare');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('MODERATOR', 'photoUrlForAvatar', 'Moderator for testing2', 'luka@gmail.com', '123456', '2022-04-19', 'Luka', 'lule');
+	VALUES ('USER', 'photoUrlForAvatar', 'Moderator for testing2', 'luka@gmail.com', '123456', '2022-04-19', 'Luka', 'lule');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('USER', 'photoUrlForAvatar', 'User for banning', 'milan@gmail.com', '123456', '2022-04-22', 'Milan', 'mile');
 
@@ -40,9 +40,9 @@ INSERT INTO communities (name, description, creation_date, is_suspended, suspend
 INSERT INTO communities (name, description, creation_date, is_suspended, suspended_reason) 
 	VALUES ('Sport', 'Community for sportsman', '2022-04-23', false, null);
     
-INSERT INTO communities_moderators (community_id, moderator_id) VALUES (1, 3);
-INSERT INTO communities_moderators (community_id, moderator_id) VALUES (2, 3);
-INSERT INTO communities_moderators (community_id, moderator_id) VALUES (2, 5);
+INSERT INTO moderator (community_id, user_id) VALUES (1, 3);
+INSERT INTO moderator (community_id, user_id) VALUES (2, 3);
+INSERT INTO moderator (community_id, user_id) VALUES (2, 5);
 
 INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 3);
 INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (1, 10);

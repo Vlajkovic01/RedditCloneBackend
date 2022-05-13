@@ -5,21 +5,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
+import javax.persistence.*;
 
-import static javax.persistence.DiscriminatorType.STRING;
-import static javax.persistence.InheritanceType.SINGLE_TABLE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
+@ToString
 @NoArgsConstructor
 @Entity
-@Inheritance(strategy = SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = STRING)
-@DiscriminatorValue("MODERATOR")
-public class Moderator extends User {
+public class Moderator{
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "moderator_id", unique = true, nullable = false)
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "community_id", referencedColumnName = "community_id", nullable = false)
+    private Community community;
 }

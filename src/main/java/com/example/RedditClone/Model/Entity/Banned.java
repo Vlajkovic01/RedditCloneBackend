@@ -28,7 +28,7 @@ public class Banned {
 
     @ManyToOne
     @JoinColumn(name = "moderator_id", referencedColumnName = "user_id", nullable = false)
-    private Moderator by;
+    private User by;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)

@@ -36,10 +36,7 @@ public class Community {
     @Column()
     private String suspendedReason;
 
-    @ManyToMany(cascade = {ALL}, fetch = EAGER)
-    @JoinTable(name = "communities_moderators",
-            joinColumns = @JoinColumn(name = "community_id", referencedColumnName = "community_id"),
-            inverseJoinColumns = @JoinColumn(name = "moderator_id", referencedColumnName = "user_id"))
+    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "community")
     private Set<Moderator> moderators = new HashSet<>();
 
     @OneToMany(cascade = {ALL}, fetch = EAGER)
