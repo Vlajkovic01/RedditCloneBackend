@@ -50,13 +50,13 @@ INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUE
 INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (2, 5);
 
 INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Spring Boot', 'Test post for Java Spring Boot project', '2022-04-22', null, 2, 3);
+	VALUES ('Spring Boot', 'Test post for Java Spring Boot project', '2022-04-22', 'assets/images/post/springBoot.png', 2, 3);
 INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Computing', 'Test post for computing engineering', '2022-04-23', null, 4, 10);
+	VALUES ('Computing', 'Test post for computing engineering', '2022-04-23', 'assets/images/post/computing.png', 4, 10);
 INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Football in nature', 'Test post for football', '2022-04-23', null, 3, 5);
+	VALUES ('Football in nature', 'Test post for football', '2022-04-23', 'assets/images/post/footballNature.jpg', 3, 5);
 INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Basketball', 'Test post for basketball', '2022-04-24', null, 4, 1);
+	VALUES ('Basketball', 'Test post for basketball', '2022-04-24', 'assets/images/post/basketball.jpg', 4, 1);
     
 INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 1);
 INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 2);
