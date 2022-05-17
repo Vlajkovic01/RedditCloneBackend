@@ -4,6 +4,7 @@ import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -24,5 +25,15 @@ public class WebSecurity {
             return true;
         }
         return false;
+    }
+
+    public boolean checkUserId(Authentication authentication, HttpServletRequest request, int id) {
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User user = userService.findByUsername(userDetails.getUsername());
+            return id == user.getId();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

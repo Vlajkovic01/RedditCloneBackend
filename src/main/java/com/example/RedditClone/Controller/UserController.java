@@ -1,5 +1,6 @@
 package com.example.RedditClone.Controller;
 
+import com.example.RedditClone.Model.DTO.User.Request.UserEditRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserRegisterRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserLoginRequestDTO;
@@ -21,6 +22,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -86,5 +89,16 @@ public class UserController {
         UserRegisterRequestDTO userDTO = modelMapper.map(createdUser, UserRegisterRequestDTO.class);
 
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("{id}/edit")
+    public ResponseEntity<UserGetAllResponseDTO> editUser(@RequestBody @Validated UserEditRequestDTO userEditRequestDTO,
+                                                       @PathVariable Integer id, Authentication authentication){
+
+        User editedUser = userService.editUser(userEditRequestDTO, id);
+
+        UserGetAllResponseDTO userDTO = modelMapper.map(editedUser, UserGetAllResponseDTO.class);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }
