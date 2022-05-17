@@ -17,6 +17,6 @@ public class UserLoginRequestDTO {
     private String username;
 
     @NotBlank(message = "Password is mandatory")
-    @Length(min = 6, message = "Password must be longer than 6 characters.")
+    @Length(min = 5, message = "Password must be longer than 5 characters.")
     private String password;
 }
