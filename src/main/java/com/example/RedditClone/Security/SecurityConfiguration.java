@@ -69,6 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/posts").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/registration").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}/**").access("@webSecurity.checkCommunityId(authentication,request,#id)")
                 .anyRequest().authenticated();

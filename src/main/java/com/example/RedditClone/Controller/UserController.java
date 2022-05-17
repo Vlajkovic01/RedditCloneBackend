@@ -1,5 +1,6 @@
 package com.example.RedditClone.Controller;
 
+import com.example.RedditClone.Model.DTO.User.Request.UserRegisterRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserLoginRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserTokenState;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,7 +55,7 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken
-            (@Valid @RequestBody UserLoginRequestDTO userLoginRequestDTO) {
+            (@Validated @RequestBody UserLoginRequestDTO userLoginRequestDTO) {
 
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
@@ -71,5 +73,18 @@ public class UserController {
 
         // Vrati token kao odgovor na uspesnu autentifikaciju
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<UserRegisterRequestDTO> createUser(@RequestBody @Validated UserRegisterRequestDTO newUser){
+
+        User createdUser = userService.createUser(newUser);
+
+        if(createdUser == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+        UserRegisterRequestDTO userDTO = modelMapper.map(createdUser, UserRegisterRequestDTO.class);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 }
