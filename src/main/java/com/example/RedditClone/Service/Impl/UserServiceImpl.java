@@ -70,8 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editUser(@Validated UserEditRequestDTO userEditRequestDTO, Integer id) {
-        User currentLoggedUser = userRepository.findUserById(id);
+    public User editUser(@Validated UserEditRequestDTO userEditRequestDTO, User currentLoggedUser) {
 
         currentLoggedUser.setUsername(userEditRequestDTO.getUsername());
         currentLoggedUser.setAvatar(userEditRequestDTO.getAvatar());

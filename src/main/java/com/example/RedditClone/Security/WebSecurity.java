@@ -27,13 +27,4 @@ public class WebSecurity {
         return false;
     }
 
-    public boolean checkUserId(Authentication authentication, HttpServletRequest request, int id) {
-        try {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User user = userService.findByUsername(userDetails.getUsername());
-            return id == user.getId();
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }

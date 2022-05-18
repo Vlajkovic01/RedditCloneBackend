@@ -91,14 +91,23 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("{id}/edit")
+    @PutMapping()
     public ResponseEntity<UserGetAllResponseDTO> editUser(@RequestBody @Validated UserEditRequestDTO userEditRequestDTO,
-                                                       @PathVariable Integer id, Authentication authentication){
+                                                        Authentication authentication){
+        if (authentication == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
 
-        User editedUser = userService.editUser(userEditRequestDTO, id);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentLoggedUser = userService.findByUsername(userDetails.getUsername());
+
+        if (currentLoggedUser == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        User editedUser = userService.editUser(userEditRequestDTO, currentLoggedUser);
 
         UserGetAllResponseDTO userDTO = modelMapper.map(editedUser, UserGetAllResponseDTO.class);
-
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }

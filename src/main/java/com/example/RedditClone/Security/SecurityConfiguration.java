@@ -70,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/posts").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/registration").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users/{id}/edit").access("@webSecurity.checkUserId(authentication,request,#id)")
+                .antMatchers(HttpMethod.PUT, "/api/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}/**").access("@webSecurity.checkCommunityId(authentication,request,#id)")
                 .anyRequest().authenticated();

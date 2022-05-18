@@ -14,5 +14,5 @@ public interface UserService {
 
     User createUser(UserRegisterRequestDTO userDTO);
 
-    User editUser(UserEditRequestDTO userEditRequestDTO, Integer id);
+    User editUser(UserEditRequestDTO userEditRequestDTO, User currentLoggedUser);
 }
