@@ -1,6 +1,7 @@
 package com.example.RedditClone.Service.Impl;
 
 import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
+import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
 import com.example.RedditClone.Model.Entity.Flair;
 import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Model.Entity.User;
@@ -39,6 +40,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Post findPostById(Integer id) {
+        return postRepository.findPostById(id);
+    }
+
+    @Override
     public Post createPost(PostCreateRequestDTO postCreateRequestDTO, Authentication authentication) {
 
         if (authentication == null) {
@@ -52,7 +58,6 @@ public class PostServiceImpl implements PostService {
             return null;
         }
 
-
         Post newPost = new Post();
         newPost.setTitle(postCreateRequestDTO.getTitle());
         newPost.setText(postCreateRequestDTO.getText());
@@ -65,5 +70,18 @@ public class PostServiceImpl implements PostService {
         }
         newPost = postRepository.save(newPost);
         return newPost;
+    }
+
+    @Override
+    public Post editPost(PostEditRequestDTO postEditRequestDTO, Post postForEdit) {
+        postForEdit.setText(postEditRequestDTO.getText());
+        postForEdit.setImagePath(postEditRequestDTO.getImagePath());
+
+        if (postEditRequestDTO.getFlair() != null) {
+            postForEdit.setFlair(flairService.findFlairByName(postEditRequestDTO.getFlair().getName()));
+        }
+
+        postForEdit = postRepository.save(postForEdit);
+        return postForEdit;
     }
 }

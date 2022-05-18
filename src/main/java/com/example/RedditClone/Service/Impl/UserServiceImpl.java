@@ -85,4 +85,9 @@ public class UserServiceImpl implements UserService {
         currentLoggedUser = userRepository.save(currentLoggedUser);
         return currentLoggedUser;
     }
+
+    @Override
+    public boolean amIPostCreator(Integer idPost, Integer idUser) {
+        return userRepository.imIPostCreator(idPost, idUser) > 0;
+    }
 }

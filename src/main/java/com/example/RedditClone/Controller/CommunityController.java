@@ -4,6 +4,7 @@ import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateReques
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
+import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Community;
@@ -86,7 +87,6 @@ public class CommunityController {
     }
 
     @PostMapping("/{id}/posts")
-
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMINISTRATOR')")
     public ResponseEntity<PostGetAllResponseDTO> createPost(@RequestBody @Validated PostCreateRequestDTO newPost,
                                                             Authentication authentication, @PathVariable Integer id) {
@@ -100,6 +100,22 @@ public class CommunityController {
 
         community.getPosts().add(createdPost);
         PostGetAllResponseDTO postDTO = modelMapper.map(createdPost, PostGetAllResponseDTO.class);
+        return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{idCommunity}/posts/{idPost}")
+    public ResponseEntity<PostGetAllResponseDTO> editPost(@RequestBody @Validated PostEditRequestDTO postEditRequestDTO,
+                                                                 @PathVariable Integer idCommunity,
+                                                                 @PathVariable Integer idPost) {
+        Community community = communityService.findCommunityById(idCommunity);
+        Post postForEdit = postService.findPostById(idPost);
+        Post editedPost = postService.editPost(postEditRequestDTO, postForEdit);
+
+        if(community == null || postForEdit == null || editedPost == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        PostGetAllResponseDTO postDTO = modelMapper.map(editedPost, PostGetAllResponseDTO.class);
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }
 }

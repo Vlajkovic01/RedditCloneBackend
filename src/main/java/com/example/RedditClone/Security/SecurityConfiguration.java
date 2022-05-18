@@ -72,7 +72,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/communities/{id}/**").access("@webSecurity.checkCommunityId(authentication,request,#id)")
+                .antMatchers(HttpMethod.PUT, "/api/communities/{id}").access("@webSecurity.checkCommunityId(authentication,request,#id)")
+                .antMatchers(HttpMethod.PUT, "/api/communities/{idCommunity}/posts/{idPost}").access("@webSecurity.checkPostCreator(authentication,request,#idCommunity, #idPost)")
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

@@ -16,4 +16,6 @@ public interface UserService {
     User createUser(UserRegisterRequestDTO userDTO);
 
     User editUser(UserEditRequestDTO userEditRequestDTO, User currentLoggedUser);
+
+    boolean amIPostCreator(Integer idPost, Integer idUser);
 }

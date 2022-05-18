@@ -16,4 +16,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findFirstByUsername(String username);
     User findUserById(Integer id);
+
+    @Query(nativeQuery = true, value = "select count(*) from posts where post_id = ? and user_id = ?")
+    Integer imIPostCreator(Integer idPost, Integer idUser);
 }
