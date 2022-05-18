@@ -78,7 +78,7 @@ public class UserController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
-    @PostMapping("/registration")
+    @PostMapping()
     public ResponseEntity<UserRegisterRequestDTO> createUser(@RequestBody @Validated UserRegisterRequestDTO newUser){
 
         User createdUser = userService.createUser(newUser);

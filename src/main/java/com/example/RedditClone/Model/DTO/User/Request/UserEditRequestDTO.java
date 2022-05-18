@@ -12,10 +12,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserEditRequestDTO {
 
-    @NotBlank(message = "Username is mandatory")
-    @Length(min = 3, max = 15, message = "Username must be between 3 and 15 characters.")
-    private String username;
-
     private String currentPassword;
     private String newPassword;
     private String confirmNewPassword;
