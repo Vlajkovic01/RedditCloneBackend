@@ -1,7 +1,7 @@
 package com.example.RedditClone.Model.DTO.Community.Request;
 
 import com.example.RedditClone.Model.DTO.Flair.Response.FlairGetAllResponseDTO;
-import com.example.RedditClone.Model.Entity.Flair;
+import com.example.RedditClone.Model.DTO.Rule.Response.RuleGetByCommunityResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,4 +25,6 @@ public class CommunityCreateRequestDTO {
     private String description;
     @NotEmpty(message = "Flairs is mandatory")
     private Set<FlairGetAllResponseDTO> flairs = new HashSet<>();
+    @NotEmpty(message = "Flairs is mandatory")
+    private Set<RuleGetByCommunityResponseDTO> rules = new HashSet<>();
 }

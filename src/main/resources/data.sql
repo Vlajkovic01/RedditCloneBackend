@@ -5,7 +5,7 @@ SELECT * FROM communities_posts;
 SELECT * FROM comments;
 SELECT * FROM reactions;
 SELECT * FROM reports;
-SELECT * FROM rules; 
+SELECT * FROM rules;
 SELECT * FROM flairs;
 SELECT * FROM communities_flairs;
 SELECT * FROM banned;
