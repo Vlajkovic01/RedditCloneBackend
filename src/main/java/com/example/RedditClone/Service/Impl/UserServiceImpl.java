@@ -78,9 +78,7 @@ public class UserServiceImpl implements UserService {
 
         if (userEditRequestDTO.getCurrentPassword() != null) {
             if (userEditRequestDTO.getCurrentPassword().equals(currentLoggedUser.getPassword())) {
-                if (userEditRequestDTO.getNewPassword().equals(userEditRequestDTO.getConfirmNewPassword())) {
-                    currentLoggedUser.setPassword(passwordEncoder.encode(userEditRequestDTO.getConfirmNewPassword()));
-                }
+                currentLoggedUser.setPassword(passwordEncoder.encode(userEditRequestDTO.getNewPassword()));
             }
         }
 
