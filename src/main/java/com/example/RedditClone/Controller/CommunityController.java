@@ -3,10 +3,14 @@ package com.example.RedditClone.Controller;
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
+import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
+import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Community;
+import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Service.CommunityService;
+import com.example.RedditClone.Service.PostService;
 import com.example.RedditClone.Service.RuleService;
 import com.example.RedditClone.Service.UserService;
 import com.example.RedditClone.Util.ExtendedModelMapper;
@@ -26,6 +30,7 @@ import java.util.List;
 @RequestMapping(value = "api/communities")
 public class CommunityController {
 
+    private final PostService postService;
     private final UserService userService;
     private final RuleService ruleService;
 
@@ -33,11 +38,12 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
         this.userService = userService;
+        this.postService = postService;
     }
 
     @GetMapping
@@ -77,5 +83,23 @@ public class CommunityController {
         CommunityEditRequestDTO communityDTO = modelMapper.map(editedCommunity, CommunityEditRequestDTO.class);
 
         return new ResponseEntity<>(communityDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/posts")
+
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMINISTRATOR')")
+    public ResponseEntity<PostGetAllResponseDTO> createPost(@RequestBody @Validated PostCreateRequestDTO newPost,
+                                                            Authentication authentication, @PathVariable Integer id) {
+
+        Post createdPost = postService.createPost(newPost, authentication);
+        Community community = communityService.findCommunityById(id);
+
+        if(community == null || createdPost == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        community.getPosts().add(createdPost);
+        PostGetAllResponseDTO postDTO = modelMapper.map(createdPost, PostGetAllResponseDTO.class);
+        return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }
 }

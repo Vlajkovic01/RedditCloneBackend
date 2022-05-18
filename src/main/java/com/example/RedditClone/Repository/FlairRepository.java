@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FlairRepository extends JpaRepository<Flair, Integer> {
+
+    Flair findFlairByName(String name);
 }
