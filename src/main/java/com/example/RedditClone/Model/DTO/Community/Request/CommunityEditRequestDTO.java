@@ -15,11 +15,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommunityCreateRequestDTO {
+public class CommunityEditRequestDTO {
 
-    @NotBlank(message = "Name is mandatory")
-    @Length(min = 3, max = 20, message = "Name must be between 3 and 20 characters.")
-    private String name;
     @NotBlank(message = "Description is mandatory")
     @Length(min = 3, max = 100, message = "Description must be between 3 and 100 characters.")
     private String description;

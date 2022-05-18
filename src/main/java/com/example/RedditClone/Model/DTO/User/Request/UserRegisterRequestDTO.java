@@ -27,8 +27,5 @@ public class UserRegisterRequestDTO {
 
     private String avatar;
     private String description;
-
-    @NotBlank(message = "Display name is mandatory")
-    @Length(min = 3, max = 15, message = "Display name must be between 3 and 15 characters.")
     private String displayName;
 }

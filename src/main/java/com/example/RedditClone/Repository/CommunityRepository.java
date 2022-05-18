@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Integer> {
     List<Community> findAll();
+    Community findCommunityById(Integer id);
     Community findCommunityByName(String name);
 }

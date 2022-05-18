@@ -1,6 +1,7 @@
 package com.example.RedditClone.Service.Impl;
 
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateRequestDTO;
+import com.example.RedditClone.Model.DTO.Community.Request.CommunityEditRequestDTO;
 import com.example.RedditClone.Model.Entity.*;
 import com.example.RedditClone.Repository.CommunityRepository;
 import com.example.RedditClone.Repository.FlairRepository;
@@ -39,6 +40,11 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public List<Community> findAll() {
         return communityRepository.findAll();
+    }
+
+    @Override
+    public Community findCommunityById(Integer id) {
+        return communityRepository.findCommunityById(id);
     }
 
     @Override
@@ -91,6 +97,30 @@ public class CommunityServiceImpl implements CommunityService {
         }).collect(Collectors.toSet());
 
         return newCommunity;
+    }
+
+    @Override
+    public Community editCommunity(CommunityEditRequestDTO communityEditRequestDTO, Community community) {
+        community.setDescription(communityEditRequestDTO.getDescription());
+        Community finalCommunity = community;
+        Set<Flair> flairs = communityEditRequestDTO.getFlairs().stream().map(flair -> {
+            Flair f = new Flair();
+            f.getCommunities().add(finalCommunity);
+            f.setName(flair.getName());
+            return this.flairRepository.save(f);
+        }).collect(Collectors.toSet());
+        community.setFlairs(flairs);
+
+        ruleRepository.deleteAllByCommunityId(finalCommunity.getId());
+        Set<Rule> rules = communityEditRequestDTO.getRules().stream().map(rule -> {
+            Rule r = new Rule();
+            r.setCommunity(finalCommunity);
+            r.setDescription(rule.getDescription());
+            return this.ruleRepository.save(r);
+        }).collect(Collectors.toSet());
+
+        community = communityRepository.save(community);
+        return community;
     }
 
 }

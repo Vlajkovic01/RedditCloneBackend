@@ -3,6 +3,7 @@ package com.example.RedditClone.Service;
 import com.example.RedditClone.Model.DTO.User.Request.UserEditRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserRegisterRequestDTO;
 import com.example.RedditClone.Model.Entity.User;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
