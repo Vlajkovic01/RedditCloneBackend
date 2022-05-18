@@ -1,15 +1,17 @@
 package com.example.RedditClone.Controller;
 
+import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
+import com.example.RedditClone.Model.DTO.User.Request.UserRegisterRequestDTO;
 import com.example.RedditClone.Model.Entity.Community;
+import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Service.CommunityService;
 import com.example.RedditClone.Util.ExtendedModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +36,18 @@ public class CommunityController {
         List<CommunityGetAllResponseDTO> communitiesDTO = modelMapper.mapAll(communities, CommunityGetAllResponseDTO.class);
 
         return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
+    }
+    @PostMapping
+    public ResponseEntity<CommunityCreateRequestDTO> createCommunity(@RequestBody @Validated CommunityCreateRequestDTO newCommunity,
+                                                                     Authentication authentication) {
+
+        Community createdCommunity = communityService.createCommunity(newCommunity, authentication);
+
+        if(createdCommunity == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+        CommunityCreateRequestDTO communityDTO = modelMapper.map(createdCommunity, CommunityCreateRequestDTO.class);
+
+        return new ResponseEntity<>(communityDTO, HttpStatus.CREATED);
     }
 }
