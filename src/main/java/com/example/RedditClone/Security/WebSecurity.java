@@ -23,11 +23,12 @@ public class WebSecurity {
         this.moderatorService = moderatorService;
     }
 
-    public boolean checkCommunityId(Authentication authentication, HttpServletRequest request, int id) {
+    public boolean amIAdminOrModerator(Authentication authentication, HttpServletRequest request, int id) {
         try {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User user = userService.findByUsername(userDetails.getUsername());
-            return moderatorService.amIModerator(id, user.getId());
+            return moderatorService.amIModerator(id, user.getId()) ||
+                    userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
         } catch (ClassCastException e) {
             return false;
         }
