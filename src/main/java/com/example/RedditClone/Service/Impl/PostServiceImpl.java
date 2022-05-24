@@ -4,8 +4,11 @@ import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
 import com.example.RedditClone.Model.Entity.Flair;
 import com.example.RedditClone.Model.Entity.Post;
+import com.example.RedditClone.Model.Entity.Reaction;
 import com.example.RedditClone.Model.Entity.User;
+import com.example.RedditClone.Model.Enum.ReactionType;
 import com.example.RedditClone.Repository.PostRepository;
+import com.example.RedditClone.Repository.ReactionRepository;
 import com.example.RedditClone.Service.FlairService;
 import com.example.RedditClone.Service.PostService;
 import com.example.RedditClone.Service.UserService;
@@ -23,15 +26,17 @@ import java.util.Optional;
 @Service
 public class PostServiceImpl implements PostService {
 
+    private final ReactionRepository reactionRepository;
     private FlairService flairService;
     private final UserService userService;
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService) {
+    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService, ReactionRepository reactionRepository) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.flairService = flairService;
+        this.reactionRepository = reactionRepository;
     }
 
     @Override
@@ -68,7 +73,16 @@ public class PostServiceImpl implements PostService {
         if (postCreateRequestDTO.getFlair() != null) {
             newPost.setFlair(flairService.findFlairByName(postCreateRequestDTO.getFlair().getName()));
         }
+
+        Reaction newReaction = new Reaction();
+        newReaction.setType(ReactionType.UPVOTE);
+        newReaction.setTimestamp(LocalDate.now());
+        newReaction.setUser(currentLoggedUser);
+        newReaction.setPost(newPost);
+
+
         newPost = postRepository.save(newPost);
+        newReaction = reactionRepository.save(newReaction);
         return newPost;
     }
 
