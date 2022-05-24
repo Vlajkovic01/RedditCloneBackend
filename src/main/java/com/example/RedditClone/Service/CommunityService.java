@@ -13,4 +13,8 @@ public interface CommunityService {
     Community findCommunityById(Integer id);
     Community createCommunity(CommunityCreateRequestDTO communityCreateRequestDTO, Authentication authentication);
     Community editCommunity(CommunityEditRequestDTO communityEditRequestDTO, Community community);
+
+    Community save(Community community);
+
+    void deleteCommunity(Community community);
 }

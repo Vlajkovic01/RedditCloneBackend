@@ -98,4 +98,9 @@ public class PostServiceImpl implements PostService {
         postForEdit = postRepository.save(postForEdit);
         return postForEdit;
     }
+
+    @Override
+    public void deletePost(Post postForDelete) {
+        postRepository.delete(postForDelete);
+    }
 }

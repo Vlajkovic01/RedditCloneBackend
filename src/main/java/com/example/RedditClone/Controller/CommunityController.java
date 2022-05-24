@@ -10,10 +10,8 @@ import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Model.Entity.User;
-import com.example.RedditClone.Service.CommunityService;
-import com.example.RedditClone.Service.PostService;
-import com.example.RedditClone.Service.RuleService;
-import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Repository.PostRepository;
+import com.example.RedditClone.Service.*;
 import com.example.RedditClone.Util.ExtendedModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +29,7 @@ import java.util.List;
 @RequestMapping(value = "api/communities")
 public class CommunityController {
 
+    private final ReactionService reactionService;
     private final PostService postService;
     private final UserService userService;
     private final RuleService ruleService;
@@ -39,12 +38,13 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
         this.userService = userService;
         this.postService = postService;
+        this.reactionService = reactionService;
     }
 
     @GetMapping
@@ -99,6 +99,7 @@ public class CommunityController {
         }
 
         community.getPosts().add(createdPost);
+        communityService.save(community);
         PostGetAllResponseDTO postDTO = modelMapper.map(createdPost, PostGetAllResponseDTO.class);
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }
@@ -117,5 +118,36 @@ public class CommunityController {
 
         PostGetAllResponseDTO postDTO = modelMapper.map(editedPost, PostGetAllResponseDTO.class);
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{idCommunity}/posts/{idPost}")
+    public ResponseEntity<PostGetAllResponseDTO> deletePost(@PathVariable Integer idCommunity,
+                                                          @PathVariable Integer idPost) {
+        Community community = communityService.findCommunityById(idCommunity);
+        Post postForDelete = postService.findPostById(idPost);
+
+        if(community == null || postForDelete == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+//        community.getPosts().remove(postForDelete);
+//        reactionService.deleteAllByPost(postForDelete);
+        postService.deletePost(postForDelete);
+//        communityService.save(community);
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CommunityEditRequestDTO> deleteCommunity(@PathVariable Integer id) {
+        Community communityForDelete = communityService.findCommunityById(id);
+
+        if (communityForDelete == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        communityService.deleteCommunity(communityForDelete);
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

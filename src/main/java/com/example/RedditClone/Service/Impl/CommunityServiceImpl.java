@@ -123,4 +123,14 @@ public class CommunityServiceImpl implements CommunityService {
         return community;
     }
 
+    @Override
+    public Community save(Community community) {
+        return communityRepository.save(community);
+    }
+
+    @Override
+    public void deleteCommunity(Community community) {
+        communityRepository.delete(community);
+    }
+
 }

@@ -12,4 +12,6 @@ public interface PostService {
     Post findPostById(Integer id);
     Post createPost(PostCreateRequestDTO postCreateRequestDTO, Authentication authentication);
     Post editPost(PostEditRequestDTO postEditRequestDTO, Post postForEdit);
+
+    void deletePost(Post postForDelete);
 }
