@@ -1,7 +1,7 @@
 SELECT * FROM users;
 SELECT * FROM posts;
 SELECT * FROM communities;
-SELECT * FROM communities_posts;
+-- SELECT * FROM communities_posts;
 SELECT * FROM comments;
 SELECT * FROM reactions;
 SELECT * FROM reports;
@@ -10,6 +10,8 @@ SELECT * FROM flairs;
 SELECT * FROM communities_flairs;
 SELECT * FROM banned;
 SELECT * FROM moderator;
+
+
 
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('ADMINISTRATOR', 'photoUrlForAvatar', 'Admin for testing', 'stefan@gmail.com', '$2a$12$rwy22ZcqnYllFY2tih7ADeMTS1KpZ7lhASVJ5wHqVIn4ajVeU04Hy', '2022-04-11', 'Stefan', 'stefo');
@@ -49,19 +51,19 @@ INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUE
 INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (2, 1);
 INSERT INTO communities_flairs (communities_community_id, flairs_flair_id) VALUES (2, 5);
 
-INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Spring Boot', 'Test post for Java Spring Boot project', '2022-04-22', 'assets/images/post/springBoot.png', 2, 3);
-INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Computing', 'Test post for computing engineering', '2022-04-23', 'assets/images/post/computing.png', 4, 10);
-INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Football in nature', 'Test post for football', '2022-04-23', 'assets/images/post/footballNature.jpg', 3, 5);
-INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id)
-	VALUES ('Basketball', 'Test post for basketball', '2022-04-24', 'assets/images/post/basketball.jpg', 4, 1);
+INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id, community_id)
+	VALUES ('Spring Boot', 'Test post for Java Spring Boot project', '2022-04-22', 'assets/images/post/springBoot.png', 2, 3, 1);
+INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id, community_id)
+	VALUES ('Computing', 'Test post for computing engineering', '2022-04-23', 'assets/images/post/computing.png', 4, 10, 1);
+INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id, community_id)
+	VALUES ('Football in nature', 'Test post for football', '2022-04-23', 'assets/images/post/footballNature.jpg', 3, 5, 2);
+INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id, community_id)
+	VALUES ('Basketball', 'Test post for basketball', '2022-04-24', 'assets/images/post/basketball.jpg', 4, 1, 2);
     
-INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 1);
-INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 2);
-INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 3);
-INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 4);
+-- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 1);
+-- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 2);
+-- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 3);
+-- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 4);
 
 INSERT INTO rules (description, community_id) VALUES ('No bullying', 1);
 INSERT INTO rules (description, community_id) VALUES ('No racism', 1);

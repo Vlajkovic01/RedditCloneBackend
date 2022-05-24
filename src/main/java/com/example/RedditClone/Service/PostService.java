@@ -13,5 +13,5 @@ public interface PostService {
     Post createPost(PostCreateRequestDTO postCreateRequestDTO, Authentication authentication);
     Post editPost(PostEditRequestDTO postEditRequestDTO, Post postForEdit);
 
-    void deletePost(Post postForDelete);
+    void deletePost(Integer idPost);
 }

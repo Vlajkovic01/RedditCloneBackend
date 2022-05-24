@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/communities")
 public class CommunityController {
-
+    private final PostRepository postRepository;
     private final ReactionService reactionService;
     private final PostService postService;
     private final UserService userService;
@@ -38,13 +38,14 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
         this.userService = userService;
         this.postService = postService;
         this.reactionService = reactionService;
+        this.postRepository = postRepository;
     }
 
     @GetMapping
@@ -121,7 +122,7 @@ public class CommunityController {
     }
 
     @DeleteMapping("/{idCommunity}/posts/{idPost}")
-    public ResponseEntity<PostGetAllResponseDTO> deletePost(@PathVariable Integer idCommunity,
+    public ResponseEntity deletePost(@PathVariable Integer idCommunity,
                                                           @PathVariable Integer idPost) {
         Community community = communityService.findCommunityById(idCommunity);
         Post postForDelete = postService.findPostById(idPost);
@@ -129,13 +130,13 @@ public class CommunityController {
         if(community == null || postForDelete == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
+        community.getPosts().remove(postForDelete);
+//        postService.deletePost(idPost);
+        communityService.save(community);
+        postRepository.delete(postForDelete);
 
-//        community.getPosts().remove(postForDelete);
-//        reactionService.deleteAllByPost(postForDelete);
-        postService.deletePost(postForDelete);
-//        communityService.save(community);
+        return new ResponseEntity<>( HttpStatus.OK);
 
-        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

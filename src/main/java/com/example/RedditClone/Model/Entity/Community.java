@@ -16,7 +16,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "communities")
@@ -39,7 +38,7 @@ public class Community {
     @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "community")
     private Set<Moderator> moderators = new HashSet<>();
 
-    @OneToMany(cascade = {ALL}, fetch = EAGER)
+    @OneToMany(cascade = {ALL}, fetch = EAGER,orphanRemoval = true, mappedBy = "community")
     private Set<Post> posts = new HashSet<>();
 
     @ManyToMany(fetch = EAGER)
