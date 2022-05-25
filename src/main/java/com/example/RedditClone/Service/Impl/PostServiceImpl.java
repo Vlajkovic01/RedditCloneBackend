@@ -2,10 +2,7 @@ package com.example.RedditClone.Service.Impl;
 
 import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
-import com.example.RedditClone.Model.Entity.Flair;
-import com.example.RedditClone.Model.Entity.Post;
-import com.example.RedditClone.Model.Entity.Reaction;
-import com.example.RedditClone.Model.Entity.User;
+import com.example.RedditClone.Model.Entity.*;
 import com.example.RedditClone.Model.Enum.ReactionType;
 import com.example.RedditClone.Repository.PostRepository;
 import com.example.RedditClone.Repository.ReactionRepository;
@@ -50,7 +47,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post createPost(PostCreateRequestDTO postCreateRequestDTO, Authentication authentication) {
+    public Post createPost(PostCreateRequestDTO postCreateRequestDTO, Authentication authentication, Community community) {
 
         if (authentication == null) {
             return null;
@@ -69,6 +66,7 @@ public class PostServiceImpl implements PostService {
         newPost.setCreationDate(LocalDate.now());
         newPost.setImagePath(postCreateRequestDTO.getImagePath());
         newPost.setUser(currentLoggedUser);
+        newPost.setCommunity(community);
 
         if (postCreateRequestDTO.getFlair() != null) {
             newPost.setFlair(flairService.findFlairByName(postCreateRequestDTO.getFlair().getName()));

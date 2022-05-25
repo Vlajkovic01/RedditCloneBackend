@@ -92,8 +92,8 @@ public class CommunityController {
     public ResponseEntity<PostGetAllResponseDTO> createPost(@RequestBody @Validated PostCreateRequestDTO newPost,
                                                             Authentication authentication, @PathVariable Integer id) {
 
-        Post createdPost = postService.createPost(newPost, authentication);
         Community community = communityService.findCommunityById(id);
+        Post createdPost = postService.createPost(newPost, authentication, community);
 
         if(community == null || createdPost == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
@@ -130,13 +130,12 @@ public class CommunityController {
         if(community == null || postForDelete == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        community.getPosts().remove(postForDelete);
-//        postService.deletePost(idPost);
-        communityService.save(community);
+
+        postForDelete.setCommunity(null);
+        postRepository.save(postForDelete);
         postRepository.delete(postForDelete);
 
         return new ResponseEntity<>( HttpStatus.OK);
-
     }
 
     @DeleteMapping("/{id}")
