@@ -28,8 +28,11 @@ public class User {
     private String username;
     private String password;
     private String email;
+    @Column
     private String avatar;
+    @Column(nullable = false)
     private LocalDate registrationDate;
+    @Column
     private String description;
     private String displayName;
 }

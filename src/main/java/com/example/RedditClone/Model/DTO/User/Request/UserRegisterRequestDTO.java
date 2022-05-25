@@ -24,8 +24,4 @@ public class UserRegisterRequestDTO {
     @NotBlank(message = "Email is mandatory")
     @Email
     private String email;
-
-    private String avatar;
-    private String description;
-    private String displayName;
 }
