@@ -3,7 +3,6 @@ package com.example.RedditClone.Model.DTO.Community.Response;
 import com.example.RedditClone.Model.DTO.Flair.Response.FlairGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Moderator.Response.ModeratorGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
-import com.example.RedditClone.Model.DTO.Post.Response.PostGetForCommunityDTO;
 import com.example.RedditClone.Model.DTO.Rule.Response.RuleGetByCommunityResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +11,10 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommunityGetAllResponseDTO {
+public class CommunityGetForPostDTO {
 
     private Integer id;
     private String name;
@@ -26,6 +24,5 @@ public class CommunityGetAllResponseDTO {
     private String suspendedReason;
     private Set<RuleGetByCommunityResponseDTO> rules = new HashSet<>();
     private Set<ModeratorGetAllResponseDTO> moderators = new HashSet<>();
-    private Set<PostGetForCommunityDTO> posts = new HashSet<>();
     private Set<FlairGetAllResponseDTO> flairs = new HashSet<>();
 }
