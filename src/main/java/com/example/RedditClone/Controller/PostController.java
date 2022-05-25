@@ -27,9 +27,9 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostGetAllResponseDTO>> getPosts() {
+    public ResponseEntity<List<PostGetAllResponseDTO>> getRandomPosts() {
 
-        List<Post> posts = postService.findAll();
+        List<Post> posts = postService.find12RandomPosts();
 
         List<PostGetAllResponseDTO> postsDTO = modelMapper.mapAll(posts, PostGetAllResponseDTO.class);
 

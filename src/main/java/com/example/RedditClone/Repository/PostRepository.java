@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findAll();
+
+    @Query(nativeQuery = true, value = "select * from posts order by  rand() limit 12")
+    List<Post> find12RandomPosts();
     Post findPostById(Integer id);
-//    void deletePost(Integer idPost);
 }

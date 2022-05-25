@@ -42,6 +42,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> find12RandomPosts() {
+        return postRepository.find12RandomPosts();
+    }
+
+    @Override
     public Post findPostById(Integer id) {
         return postRepository.findPostById(id);
     }
