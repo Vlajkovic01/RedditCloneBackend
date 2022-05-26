@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,19 @@ public class CommunityController {
         List<CommunityGetAllResponseDTO> communitiesDTO = modelMapper.mapAll(communities, CommunityGetAllResponseDTO.class);
 
         return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommunityGetAllResponseDTO> getSingleCommunity(@PathVariable Integer id) {
+
+        Community community = communityService.findCommunityById(id);
+        if (community == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        CommunityGetAllResponseDTO communityDTO = modelMapper.map(community, CommunityGetAllResponseDTO.class);
+
+        return new ResponseEntity<>(communityDTO, HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<CommunityCreateRequestDTO> createCommunity(@RequestBody @Validated CommunityCreateRequestDTO newCommunity,
