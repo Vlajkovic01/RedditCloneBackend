@@ -23,8 +23,6 @@ public class CommunityCreateRequestDTO {
     @NotBlank(message = "Description is mandatory")
     @Length(min = 3, max = 100, message = "Description must be between 3 and 100 characters.")
     private String description;
-    @NotEmpty(message = "Flairs is mandatory")
     private Set<FlairGetAllResponseDTO> flairs = new HashSet<>();
-    @NotEmpty(message = "Rules is mandatory")
     private Set<RuleGetByCommunityResponseDTO> rules = new HashSet<>();
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface CommunityService {
     List<Community> findAll();
+    List<Community> find12RandomCommunities();
     Community findCommunityById(Integer id);
     Community createCommunity(CommunityCreateRequestDTO communityCreateRequestDTO, Authentication authentication);
     Community editCommunity(CommunityEditRequestDTO communityEditRequestDTO, Community community);

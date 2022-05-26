@@ -43,6 +43,11 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
+    public List<Community> find12RandomCommunities() {
+        return communityRepository.find12RandomCommunities();
+    }
+
+    @Override
     public Community findCommunityById(Integer id) {
         return communityRepository.findCommunityById(id);
     }

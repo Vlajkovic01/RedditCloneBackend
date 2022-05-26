@@ -51,7 +51,7 @@ public class CommunityController {
     @GetMapping
     public ResponseEntity<List<CommunityGetAllResponseDTO>> getCommunities() {
 
-        List<Community> communities = communityService.findAll();
+        List<Community> communities = communityService.find12RandomCommunities();
 
         List<CommunityGetAllResponseDTO> communitiesDTO = modelMapper.mapAll(communities, CommunityGetAllResponseDTO.class);
 
