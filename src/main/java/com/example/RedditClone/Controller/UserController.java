@@ -6,6 +6,7 @@ import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserLoginRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserTokenState;
 import com.example.RedditClone.Security.TokenUtils;
+import com.example.RedditClone.Service.ModeratorService;
 import com.example.RedditClone.Util.ExtendedModelMapper;
 import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,24 +27,25 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/users")
 public class UserController {
 
-    private final UserDetailsService userDetailsService;
+    private ModeratorService moderatorService;
     private final TokenUtils tokenUtils;
     private final AuthenticationManager authenticationManager;
     private final ExtendedModelMapper modelMapper;
     private final UserService userService;
 
-    public UserController(UserService userService, ExtendedModelMapper modelMapper, AuthenticationManager authenticationManager, TokenUtils tokenUtils, UserDetailsService userDetailsService) {
+    public UserController(UserService userService, ExtendedModelMapper modelMapper, AuthenticationManager authenticationManager, TokenUtils tokenUtils, ModeratorService moderatorService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
         this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
-        this.userDetailsService = userDetailsService;
+        this.moderatorService = moderatorService;
     }
 
     @GetMapping
