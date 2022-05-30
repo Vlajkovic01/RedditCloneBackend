@@ -9,7 +9,11 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -42,4 +46,7 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;
+
+    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "post")
+    private Set<Reaction> reactions = new HashSet<>();
 }
