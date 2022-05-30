@@ -2,6 +2,7 @@ package com.example.RedditClone.Repository;
 
 import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Model.Entity.Reaction;
+import com.example.RedditClone.Model.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,6 @@ public interface ReactionRepository extends JpaRepository<Reaction, Integer> {
     void deleteAllByPost(Post post);
 
     List<Reaction> findAllByPostId(Integer id);
+
+    Reaction findReactionByPostAndUser(Post post, User user);
 }
