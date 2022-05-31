@@ -101,6 +101,9 @@ public class CommunityServiceImpl implements CommunityService {
             return this.ruleRepository.save(r);
         }).collect(Collectors.toSet());
 
+        newCommunity.setRules(rules);
+        finalNewCommunity.setRules(rules);
+
         return newCommunity;
     }
 

@@ -44,6 +44,9 @@ public class Community {
     @ManyToMany(fetch = EAGER)
     private Set<Flair> flairs = new HashSet<>();
 
+    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "community")
+    private Set<Rule> rules = new HashSet<>();
+
     public void removePost(Post post) {
         posts.remove(post);
         post.setCommunity(null);
