@@ -164,4 +164,18 @@ public class CommunityController {
 
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
+
+    @GetMapping("/{idCommunity}/posts/{idPost}")
+    public ResponseEntity<PostGetAllResponseDTO> getPostFromCommunity(@PathVariable Integer idCommunity,
+                                                                        @PathVariable Integer idPost) {
+        Community community = communityService.findCommunityById(idCommunity);
+        Post post = postService.findPostById(idPost);
+
+        if(community == null || post == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        PostGetAllResponseDTO postDTO = modelMapper.map(post, PostGetAllResponseDTO.class);
+        return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
+    }
 }

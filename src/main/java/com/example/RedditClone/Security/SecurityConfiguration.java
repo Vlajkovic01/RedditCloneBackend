@@ -77,6 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/communities/{id}").access("@webSecurity.amIAdminOrModerator(authentication,request,#id)")
                 .antMatchers(HttpMethod.PUT, "/api/communities/{idCommunity}/posts/{idPost}").access("@webSecurity.checkPostCreator(authentication,request,#idCommunity, #idPost)")
                 .antMatchers(HttpMethod.DELETE, "/api/communities/{idCommunity}/posts/{idPost}").access("@webSecurity.amIAdminOrModerator(authentication,request,#idCommunity)")
+                .antMatchers(HttpMethod.GET, "/api/communities/{idCommunity}/posts/{idPost}").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
