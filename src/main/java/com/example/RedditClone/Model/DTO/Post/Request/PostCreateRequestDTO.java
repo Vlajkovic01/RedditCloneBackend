@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class PostCreateRequestDTO {
 
     @NotBlank(message = "Title is mandatory")
-    @Length(min = 3, max = 15, message = "Title must be between 3 and 15 characters.")
+    @Length(min = 3, max = 20, message = "Title must be between 3 and 20 characters.")
     private String title;
     @NotBlank(message = "Text is mandatory")
     @Length(min = 3, max = 100, message = "Text must be between 3 and 100 characters.")
