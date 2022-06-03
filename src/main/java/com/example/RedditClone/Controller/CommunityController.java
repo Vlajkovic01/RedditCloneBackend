@@ -136,6 +136,7 @@ public class CommunityController {
     }
 
     @DeleteMapping("/{idCommunity}/posts/{idPost}")
+    @CrossOrigin()
     public ResponseEntity deletePost(@PathVariable Integer idCommunity,
                                                           @PathVariable Integer idPost) {
         Community community = communityService.findCommunityById(idCommunity);

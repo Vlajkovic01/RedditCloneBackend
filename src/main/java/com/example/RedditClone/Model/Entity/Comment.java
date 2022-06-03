@@ -36,6 +36,7 @@ public class Comment {
     private Boolean isDeleted;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "parent_id", referencedColumnName = "comment_id")
     private Comment parent;
 
