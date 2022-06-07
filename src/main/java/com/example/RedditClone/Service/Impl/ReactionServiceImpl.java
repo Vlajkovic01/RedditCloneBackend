@@ -6,6 +6,7 @@ import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Model.Entity.Reaction;
 import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Repository.ReactionRepository;
+import com.example.RedditClone.Service.CommentService;
 import com.example.RedditClone.Service.PostService;
 import com.example.RedditClone.Service.ReactionService;
 import com.example.RedditClone.Service.UserService;
@@ -21,17 +22,19 @@ import java.util.List;
 @Service
 public class ReactionServiceImpl implements ReactionService {
 
+    private final CommentService commentService;
     private final PostService postService;
     private final UserService userService;
     private final ExtendedModelMapper modelMapper;
 
     private final ReactionRepository reactionRepository;
 
-    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService) {
+    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService, CommentService commentService) {
         this.reactionRepository = reactionRepository;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @Override
@@ -60,18 +63,30 @@ public class ReactionServiceImpl implements ReactionService {
             return null;
         }
 
-        Reaction reaction = reactionRepository.findReactionByPostAndUser(
-                                                postService.findPostById(reactionCreateRequestDTO.getPostId()),
-                                                currentLoggedUser);
-        if (reaction != null) {
-            return null;
-        }
-
         Reaction newReaction = new Reaction();
         newReaction.setType(reactionCreateRequestDTO.getType());
         newReaction.setTimestamp(LocalDate.now());
         newReaction.setUser(currentLoggedUser);
-        newReaction.setPost(postService.findPostById(reactionCreateRequestDTO.getPostId()));
+
+        if (reactionCreateRequestDTO.getPostId() != 0) {
+            Reaction reactionPost = reactionRepository.findReactionByPostAndUser(
+                    postService.findPostById(reactionCreateRequestDTO.getPostId()),
+                    currentLoggedUser);
+            if (reactionPost != null) {
+                return null;
+            }
+            newReaction.setPost(postService.findPostById(reactionCreateRequestDTO.getPostId()));
+        }
+
+        if (reactionCreateRequestDTO.getCommentId() != 0) {
+            Reaction reactionComment = reactionRepository.findReactionByCommentAndUser(
+                    commentService.findCommentById(reactionCreateRequestDTO.getCommentId()),
+                    currentLoggedUser);
+            if (reactionComment != null) {
+                return null;
+            }
+            newReaction.setComment(commentService.findCommentById(reactionCreateRequestDTO.getCommentId()));
+        }
 
         reactionRepository.save(newReaction);
 

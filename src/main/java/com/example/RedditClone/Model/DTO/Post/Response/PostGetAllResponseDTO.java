@@ -1,5 +1,6 @@
 package com.example.RedditClone.Model.DTO.Post.Response;
 
+import com.example.RedditClone.Model.DTO.Comment.Response.CommentGetForPostDTO;
 import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetForPostDTO;
 import com.example.RedditClone.Model.DTO.Flair.Response.FlairGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Reaction.Response.ReactionForPostAndCommentDTO;
@@ -26,4 +27,6 @@ public class PostGetAllResponseDTO {
     private FlairGetAllResponseDTO flair;
     private CommunityGetForPostDTO community;
     private Set<ReactionForPostAndCommentDTO> reactions = new HashSet<>();
+    private Set<CommentGetForPostDTO> comments = new HashSet<>();
+
 }

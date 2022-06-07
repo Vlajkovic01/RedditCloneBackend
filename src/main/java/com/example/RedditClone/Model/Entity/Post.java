@@ -49,4 +49,7 @@ public class Post {
 
     @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "post")
     private Set<Reaction> reactions = new HashSet<>();
+
+    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "post")
+    private Set<Comment> comments = new HashSet<>();
 }

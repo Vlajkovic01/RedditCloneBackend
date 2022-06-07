@@ -40,7 +40,7 @@ public class Comment {
     @JoinColumn(name = "parent_id", referencedColumnName = "comment_id")
     private Comment parent;
 
-    @OneToMany(cascade = {ALL}, fetch = LAZY, mappedBy = "parent")
+    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "parent")
     private Set<Comment> children = new HashSet<>();
 
     @ManyToOne
@@ -49,6 +49,9 @@ public class Comment {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "post_id", referencedColumnName = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private Post post;
+
+    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "comment")
+    private Set<Reaction> reactions = new HashSet<>();
 }

@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserGetAllResponseDTO {
 
+    private Integer id;
     private String username;
     private String email;
     private String avatar;

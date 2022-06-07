@@ -73,7 +73,7 @@ INSERT INTO rules (description, community_id) VALUES ('No spam', 2);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
 	VALUES (false, 'Text test comment', '2022-04-23', null, 1, 4);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Reply on test comment', '2022-04-23', 1, 1, 2);
+	VALUES (false, 'Reply on test comment', '2022-04-23', 1, null, 2);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
 	VALUES (false, 'Text test comment two', '2022-04-23', null, 1, 3);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
@@ -83,7 +83,7 @@ INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
 	VALUES (false, 'Comment one', '2022-04-24', null, 3, 4);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
-	VALUES (false, 'Reply on comment one', '2022-04-24', 3, 3, 3);
+	VALUES (false, 'Reply on comment two', '2022-04-24', 3, null, 3);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
 	VALUES (false, 'Comment one', '2022-04-24', null, 4, 4);
 INSERT INTO comments (is_deleted, text, timestamp, parent_id, post_id, user_id)
