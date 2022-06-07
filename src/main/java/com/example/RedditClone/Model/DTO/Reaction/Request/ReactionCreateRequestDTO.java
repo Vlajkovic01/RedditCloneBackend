@@ -1,7 +1,5 @@
 package com.example.RedditClone.Model.DTO.Reaction.Request;
 
-import com.example.RedditClone.Model.Entity.Comment;
-import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Model.Enum.ReactionType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
