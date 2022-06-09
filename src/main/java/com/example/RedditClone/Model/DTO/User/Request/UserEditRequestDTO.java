@@ -12,8 +12,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserEditRequestDTO {
 
-    private String currentPassword;
-    private String newPassword;
     private String avatar;
     private String description;
     private String displayName;

@@ -19,4 +19,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(nativeQuery = true, value = "select count(*) from posts where post_id = ? and user_id = ?")
     Integer imIPostCreator(Integer idPost, Integer idUser);
+    @Query(nativeQuery = true, value = "select (select count(*) from reactions r " +
+            "left join posts p on r.post_id = p.post_id " +
+            "left join comments c on r.comment_id = c.comment_id " +
+            "where (p.user_id = ?1 or c.user_id = ?1) and r.type = 'UPVOTE') " +
+            "- (select count(*) from reactions r " +
+            "left join posts p on r.post_id = p.post_id " +
+            "left join comments c on r.comment_id = c.comment_id " +
+            "where (p.user_id = ?1 or c.user_id = ?1) and r.type = 'DOWNVOTE') AS Difference")
+    Integer findTotalKarmaByUserId(Integer id);
 }

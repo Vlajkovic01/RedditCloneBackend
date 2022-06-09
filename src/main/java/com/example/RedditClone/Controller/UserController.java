@@ -1,10 +1,14 @@
 package com.example.RedditClone.Controller;
 
+import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
+import com.example.RedditClone.Model.DTO.User.Request.UserEditPasswordRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserEditRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserRegisterRequestDTO;
+import com.example.RedditClone.Model.DTO.User.Response.UserForMyProfileDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserLoginRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserTokenState;
+import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Security.TokenUtils;
 import com.example.RedditClone.Service.ModeratorService;
 import com.example.RedditClone.Util.ExtendedModelMapper;
@@ -59,6 +63,20 @@ public class UserController {
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<UserForMyProfileDTO> getUser(@PathVariable String username) {
+
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        UserForMyProfileDTO userDTO = modelMapper.map(user, UserForMyProfileDTO.class);
+        userDTO.setTotalKarma(userService.findTotalKarmaByUserId(user.getId()));
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken
             (@Validated @RequestBody UserLoginRequestDTO userLoginRequestDTO) {
@@ -95,6 +113,7 @@ public class UserController {
     }
 
     @PutMapping()
+    @CrossOrigin
     public ResponseEntity<UserGetAllResponseDTO> editUser(@RequestBody @Validated UserEditRequestDTO userEditRequestDTO,
                                                         Authentication authentication){
         if (authentication == null) {
@@ -111,6 +130,31 @@ public class UserController {
         User editedUser = userService.editUser(userEditRequestDTO, currentLoggedUser);
 
         UserGetAllResponseDTO userDTO = modelMapper.map(editedUser, UserGetAllResponseDTO.class);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/password")
+    @CrossOrigin
+    public ResponseEntity<UserGetAllResponseDTO> editPassword(@RequestBody @Validated UserEditPasswordRequestDTO userEditPasswordRequestDTO,
+                                                          Authentication authentication){
+        if (authentication == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentLoggedUser = userService.findByUsername(userDetails.getUsername());
+
+        if (currentLoggedUser == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        User editedUserPassword = userService.editPassword(userEditPasswordRequestDTO, currentLoggedUser);
+
+        if (editedUserPassword == null) {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        }
+
+        UserGetAllResponseDTO userDTO = modelMapper.map(editedUserPassword, UserGetAllResponseDTO.class);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }

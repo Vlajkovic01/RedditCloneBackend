@@ -1,7 +1,6 @@
 SELECT * FROM users;
 SELECT * FROM posts;
 SELECT * FROM communities;
--- SELECT * FROM communities_posts;
 SELECT * FROM comments;
 SELECT * FROM reactions;
 SELECT * FROM reports;

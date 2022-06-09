@@ -31,4 +31,15 @@ public class FileUploadController {
         }
     }
 
+    @PostMapping("/users/image")
+    public ResponseEntity<String> saveUserImg(@RequestParam MultipartFile image) throws IOException {
+        try{
+            String uploadDir = "../RedditCloneFrontend/src/assets/images/user";
+            String fileName = fileUploadService.saveFile(uploadDir, image);
+            return new ResponseEntity<>(fileName, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

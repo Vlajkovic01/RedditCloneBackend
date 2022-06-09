@@ -71,6 +71,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/{id}").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/users/password").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/communities/{id}").access("@webSecurity.amIAdminOrModerator(authentication,request,#id)")
