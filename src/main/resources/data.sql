@@ -56,11 +56,6 @@ INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id, co
 	VALUES ('Football in nature', 'Test post for football', '2022-04-23', 'assets/images/post/footballNature.jpg', 3, 5, 2);
 INSERT INTO posts (title, text, creation_date, image_path, user_id, flair_id, community_id)
 	VALUES ('Basketball', 'Test post for basketball', '2022-04-24', 'assets/images/post/basketball.jpg', 4, 1, 2);
-    
--- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 1);
--- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (1, 2);
--- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 3);
--- INSERT INTO communities_posts (community_community_id, posts_post_id) VALUES (2, 4);
 
 INSERT INTO rules (description, community_id) VALUES ('No bullying', 1);
 INSERT INTO rules (description, community_id) VALUES ('No racism', 1);
