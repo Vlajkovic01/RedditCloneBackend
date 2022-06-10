@@ -11,17 +11,17 @@ SELECT * FROM banned;
 SELECT * FROM moderator;
 
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('ADMINISTRATOR', 'photoUrlForAvatar', 'Admin for testing', 'stefan@gmail.com', '$2a$12$rwy22ZcqnYllFY2tih7ADeMTS1KpZ7lhASVJ5wHqVIn4ajVeU04Hy', '2022-04-11', 'Stefan', 'stefo');
+	VALUES ('ADMINISTRATOR', 'assets/images/user/user1.jpg', 'Admin for testing', 'stefan@gmail.com', '$2a$12$rwy22ZcqnYllFY2tih7ADeMTS1KpZ7lhASVJ5wHqVIn4ajVeU04Hy', '2022-04-11', 'Stefan', 'stefo');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('USER', 'photoUrlForAvatar', 'User for testing', 'nikola@gmail.com', '$2a$12$edlRtdBAI4EEfh7qzviZ/ee5QbTFH7z7DB9finQSKH/FwTz2n9nhe', '2022-04-12', 'Nikola', 'nidzo');
+	VALUES ('USER', 'assets/images/user/user2.jpg', 'User for testing', 'nikola@gmail.com', '$2a$12$edlRtdBAI4EEfh7qzviZ/ee5QbTFH7z7DB9finQSKH/FwTz2n9nhe', '2022-04-12', 'Nikola', 'nidzo');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('USER', 'photoUrlForAvatar', 'Moderator for testing', 'marko@gmail.com', '$2a$12$8VBgzFPi5kfcwn7/MJocbOXfva9ntbGgk6DEkyEBAJygaD7IWe4sy', '2022-04-11', 'Marko', 'mare');
+	VALUES ('USER', 'assets/images/user/user3.png', 'Moderator for testing', 'marko@gmail.com', '$2a$12$8VBgzFPi5kfcwn7/MJocbOXfva9ntbGgk6DEkyEBAJygaD7IWe4sy', '2022-04-11', 'Marko', 'mare');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('USER', 'photoUrlForAvatar', 'User for testing2', 'darko@gmail.com', '$2a$12$99PVi0nu1obKVifsRclIGes.g8s2aNSsu8Pk.Hx5BGOfIBoytbXKy', '2022-04-18', 'Darko', 'dare');
+	VALUES ('USER', 'assets/images/user/user4.jpg', 'User for testing2', 'darko@gmail.com', '$2a$12$99PVi0nu1obKVifsRclIGes.g8s2aNSsu8Pk.Hx5BGOfIBoytbXKy', '2022-04-18', 'Darko', 'dare');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('USER', 'photoUrlForAvatar', 'Moderator for testing2', 'luka@gmail.com', '$2a$12$O8Ys0FesfwEB45ykaVeQ8epnlyu8Yi7xqnxSCEJsbA2dPM1DPeEVK', '2022-04-19', 'Luka', 'lule');
+	VALUES ('USER', 'assets/images/user/user5.jpg', 'Moderator for testing2', 'luka@gmail.com', '$2a$12$O8Ys0FesfwEB45ykaVeQ8epnlyu8Yi7xqnxSCEJsbA2dPM1DPeEVK', '2022-04-19', 'Luka', 'lule');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
-	VALUES ('USER', 'photoUrlForAvatar', 'User for banning', 'milan@gmail.com', '$2a$12$c6y38E90.Bk/SHGvTkme3OdFvu4XYjMi6UAk50P8QsKvrq46BORte', '2022-04-22', 'Milan', 'mile');
+	VALUES ('USER', 'assets/images/user/user6.jpg', 'User for banning', 'milan@gmail.com', '$2a$12$c6y38E90.Bk/SHGvTkme3OdFvu4XYjMi6UAk50P8QsKvrq46BORte', '2022-04-22', 'Milan', 'mile');
 
 INSERT INTO flairs (name) VALUES ('Sport');
 INSERT INTO flairs (name) VALUES ('Politics');

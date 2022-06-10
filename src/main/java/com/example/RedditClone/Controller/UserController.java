@@ -114,7 +114,7 @@ public class UserController {
 
     @PutMapping()
     @CrossOrigin
-    public ResponseEntity<UserGetAllResponseDTO> editUser(@RequestBody @Validated UserEditRequestDTO userEditRequestDTO,
+    public ResponseEntity<UserForMyProfileDTO> editUser(@RequestBody @Validated UserEditRequestDTO userEditRequestDTO,
                                                         Authentication authentication){
         if (authentication == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
@@ -129,7 +129,8 @@ public class UserController {
 
         User editedUser = userService.editUser(userEditRequestDTO, currentLoggedUser);
 
-        UserGetAllResponseDTO userDTO = modelMapper.map(editedUser, UserGetAllResponseDTO.class);
+        UserForMyProfileDTO userDTO = modelMapper.map(editedUser, UserForMyProfileDTO.class);
+        userDTO.setTotalKarma(userService.findTotalKarmaByUserId(editedUser.getId()));
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 

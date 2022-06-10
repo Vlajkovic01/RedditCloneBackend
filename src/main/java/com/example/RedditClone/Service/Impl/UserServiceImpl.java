@@ -79,13 +79,13 @@ public class UserServiceImpl implements UserService {
             currentLoggedUser.setAvatar(userEditRequestDTO.getAvatar());
         }
 
-        if (!userEditRequestDTO.getDescription().equals("")) {
+        if (userEditRequestDTO.getDescription() != null) {
             currentLoggedUser.setDescription(userEditRequestDTO.getDescription());
         } else {
             currentLoggedUser.setDescription(null);
         }
 
-        if (!userEditRequestDTO.getDisplayName().equals("")) {
+        if (userEditRequestDTO.getDisplayName() != null) {
             currentLoggedUser.setDisplayName(userEditRequestDTO.getDisplayName());
         } else {
             currentLoggedUser.setDisplayName(null);
