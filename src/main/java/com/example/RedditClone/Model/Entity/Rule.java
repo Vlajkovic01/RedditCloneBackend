@@ -30,6 +30,6 @@ public class Rule {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "community_id", referencedColumnName = "community_id", nullable = false)
+    @JoinColumn(name = "community_id", referencedColumnName = "community_id")
     private Community community;
 }

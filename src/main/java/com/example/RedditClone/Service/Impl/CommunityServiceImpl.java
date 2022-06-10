@@ -92,10 +92,16 @@ public class CommunityServiceImpl implements CommunityService {
 
         Community finalNewCommunity = newCommunity;
         Set<Flair> flairs = communityCreateRequestDTO.getFlairs().stream().map(flair -> {
-           Flair f = new Flair();
-           f.getCommunities().add(finalNewCommunity);
-           f.setName(flair.getName());
-           return this.flairRepository.save(f);
+            Flair foundFlair = flairRepository.findFlairByName(flair.getName());
+            if (foundFlair != null) {
+                foundFlair.getCommunities().add(finalNewCommunity);
+                return this.flairRepository.save(foundFlair);
+            } else {
+                Flair f = new Flair();
+                f.getCommunities().add(finalNewCommunity);
+                f.setName(flair.getName());
+                return this.flairRepository.save(f);
+            }
         }).collect(Collectors.toSet());
 
         newCommunity.setFlairs(flairs);
@@ -121,20 +127,27 @@ public class CommunityServiceImpl implements CommunityService {
         community.setDescription(communityEditRequestDTO.getDescription());
         Community finalCommunity = community;
         Set<Flair> flairs = communityEditRequestDTO.getFlairs().stream().map(flair -> {
-            Flair f = new Flair();
-            f.getCommunities().add(finalCommunity);
-            f.setName(flair.getName());
-            return this.flairRepository.save(f);
+            Flair foundFlair = flairRepository.findFlairByName(flair.getName());
+            if (foundFlair != null) {
+                foundFlair.getCommunities().add(finalCommunity);
+                return this.flairRepository.save(foundFlair);
+            } else {
+                Flair f = new Flair();
+                f.getCommunities().add(finalCommunity);
+                f.setName(flair.getName());
+                return this.flairRepository.save(f);
+            }
         }).collect(Collectors.toSet());
         community.setFlairs(flairs);
 
-        ruleRepository.deleteAllByCommunityId(finalCommunity.getId());
+        ruleRepository.deleteAllByCommunityId(community.getId());
         Set<Rule> rules = communityEditRequestDTO.getRules().stream().map(rule -> {
             Rule r = new Rule();
             r.setCommunity(finalCommunity);
             r.setDescription(rule.getDescription());
             return this.ruleRepository.save(r);
         }).collect(Collectors.toSet());
+        community.setRules(rules);
 
         community = communityRepository.save(community);
         return community;

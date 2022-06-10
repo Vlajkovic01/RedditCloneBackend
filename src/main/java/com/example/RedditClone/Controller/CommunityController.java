@@ -91,7 +91,8 @@ public class CommunityController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommunityEditRequestDTO> editCommunity(@RequestBody @Validated CommunityEditRequestDTO communityEditRequestDTO,
+    @CrossOrigin
+    public ResponseEntity<CommunityGetAllResponseDTO> editCommunity(@RequestBody @Validated CommunityEditRequestDTO communityEditRequestDTO,
                                                                  @PathVariable Integer id) {
         Community communityForEdit = communityService.findCommunityById(id);
 
@@ -101,7 +102,7 @@ public class CommunityController {
 
         Community editedCommunity = communityService.editCommunity(communityEditRequestDTO, communityForEdit);
 
-        CommunityEditRequestDTO communityDTO = modelMapper.map(editedCommunity, CommunityEditRequestDTO.class);
+        CommunityGetAllResponseDTO communityDTO = modelMapper.map(editedCommunity, CommunityGetAllResponseDTO.class);
 
         return new ResponseEntity<>(communityDTO, HttpStatus.CREATED);
     }
