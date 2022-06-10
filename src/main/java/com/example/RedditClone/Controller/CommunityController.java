@@ -126,6 +126,7 @@ public class CommunityController {
     }
 
     @PutMapping("/{idCommunity}/posts/{idPost}")
+    @CrossOrigin
     public ResponseEntity<PostGetAllResponseDTO> editPost(@RequestBody @Validated PostEditRequestDTO postEditRequestDTO,
                                                                  @PathVariable Integer idCommunity,
                                                                  @PathVariable Integer idPost) {

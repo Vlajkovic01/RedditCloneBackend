@@ -92,9 +92,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post editPost(PostEditRequestDTO postEditRequestDTO, Post postForEdit) {
         postForEdit.setText(postEditRequestDTO.getText());
-        postForEdit.setImagePath(postEditRequestDTO.getImagePath());
 
-        if (postEditRequestDTO.getFlair() != null) {
+        if (!postEditRequestDTO.getImagePath().equals("")) {
+            postForEdit.setImagePath(postEditRequestDTO.getImagePath());
+        }
+
+        if (!postEditRequestDTO.getFlair().getName().equals("")) {
             postForEdit.setFlair(flairService.findFlairByName(postEditRequestDTO.getFlair().getName()));
         }
 
