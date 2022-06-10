@@ -1,5 +1,6 @@
 package com.example.RedditClone.Service.Impl;
 
+import com.example.RedditClone.Model.Entity.Moderator;
 import com.example.RedditClone.Repository.ModeratorRepository;
 import com.example.RedditClone.Service.ModeratorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,15 @@ public class ModeratorServiceImpl implements ModeratorService {
     @Override
     public boolean amIModerator(Integer idCommunity, Integer idUser) {
         return moderatorRepository.imIModerator(idCommunity, idUser) > 0;
+    }
+
+    @Override
+    public void delete(Moderator moderator) {
+        moderatorRepository.delete(moderator);
+    }
+
+    @Override
+    public void save(Moderator moderator) {
+        moderatorRepository.save(moderator);
     }
 }

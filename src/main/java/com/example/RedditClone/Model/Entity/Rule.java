@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 

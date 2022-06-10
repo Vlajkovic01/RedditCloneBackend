@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -19,6 +20,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Entity
 @Table(name = "communities")
+@Where(clause = "is_suspended=false")
 public class Community {
 
     @Id
@@ -35,7 +37,7 @@ public class Community {
     @Column()
     private String suspendedReason;
 
-    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "community")
+    @OneToMany(cascade = {ALL, REFRESH}, fetch = EAGER, orphanRemoval = true, mappedBy = "community")
     private Set<Moderator> moderators = new HashSet<>();
 
     @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "community")
@@ -50,5 +52,9 @@ public class Community {
     public void removePost(Post post) {
         posts.remove(post);
         post.setCommunity(null);
+    }
+    public void removeModerator(Moderator moderator) {
+        moderator.setCommunity(null);
+        moderators.remove(moderator);
     }
 }

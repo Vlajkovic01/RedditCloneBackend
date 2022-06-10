@@ -2,19 +2,24 @@ package com.example.RedditClone.Service.Impl;
 
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityEditRequestDTO;
+import com.example.RedditClone.Model.DTO.Community.Request.CommunitySuspendRequestDTO;
 import com.example.RedditClone.Model.Entity.*;
 import com.example.RedditClone.Repository.CommunityRepository;
 import com.example.RedditClone.Repository.FlairRepository;
+import com.example.RedditClone.Repository.ModeratorRepository;
 import com.example.RedditClone.Repository.RuleRepository;
 import com.example.RedditClone.Service.CommunityService;
 import com.example.RedditClone.Service.FlairService;
+import com.example.RedditClone.Service.ModeratorService;
 import com.example.RedditClone.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,18 +28,22 @@ import java.util.stream.Collectors;
 @Service
 public class CommunityServiceImpl implements CommunityService {
 
-    private final RuleRepository ruleRepository;
+    private final ModeratorRepository moderatorRepository;
 
+    private final ModeratorService moderatorService;
+    private final RuleRepository ruleRepository;
     private final FlairRepository flairRepository;
     private final UserService userService;
 
     private final CommunityRepository communityRepository;
 
-    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository) {
+    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, ModeratorService moderatorService, ModeratorRepository moderatorRepository) {
         this.communityRepository = communityRepository;
         this.userService = userService;
         this.flairRepository = flairRepository;
         this.ruleRepository = ruleRepository;
+        this.moderatorService = moderatorService;
+        this.moderatorRepository = moderatorRepository;
     }
 
     @Override
@@ -137,8 +146,17 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public void deleteCommunity(Community community) {
-        communityRepository.delete(community);
+    public void suspendCommunity(Community community, CommunitySuspendRequestDTO communitySuspendRequestDTO) {
+
+        community.getModerators().forEach(moderator -> {
+            moderator.setCommunity(null);
+        });
+        community.getModerators().clear();
+
+        community.setIsSuspended(true);
+        community.setSuspendedReason(communitySuspendRequestDTO.getSuspendedReason());
+
+        communityRepository.save(community);
     }
 
 }

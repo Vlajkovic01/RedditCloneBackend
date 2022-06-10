@@ -2,6 +2,7 @@ package com.example.RedditClone.Service;
 
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityEditRequestDTO;
+import com.example.RedditClone.Model.DTO.Community.Request.CommunitySuspendRequestDTO;
 import com.example.RedditClone.Model.Entity.Community;
 import org.springframework.security.core.Authentication;
 
@@ -17,5 +18,5 @@ public interface CommunityService {
 
     Community save(Community community);
 
-    void deleteCommunity(Community community);
+    void suspendCommunity(Community community, CommunitySuspendRequestDTO communitySuspendRequestDTO);
 }

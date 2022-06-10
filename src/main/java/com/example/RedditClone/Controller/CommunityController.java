@@ -2,6 +2,7 @@ package com.example.RedditClone.Controller;
 
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityEditRequestDTO;
+import com.example.RedditClone.Model.DTO.Community.Request.CommunitySuspendRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
@@ -10,6 +11,7 @@ import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Model.Entity.User;
+import com.example.RedditClone.Repository.ModeratorRepository;
 import com.example.RedditClone.Repository.PostRepository;
 import com.example.RedditClone.Service.*;
 import com.example.RedditClone.Util.ExtendedModelMapper;
@@ -29,6 +31,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/communities")
 public class CommunityController {
+
+    private ModeratorRepository moderatorRepository;
     private final PostRepository postRepository;
     private final ReactionService reactionService;
     private final PostService postService;
@@ -39,7 +43,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
@@ -47,6 +51,7 @@ public class CommunityController {
         this.postService = postService;
         this.reactionService = reactionService;
         this.postRepository = postRepository;
+        this.moderatorRepository = moderatorRepository;
     }
 
     @GetMapping
@@ -153,15 +158,17 @@ public class CommunityController {
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CommunityEditRequestDTO> deleteCommunity(@PathVariable Integer id) {
+    @PostMapping("/{id}/suspend")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    public ResponseEntity<CommunityEditRequestDTO> suspendCommunity(@RequestBody @Validated CommunitySuspendRequestDTO communitySuspendRequestDTO,
+                                                                        @PathVariable Integer id) {
         Community communityForDelete = communityService.findCommunityById(id);
 
         if (communityForDelete == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        communityService.deleteCommunity(communityForDelete);
+        communityService.suspendCommunity(communityForDelete, communitySuspendRequestDTO);
 
         return new ResponseEntity<>(null, HttpStatus.OK);
     }

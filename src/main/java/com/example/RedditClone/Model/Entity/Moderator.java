@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -25,6 +28,6 @@ public class Moderator{
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "community_id", referencedColumnName = "community_id", nullable = false)
+    @JoinColumn(name = "community_id")
     private Community community;
 }
