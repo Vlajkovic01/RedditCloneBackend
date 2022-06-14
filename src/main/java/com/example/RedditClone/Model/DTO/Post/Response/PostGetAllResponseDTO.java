@@ -6,6 +6,7 @@ import com.example.RedditClone.Model.DTO.Flair.Response.FlairGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Reaction.Response.ReactionForPostAndCommentDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Reaction;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class PostGetAllResponseDTO {
     private Integer id;
     private String title;
     private String text;
+    @JsonFormat(pattern = "YYYY-MM-dd")
     private LocalDate creationDate;
     private String imagePath;
     private UserGetAllResponseDTO user;
