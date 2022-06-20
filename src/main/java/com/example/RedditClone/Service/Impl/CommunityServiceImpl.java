@@ -8,10 +8,8 @@ import com.example.RedditClone.Repository.CommunityRepository;
 import com.example.RedditClone.Repository.FlairRepository;
 import com.example.RedditClone.Repository.ModeratorRepository;
 import com.example.RedditClone.Repository.RuleRepository;
-import com.example.RedditClone.Service.CommunityService;
-import com.example.RedditClone.Service.FlairService;
-import com.example.RedditClone.Service.ModeratorService;
-import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Service.*;
+import com.example.RedditClone.Util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.security.core.Authentication;
@@ -28,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class CommunityServiceImpl implements CommunityService {
 
+    private final LogService logService;
     private final ModeratorRepository moderatorRepository;
 
     private final ModeratorService moderatorService;
@@ -37,44 +36,53 @@ public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityRepository communityRepository;
 
-    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, ModeratorService moderatorService, ModeratorRepository moderatorRepository) {
+    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, ModeratorService moderatorService, ModeratorRepository moderatorRepository, LogService logService) {
         this.communityRepository = communityRepository;
         this.userService = userService;
         this.flairRepository = flairRepository;
         this.ruleRepository = ruleRepository;
         this.moderatorService = moderatorService;
         this.moderatorRepository = moderatorRepository;
+        this.logService = logService;
     }
 
     @Override
     public List<Community> findAll() {
+        logService.message("Community service, findAll() method called.", MessageType.INFO);
         return communityRepository.findAll();
     }
 
     @Override
     public List<Community> find12RandomCommunities() {
+        logService.message("Community service, find12RandomCommunities() method called.", MessageType.INFO);
         return communityRepository.find12RandomCommunities();
     }
 
     @Override
     public Community findCommunityById(Integer id) {
+        logService.message("Community service, findCommunityById() method called.", MessageType.INFO);
         return communityRepository.findCommunityById(id);
     }
 
     @Override
     public Community createCommunity(CommunityCreateRequestDTO communityCreateRequestDTO, Authentication authentication) {
+
+        logService.message("Community service, createCommunity() method called.", MessageType.INFO);
+
         Community community = communityRepository.findCommunityByName(communityCreateRequestDTO.getName());
 
         if(community != null){
             return null;
         }
         if (authentication == null) {
+            logService.message("Community service, createCommunity() method, authentication is null.", MessageType.WARN);
             return null;
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentLoggedUser = userService.findByUsername(userDetails.getUsername());
 
         if (currentLoggedUser == null) {
+            logService.message("Community service, createCommunity() method, current logged user is null.", MessageType.WARN);
             return null;
         }
         Community newCommunity = new Community();
@@ -124,6 +132,9 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Community editCommunity(CommunityEditRequestDTO communityEditRequestDTO, Community community) {
+
+        logService.message("Community service, editCommunity() method called.", MessageType.INFO);
+
         community.setDescription(communityEditRequestDTO.getDescription());
         Community finalCommunity = community;
         Set<Flair> flairs = communityEditRequestDTO.getFlairs().stream().map(flair -> {
@@ -155,11 +166,14 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Community save(Community community) {
+        logService.message("Community service, save() method called.", MessageType.INFO);
         return communityRepository.save(community);
     }
 
     @Override
     public void suspendCommunity(Community community, CommunitySuspendRequestDTO communitySuspendRequestDTO) {
+
+        logService.message("Community service, suspendCommunity() method called.", MessageType.INFO);
 
         community.getModerators().forEach(moderator -> {
             moderator.setCommunity(null);

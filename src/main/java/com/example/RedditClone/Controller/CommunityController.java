@@ -7,21 +7,17 @@ import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllRespo
 import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
-import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Model.Entity.Post;
-import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Repository.ModeratorRepository;
 import com.example.RedditClone.Repository.PostRepository;
 import com.example.RedditClone.Service.*;
 import com.example.RedditClone.Util.ExtendedModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.RedditClone.Util.MessageType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +28,7 @@ import java.util.List;
 @RequestMapping(value = "api/communities")
 public class CommunityController {
 
+    private final LogService logService;
     private ModeratorRepository moderatorRepository;
     private final PostRepository postRepository;
     private final ReactionService reactionService;
@@ -43,7 +40,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
@@ -52,10 +49,13 @@ public class CommunityController {
         this.reactionService = reactionService;
         this.postRepository = postRepository;
         this.moderatorRepository = moderatorRepository;
+        this.logService = logService;
     }
 
     @GetMapping
     public ResponseEntity<List<CommunityGetAllResponseDTO>> getCommunities() {
+
+        logService.message("Community controller, getCommunities() method called.", MessageType.INFO);
 
         List<Community> communities = communityService.find12RandomCommunities();
 
@@ -67,8 +67,11 @@ public class CommunityController {
     @GetMapping("/{id}")
     public ResponseEntity<CommunityGetAllResponseDTO> getSingleCommunity(@PathVariable Integer id) {
 
+        logService.message("Community controller, getSingleCommunity() method called.", MessageType.INFO);
+
         Community community = communityService.findCommunityById(id);
         if (community == null) {
+            logService.message("Community controller, getSingleCommunity() method, failed to find a community.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
@@ -80,9 +83,12 @@ public class CommunityController {
     public ResponseEntity<CommunityCreateRequestDTO> createCommunity(@RequestBody @Validated CommunityCreateRequestDTO newCommunity,
                                                                      Authentication authentication) {
 
+        logService.message("Community controller, createCommunity() method called.", MessageType.INFO);
+
         Community createdCommunity = communityService.createCommunity(newCommunity, authentication);
 
         if(createdCommunity == null){
+            logService.message("Community controller, createCommunity() method, failed to create a community.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
         CommunityCreateRequestDTO communityDTO = modelMapper.map(createdCommunity, CommunityCreateRequestDTO.class);
@@ -94,9 +100,13 @@ public class CommunityController {
     @CrossOrigin
     public ResponseEntity<CommunityGetAllResponseDTO> editCommunity(@RequestBody @Validated CommunityEditRequestDTO communityEditRequestDTO,
                                                                  @PathVariable Integer id) {
+
+        logService.message("Community controller, editCommunity() method called.", MessageType.INFO);
+
         Community communityForEdit = communityService.findCommunityById(id);
 
         if (communityForEdit == null) {
+            logService.message("Community controller, editCommunity() method, failed to find a community.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -112,10 +122,13 @@ public class CommunityController {
     public ResponseEntity<PostGetAllResponseDTO> createPost(@RequestBody @Validated PostCreateRequestDTO newPost,
                                                             Authentication authentication, @PathVariable Integer id) {
 
+        logService.message("Community controller, createPost() method called.", MessageType.INFO);
+
         Community community = communityService.findCommunityById(id);
         Post createdPost = postService.createPost(newPost, authentication, community);
 
         if(community == null || createdPost == null){
+            logService.message("Community controller, createPost() method, failed to create a post.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -130,11 +143,15 @@ public class CommunityController {
     public ResponseEntity<PostGetAllResponseDTO> editPost(@RequestBody @Validated PostEditRequestDTO postEditRequestDTO,
                                                                  @PathVariable Integer idCommunity,
                                                                  @PathVariable Integer idPost) {
+
+        logService.message("Community controller, editPost() method called.", MessageType.INFO);
+
         Community community = communityService.findCommunityById(idCommunity);
         Post postForEdit = postService.findPostById(idPost);
         Post editedPost = postService.editPost(postEditRequestDTO, postForEdit);
 
         if(community == null || postForEdit == null || editedPost == null){
+            logService.message("Community controller, editPost() method, failed to edit a post.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -146,10 +163,14 @@ public class CommunityController {
     @CrossOrigin()
     public ResponseEntity deletePost(@PathVariable Integer idCommunity,
                                                           @PathVariable Integer idPost) {
+
+        logService.message("Community controller, deletePost() method called.", MessageType.INFO);
+
         Community community = communityService.findCommunityById(idCommunity);
         Post postForDelete = postService.findPostById(idPost);
 
         if(community == null || postForDelete == null){
+            logService.message("Community controller, deletePost() method, failed to delete a post.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -164,9 +185,13 @@ public class CommunityController {
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<CommunityEditRequestDTO> suspendCommunity(@RequestBody @Validated CommunitySuspendRequestDTO communitySuspendRequestDTO,
                                                                         @PathVariable Integer id) {
+
+        logService.message("Community controller, suspendCommunity() method called.", MessageType.INFO);
+
         Community communityForDelete = communityService.findCommunityById(id);
 
         if (communityForDelete == null) {
+            logService.message("Community controller, suspendCommunity() method, failed to suspend a community.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -178,10 +203,14 @@ public class CommunityController {
     @GetMapping("/{idCommunity}/posts/{idPost}")
     public ResponseEntity<PostGetAllResponseDTO> getPostFromCommunity(@PathVariable Integer idCommunity,
                                                                         @PathVariable Integer idPost) {
+
+        logService.message("Community controller, getPostFromCommunity() method called.", MessageType.INFO);
+
         Community community = communityService.findCommunityById(idCommunity);
         Post post = postService.findPostById(idPost);
 
         if(community == null || post == null){
+            logService.message("Community controller, getPostFromCommunity() method, failed to find a post.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 

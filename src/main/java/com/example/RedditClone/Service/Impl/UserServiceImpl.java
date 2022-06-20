@@ -7,7 +7,9 @@ import com.example.RedditClone.Model.DTO.User.Request.UserRegisterRequestDTO;
 import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Repository.UserRepository;
 import com.example.RedditClone.Security.TokenUtils;
+import com.example.RedditClone.Service.LogService;
 import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,28 +26,36 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private TokenUtils tokenUtils;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    private final LogService logService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, LogService logService) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.logService = logService;
+    }
+
     @Override
     public List<User> findAll() {
+        logService.message("User service, findAll() method called.", MessageType.INFO);
         return userRepository.findAll();
     }
     @Override
     public User findUserByUsernameAndPassword(String username, String password) {
+        logService.message("User service, findUserByUsernameAndPassword() method called.", MessageType.INFO);
         return userRepository.findUserByUsernameAndPassword(username, password);
     }
 
     @Override
     public User findUserById(Integer id) {
+        logService.message("User service, findUserById() method called.", MessageType.INFO);
         return userRepository.findUserById(id);
     }
 
     @Override
     public User findByUsername(String username) {
+        logService.message("User service, findByUsername() method called.", MessageType.INFO);
         Optional<User> user = userRepository.findFirstByUsername(username);
         if (!user.isEmpty()) {
             return user.get();
@@ -55,6 +65,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(@Validated UserRegisterRequestDTO userDTO) {
+
+        logService.message("User service, createUser() method called.", MessageType.INFO);
 
         Optional<User> user = userRepository.findFirstByUsername(userDTO.getUsername());
 
@@ -74,6 +86,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User editUser(@Validated UserEditRequestDTO userEditRequestDTO, User currentLoggedUser) {
+
+        logService.message("User service, editUser() method called.", MessageType.INFO);
 
         if (!userEditRequestDTO.getAvatar().equals("")) {
             currentLoggedUser.setAvatar(userEditRequestDTO.getAvatar());
@@ -98,6 +112,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User editPassword(UserEditPasswordRequestDTO userEditPasswordRequestDTO, User currentLoggedUser) {
 
+        logService.message("User service, editPassword() method called.", MessageType.INFO);
+
         if (userEditPasswordRequestDTO.getCurrentPassword() != null) {
             if (passwordEncoder.matches(userEditPasswordRequestDTO.getCurrentPassword(), currentLoggedUser.getPassword())) {
                 currentLoggedUser.setPassword(passwordEncoder.encode(userEditPasswordRequestDTO.getNewPassword()));
@@ -111,11 +127,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean amIPostCreator(Integer idPost, Integer idUser) {
+        logService.message("User service, amIPostCreator() method called.", MessageType.INFO);
         return userRepository.imIPostCreator(idPost, idUser) > 0;
     }
 
     @Override
     public Integer findTotalKarmaByUserId(Integer id) {
+        logService.message("User service, findTotalKarmaByUserId() method called.", MessageType.INFO);
         return userRepository.findTotalKarmaByUserId(id);
     }
 }

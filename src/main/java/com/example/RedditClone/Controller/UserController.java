@@ -1,6 +1,5 @@
 package com.example.RedditClone.Controller;
 
-import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserEditPasswordRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserEditRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserRegisterRequestDTO;
@@ -8,12 +7,13 @@ import com.example.RedditClone.Model.DTO.User.Response.UserForMyProfileDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.User.Request.UserLoginRequestDTO;
 import com.example.RedditClone.Model.DTO.User.Response.UserTokenState;
-import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Security.TokenUtils;
+import com.example.RedditClone.Service.LogService;
 import com.example.RedditClone.Service.ModeratorService;
 import com.example.RedditClone.Util.ExtendedModelMapper;
 import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,40 +21,38 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/users")
 public class UserController {
 
+    private final LogService logService;
     private ModeratorService moderatorService;
     private final TokenUtils tokenUtils;
     private final AuthenticationManager authenticationManager;
     private final ExtendedModelMapper modelMapper;
     private final UserService userService;
 
-    public UserController(UserService userService, ExtendedModelMapper modelMapper, AuthenticationManager authenticationManager, TokenUtils tokenUtils, ModeratorService moderatorService) {
+    public UserController(UserService userService, ExtendedModelMapper modelMapper, AuthenticationManager authenticationManager, TokenUtils tokenUtils, ModeratorService moderatorService, LogService logService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
         this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
         this.moderatorService = moderatorService;
+        this.logService = logService;
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<List<UserGetAllResponseDTO>> getUsers() {
+
+        logService.message("User controller, getUsers() method called.", MessageType.INFO);
 
         List<User> users = userService.findAll();
 
@@ -65,6 +63,8 @@ public class UserController {
 
     @GetMapping("/{username}")
     public ResponseEntity<UserForMyProfileDTO> getUser(@PathVariable String username) {
+
+        logService.message("User controller, getUser() method called.", MessageType.INFO);
 
         User user = userService.findByUsername(username);
         if (user == null) {
@@ -80,6 +80,8 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken
             (@Validated @RequestBody UserLoginRequestDTO userLoginRequestDTO) {
+
+        logService.message("User controller, createAuthenticationToken() method called.", MessageType.INFO);
 
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
@@ -102,6 +104,8 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<UserRegisterRequestDTO> createUser(@RequestBody @Validated UserRegisterRequestDTO newUser){
 
+        logService.message("User controller, createUser() method called.", MessageType.INFO);
+
         User createdUser = userService.createUser(newUser);
 
         if(createdUser == null){
@@ -116,6 +120,9 @@ public class UserController {
     @CrossOrigin
     public ResponseEntity<UserForMyProfileDTO> editUser(@RequestBody @Validated UserEditRequestDTO userEditRequestDTO,
                                                         Authentication authentication){
+
+        logService.message("User controller, editUser() method called.", MessageType.INFO);
+
         if (authentication == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -138,6 +145,9 @@ public class UserController {
     @CrossOrigin
     public ResponseEntity<UserGetAllResponseDTO> editPassword(@RequestBody @Validated UserEditPasswordRequestDTO userEditPasswordRequestDTO,
                                                           Authentication authentication){
+
+        logService.message("User controller, editPassword() method called.", MessageType.INFO);
+
         if (authentication == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }

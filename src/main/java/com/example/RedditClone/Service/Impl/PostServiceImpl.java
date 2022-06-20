@@ -7,8 +7,10 @@ import com.example.RedditClone.Model.Enum.ReactionType;
 import com.example.RedditClone.Repository.PostRepository;
 import com.example.RedditClone.Repository.ReactionRepository;
 import com.example.RedditClone.Service.FlairService;
+import com.example.RedditClone.Service.LogService;
 import com.example.RedditClone.Service.PostService;
 import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,38 +25,46 @@ import java.util.Optional;
 @Service
 public class PostServiceImpl implements PostService {
 
+    private final LogService logService;
     private final ReactionRepository reactionRepository;
     private FlairService flairService;
     private final UserService userService;
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService, ReactionRepository reactionRepository) {
+    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService, ReactionRepository reactionRepository, LogService logService) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.flairService = flairService;
         this.reactionRepository = reactionRepository;
+        this.logService = logService;
     }
 
     @Override
     public List<Post> findAll() {
+        logService.message("Post service, findAll() method called.", MessageType.INFO);
         return postRepository.findAll();
     }
 
     @Override
     public List<Post> find12RandomPosts() {
+        logService.message("Post service, find12RandomPosts() method called.", MessageType.INFO);
         return postRepository.find12RandomPosts();
     }
 
     @Override
     public Post findPostById(Integer id) {
+        logService.message("Post service, findPostById() method called.", MessageType.INFO);
         return postRepository.findPostById(id);
     }
 
     @Override
     public Post createPost(PostCreateRequestDTO postCreateRequestDTO, Authentication authentication, Community community) {
 
+        logService.message("Post service, createPost() method called.", MessageType.INFO);
+
         if (authentication == null) {
+            logService.message("Post service, createPost() method, authentication is null.", MessageType.INFO);
             return null;
         }
 
@@ -62,6 +72,7 @@ public class PostServiceImpl implements PostService {
         User currentLoggedUser = userService.findByUsername(userDetails.getUsername());
 
         if (currentLoggedUser == null) {
+            logService.message("Post service, createPost() method, current logged user is null.", MessageType.INFO);
             return null;
         }
 
@@ -91,6 +102,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post editPost(PostEditRequestDTO postEditRequestDTO, Post postForEdit) {
+
+        logService.message("Post service, editPost() method called.", MessageType.INFO);
+
         postForEdit.setText(postEditRequestDTO.getText());
 
         if (!postEditRequestDTO.getImagePath().equals("")) {
@@ -107,6 +121,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(Integer idPost) {
+        logService.message("Post service, deletePost() method called.", MessageType.INFO);
         postRepository.deleteById(idPost);
     }
 }

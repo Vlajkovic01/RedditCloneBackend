@@ -9,8 +9,10 @@ import com.example.RedditClone.Model.Enum.ReactionType;
 import com.example.RedditClone.Repository.CommentRepository;
 import com.example.RedditClone.Repository.ReactionRepository;
 import com.example.RedditClone.Service.CommentService;
+import com.example.RedditClone.Service.LogService;
 import com.example.RedditClone.Service.PostService;
 import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 @Service
 public class CommentServiceImpl implements CommentService {
 
+    private final LogService logService;
     private final ReactionRepository reactionRepository;
 
     private final PostService postService;
@@ -29,11 +32,12 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, PostService postService, ReactionRepository reactionRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, PostService postService, ReactionRepository reactionRepository, LogService logService) {
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.postService = postService;
         this.reactionRepository = reactionRepository;
+        this.logService = logService;
     }
 
     @Override
@@ -44,7 +48,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment createComment(CommentCreateRequestDTO commentCreateRequestDTO, Authentication authentication) {
 
+        logService.message("Comment service, createComment() method called.", MessageType.INFO);
+
         if (authentication == null) {
+            logService.message("Comment service, createComment() method, authentication is null.", MessageType.WARN);
             return null;
         }
 
@@ -52,6 +59,7 @@ public class CommentServiceImpl implements CommentService {
         User currentLoggedUser = userService.findByUsername(userDetails.getUsername());
 
         if (currentLoggedUser == null) {
+            logService.message("Comment service, createComment() method, current logged user is null.", MessageType.WARN);
             return null;
         }
 
