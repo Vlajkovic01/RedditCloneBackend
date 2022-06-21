@@ -53,6 +53,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> newSort() {
+        logService.message("Post service, newSort() method called.", MessageType.INFO);
+        return postRepository.findAllByOrderByCreationDateDesc();
+    }
+
+    @Override
     public Post findPostById(Integer id) {
         logService.message("Post service, findPostById() method called.", MessageType.INFO);
         return postRepository.findPostById(id);

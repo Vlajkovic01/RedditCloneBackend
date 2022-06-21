@@ -18,5 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where c.is_suspended = false and (not exists(select * from reports r where p.post_id = r.post_id and r.accepted = true)) " +
             "order by rand() limit 12;")
     List<Post> find12RandomPosts();
+
+    List<Post> findAllByOrderByCreationDateDesc();
     Post findPostById(Integer id);
 }

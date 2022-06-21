@@ -41,4 +41,16 @@ public class PostController {
 
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }
+
+    @GetMapping("/new")
+    public ResponseEntity<List<PostGetAllResponseDTO>> getNewPosts() {
+
+        logService.message("Post controller, getNewPosts() method called.", MessageType.INFO);
+
+        List<Post> posts = postService.newSort();
+
+        List<PostGetAllResponseDTO> postsDTO = modelMapper.mapAll(posts, PostGetAllResponseDTO.class);
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
 }

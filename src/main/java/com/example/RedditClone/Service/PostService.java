@@ -11,6 +11,7 @@ import java.util.List;
 public interface PostService {
     List<Post> findAll();
     List<Post> find12RandomPosts();
+    List<Post> newSort();
     Post findPostById(Integer id);
     Post createPost(PostCreateRequestDTO postCreateRequestDTO, Authentication authentication, Community community);
     Post editPost(PostEditRequestDTO postEditRequestDTO, Post postForEdit);
