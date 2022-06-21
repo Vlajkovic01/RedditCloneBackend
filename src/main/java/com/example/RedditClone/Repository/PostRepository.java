@@ -31,13 +31,13 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "order by difference desc")
     Set<Post> findAllOrderByKarmaDesc();
     @Query(nativeQuery = true, value = "select *, (select count(*) " +
-            "from reactions r left join posts p on r.post_id = p.post_id " +
+            "            from reactions r left join posts p on r.post_id = p.post_id " +
             "            where r.type = 'UPVOTE' and p.post_id = post.post_id) - (select count(*) " +
             "            from reactions r left join posts p on r.post_id = p.post_id " +
-            "            where r.type = 'DOWNVOTE' and p.post_id = post.post_id) as difference " +
+            "            where r.type = 'DOWNVOTE' and p.post_id = post.post_id) as karma, datediff(curdate(), post.creation_date) as daysdiff " +
             "from posts post left join communities c on post.community_id = c.community_id " +
             "where c.is_suspended = false and (not exists(select * from reports r where post.post_id = r.post_id and r.accepted = true)) " +
-            "order by difference desc, post.creation_date desc;")
+            "order by (karma * 1) - (daysdiff * 1.2) desc")
     Set<Post> findAllOrderByKarmaAndCreationDate();
     Post findPostById(Integer id);
 }
