@@ -6,8 +6,13 @@ import com.example.RedditClone.Model.Entity.Post;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.security.core.Authentication;
 
+import java.util.Set;
+
 public interface CommentService {
 
     Comment findCommentById(Integer id);
     Comment createComment(CommentCreateRequestDTO commentCreateRequestDTO, Authentication authentication);
+    Set<Comment> newSort(Post post);
+    Set<Comment> oldSort(Post post);
+    Set<Comment> topSort(Post post);
 }

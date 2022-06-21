@@ -88,6 +88,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/communities/{idCommunity}/posts/{idPost}").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/upload/posts/image").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/comments").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/comments/post/{id}/new").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/comments/post/{id}/top").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/comments/post/{id}/old").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

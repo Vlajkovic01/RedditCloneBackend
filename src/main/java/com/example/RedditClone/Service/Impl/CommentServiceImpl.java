@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -87,5 +88,20 @@ public class CommentServiceImpl implements CommentService {
         newComment = commentRepository.save(newComment);
         newReaction = reactionRepository.save(newReaction);
         return newComment;
+    }
+
+    @Override
+    public Set<Comment> newSort(Post post) {
+        return commentRepository.findCommentsByPostOrderByTimestampDesc(post);
+    }
+
+    @Override
+    public Set<Comment> oldSort(Post post) {
+        return commentRepository.findCommentsByPostOrderByTimestampAsc(post);
+    }
+
+    @Override
+    public Set<Comment> topSort(Post post) {
+        return commentRepository.findAllByPostOrderByKarma(post.getId());
     }
 }

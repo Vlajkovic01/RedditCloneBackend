@@ -26,19 +26,19 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "from reactions r left join posts p on r.post_id = p.post_id " +
             "where r.type = 'UPVOTE' and p.post_id = post.post_id) - (select count(*) " +
             "from reactions r left join posts p on r.post_id = p.post_id " +
-            "where r.type = 'DOWNVOTE' and p.post_id = post.post_id) as difference " +
+            "where r.type = 'DOWNVOTE' and p.post_id = post.post_id) as karma " +
             "from posts post left join communities c on post.community_id = c.community_id " +
             "where c.is_suspended = false and (not exists(select * from reports r where post.post_id = r.post_id and r.accepted = true)) " +
-            "order by difference desc")
+            "order by karma desc")
     Set<Post> findAllOrderByKarmaDesc();
     @Query(nativeQuery = true, value = "select *, (select count(*) " +
             "from reactions r left join posts p on r.post_id = p.post_id " +
             "where r.type = 'UPVOTE' and p.post_id = post.post_id) - (select count(*) " +
             "from reactions r left join posts p on r.post_id = p.post_id " +
-            "where r.type = 'DOWNVOTE' and p.post_id = post.post_id) as difference " +
+            "where r.type = 'DOWNVOTE' and p.post_id = post.post_id) as karma " +
             "from posts post left join communities c on post.community_id = c.community_id " +
             "where c.is_suspended = false and (not exists(select * from reports r where post.post_id = r.post_id and r.accepted = true)) and post.community_id = ? " +
-            "order by difference desc")
+            "order by karma desc")
     Set<Post> findAllByCommunityOrderByKarmaDesc(Integer communityId);
     @Query(nativeQuery = true, value = "select *, (select count(*) " +
             "            from reactions r left join posts p on r.post_id = p.post_id " +

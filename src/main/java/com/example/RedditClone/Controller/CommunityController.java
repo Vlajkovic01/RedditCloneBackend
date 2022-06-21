@@ -225,7 +225,14 @@ public class CommunityController {
 
         logService.message("Community controller, getNewPostsSort() method called.", MessageType.INFO);
 
-        List<Post> posts = postService.newSortInCommunity(communityService.findCommunityById(id));
+        Community community = communityService.findCommunityById(id);
+
+        if(community == null){
+            logService.message("Community controller, getNewPostsSort() method, failed to find a community.", MessageType.INFO);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        List<Post> posts = postService.newSortInCommunity(community);
 
         List<PostGetForCommunityDTO> postsDTO = modelMapper.mapAll(posts, PostGetForCommunityDTO.class);
 
@@ -237,7 +244,14 @@ public class CommunityController {
 
         logService.message("Community controller, getTopPostsSort() method called.", MessageType.INFO);
 
-        Set<Post> posts = postService.topSortInCommunity(communityService.findCommunityById(id));
+        Community community = communityService.findCommunityById(id);
+
+        if(community == null){
+            logService.message("Community controller, getTopPostsSort() method, failed to find a community.", MessageType.INFO);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        Set<Post> posts = postService.topSortInCommunity(community);
 
         List<PostGetForCommunityDTO> postsDTO = modelMapper.mapAll(posts.stream().toList(), PostGetForCommunityDTO.class);
 
@@ -249,7 +263,14 @@ public class CommunityController {
 
         logService.message("Community controller, getHotPostsSort() method called.", MessageType.INFO);
 
-        Set<Post> posts = postService.hotSortInCommunity(communityService.findCommunityById(id));
+        Community community = communityService.findCommunityById(id);
+
+        if(community == null){
+            logService.message("Community controller, getHotPostsSort() method, failed to find a community.", MessageType.INFO);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        Set<Post> posts = postService.hotSortInCommunity(community);
 
         List<PostGetForCommunityDTO> postsDTO = modelMapper.mapAll(posts.stream().toList(), PostGetForCommunityDTO.class);
 
