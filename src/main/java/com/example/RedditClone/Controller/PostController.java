@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/posts")
@@ -50,6 +52,30 @@ public class PostController {
         List<Post> posts = postService.newSort();
 
         List<PostGetAllResponseDTO> postsDTO = modelMapper.mapAll(posts, PostGetAllResponseDTO.class);
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<PostGetAllResponseDTO>> getTopPosts() {
+
+        logService.message("Post controller, getTopPosts() method called.", MessageType.INFO);
+
+        Set<Post> posts = postService.topSort();
+
+        List<PostGetAllResponseDTO> postsDTO = modelMapper.mapAll(posts.stream().toList(), PostGetAllResponseDTO.class);
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/hot")
+    public ResponseEntity<List<PostGetAllResponseDTO>> getHotPosts() {
+
+        logService.message("Post controller, getHotPosts() method called.", MessageType.INFO);
+
+        Set<Post> posts = postService.hotSort();
+
+        List<PostGetAllResponseDTO> postsDTO = modelMapper.mapAll(posts.stream().toList(), PostGetAllResponseDTO.class);
 
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }

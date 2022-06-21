@@ -21,13 +21,14 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
 
     private final LogService logService;
     private final ReactionRepository reactionRepository;
-    private FlairService flairService;
+    private final FlairService flairService;
     private final UserService userService;
 
     private final PostRepository postRepository;
@@ -56,6 +57,18 @@ public class PostServiceImpl implements PostService {
     public List<Post> newSort() {
         logService.message("Post service, newSort() method called.", MessageType.INFO);
         return postRepository.findAllByOrderByCreationDateDesc();
+    }
+
+    @Override
+    public Set<Post> topSort() {
+        logService.message("Post service, topSort() method called.", MessageType.INFO);
+        return postRepository.findAllOrderByKarmaDesc();
+    }
+
+    @Override
+    public Set<Post> hotSort() {
+        logService.message("Post service, hotSort() method called.", MessageType.INFO);
+        return postRepository.findAllOrderByKarmaAndCreationDate();
     }
 
     @Override
