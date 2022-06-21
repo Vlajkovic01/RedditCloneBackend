@@ -7,6 +7,7 @@ import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllRespo
 import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
+import com.example.RedditClone.Model.DTO.Post.Response.PostGetForCommunityDTO;
 import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Model.Entity.Post;
 import com.example.RedditClone.Repository.ModeratorRepository;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/communities")
@@ -216,5 +218,41 @@ public class CommunityController {
 
         PostGetAllResponseDTO postDTO = modelMapper.map(post, PostGetAllResponseDTO.class);
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/posts/new")
+    public ResponseEntity<List<PostGetForCommunityDTO>> getNewPostsSort(@PathVariable Integer id) {
+
+        logService.message("Community controller, getNewPostsSort() method called.", MessageType.INFO);
+
+        List<Post> posts = postService.newSortInCommunity(communityService.findCommunityById(id));
+
+        List<PostGetForCommunityDTO> postsDTO = modelMapper.mapAll(posts, PostGetForCommunityDTO.class);
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/posts/top")
+    public ResponseEntity<List<PostGetForCommunityDTO>> getTopPostsSort(@PathVariable Integer id) {
+
+        logService.message("Community controller, getTopPostsSort() method called.", MessageType.INFO);
+
+        Set<Post> posts = postService.topSortInCommunity(communityService.findCommunityById(id));
+
+        List<PostGetForCommunityDTO> postsDTO = modelMapper.mapAll(posts.stream().toList(), PostGetForCommunityDTO.class);
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/posts/hot")
+    public ResponseEntity<List<PostGetForCommunityDTO>> getHotPostsSort(@PathVariable Integer id) {
+
+        logService.message("Community controller, getHotPostsSort() method called.", MessageType.INFO);
+
+        Set<Post> posts = postService.hotSortInCommunity(communityService.findCommunityById(id));
+
+        List<PostGetForCommunityDTO> postsDTO = modelMapper.mapAll(posts.stream().toList(), PostGetForCommunityDTO.class);
+
+        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }
 }

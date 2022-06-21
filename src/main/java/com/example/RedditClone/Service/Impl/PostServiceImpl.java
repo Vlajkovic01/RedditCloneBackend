@@ -60,15 +60,33 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> newSortInCommunity(Community community) {
+        logService.message("Post service, newSortInCommunity() method called.", MessageType.INFO);
+        return postRepository.findPostsByCommunityOrderByCreationDateDesc(community);
+    }
+
+    @Override
     public Set<Post> topSort() {
         logService.message("Post service, topSort() method called.", MessageType.INFO);
         return postRepository.findAllOrderByKarmaDesc();
     }
 
     @Override
+    public Set<Post> topSortInCommunity(Community community) {
+        logService.message("Post service, topSortInCommunity() method called.", MessageType.INFO);
+        return postRepository.findAllByCommunityOrderByKarmaDesc(community.getId());
+    }
+
+    @Override
     public Set<Post> hotSort() {
         logService.message("Post service, hotSort() method called.", MessageType.INFO);
         return postRepository.findAllOrderByKarmaAndCreationDate();
+    }
+
+    @Override
+    public Set<Post> hotSortInCommunity(Community community) {
+        logService.message("Post service, hotSortInCommunity() method called.", MessageType.INFO);
+        return postRepository.findAllByCommunityOrderByKarmaAndCreationDate(community.getId());
     }
 
     @Override
