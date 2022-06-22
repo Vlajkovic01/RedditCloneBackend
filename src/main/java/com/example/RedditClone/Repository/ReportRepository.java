@@ -7,9 +7,12 @@ import com.example.RedditClone.Model.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     Report findReportByPostAndByUser(Post post, User user);
     Report findReportByCommentAndByUser(Comment comment, User user);
+    List<Report> findAllByCommunityIdAndAcceptedIsFalse(Integer communityId);
 }

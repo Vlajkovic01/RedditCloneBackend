@@ -82,6 +82,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}/posts/top").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}/posts/hot").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/communities/{id}").access("@webSecurity.amIAdminOrModerator(authentication,request,#id)")
+                .antMatchers(HttpMethod.GET, "/api/communities/{id}/reports").access("@webSecurity.amIAdminOrModerator(authentication,request,#id)")
                 .antMatchers(HttpMethod.POST, "/api/communities/{id}/suspend").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/communities/{idCommunity}/posts/{idPost}").access("@webSecurity.checkPostCreator(authentication,request,#idCommunity, #idPost)")
                 .antMatchers(HttpMethod.DELETE, "/api/communities/{idCommunity}/posts/{idPost}").access("@webSecurity.amIAdminOrModerator(authentication,request,#idCommunity)")

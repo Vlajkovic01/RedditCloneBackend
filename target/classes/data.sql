@@ -10,8 +10,6 @@ SELECT * FROM communities_flairs;
 SELECT * FROM banned;
 SELECT * FROM moderator;
 
-select * from reports r left join posts p on r.post_id = p.post_id;
-
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('ADMINISTRATOR', 'assets/images/user/user1.jpg', 'Admin for testing', 'stefan@gmail.com', '$2a$12$rwy22ZcqnYllFY2tih7ADeMTS1KpZ7lhASVJ5wHqVIn4ajVeU04Hy', '2022-04-11', 'Stefan', 'stefo');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)

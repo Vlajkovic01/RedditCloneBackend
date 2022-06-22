@@ -8,13 +8,16 @@ import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetForCommunityDTO;
+import com.example.RedditClone.Model.DTO.Report.Response.ReportGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Model.Entity.Post;
+import com.example.RedditClone.Model.Entity.Report;
 import com.example.RedditClone.Repository.ModeratorRepository;
 import com.example.RedditClone.Repository.PostRepository;
 import com.example.RedditClone.Service.*;
 import com.example.RedditClone.Util.ExtendedModelMapper;
 import com.example.RedditClone.Util.MessageType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,9 +32,9 @@ import java.util.Set;
 @RestController
 @RequestMapping(value = "api/communities")
 public class CommunityController {
-
+    private final ReportService reportService;
     private final LogService logService;
-    private ModeratorRepository moderatorRepository;
+    private final ModeratorRepository moderatorRepository;
     private final PostRepository postRepository;
     private final ReactionService reactionService;
     private final PostService postService;
@@ -42,7 +45,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
@@ -52,6 +55,7 @@ public class CommunityController {
         this.postRepository = postRepository;
         this.moderatorRepository = moderatorRepository;
         this.logService = logService;
+        this.reportService = reportService;
     }
 
     @GetMapping
@@ -275,5 +279,17 @@ public class CommunityController {
         List<PostGetForCommunityDTO> postsDTO = modelMapper.mapAll(posts.stream().toList(), PostGetForCommunityDTO.class);
 
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/reports")
+    public ResponseEntity<List<ReportGetAllResponseDTO>> getReports(@PathVariable Integer id) {
+
+        logService.message("Community controller, getReports() method called.", MessageType.INFO);
+
+        List<Report> reports = reportService.findAllByCommunityId(id);
+
+        List<ReportGetAllResponseDTO> reportsDTO = modelMapper.mapAll(reports, ReportGetAllResponseDTO.class);
+
+        return new ResponseEntity<>(reportsDTO, HttpStatus.OK);
     }
 }
