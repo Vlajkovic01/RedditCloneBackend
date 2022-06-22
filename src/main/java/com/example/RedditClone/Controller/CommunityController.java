@@ -32,6 +32,7 @@ import java.util.Set;
 @RestController
 @RequestMapping(value = "api/communities")
 public class CommunityController {
+    private final CommentService commentService;
     private final ReportService reportService;
     private final LogService logService;
     private final ModeratorRepository moderatorRepository;
@@ -45,7 +46,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService, CommentService commentService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
@@ -56,6 +57,7 @@ public class CommunityController {
         this.moderatorRepository = moderatorRepository;
         this.logService = logService;
         this.reportService = reportService;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -181,6 +183,17 @@ public class CommunityController {
         }
 
         postForDelete.setCommunity(null);
+
+        postForDelete.getReactions().forEach(reaction -> {
+            reaction.setPost(null);
+            reactionService.delete(reaction);
+        });
+
+        postForDelete.getComments().forEach(comment -> {
+            comment.setPost(null);
+            commentService.delete(comment);
+        });
+
         postRepository.save(postForDelete);
         postRepository.delete(postForDelete);
 

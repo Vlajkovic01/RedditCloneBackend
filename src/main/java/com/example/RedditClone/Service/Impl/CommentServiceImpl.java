@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -103,5 +104,31 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Set<Comment> topSort(Post post) {
         return commentRepository.findAllByPostOrderByKarma(post.getId());
+    }
+
+//    @Override
+//    public Void removeChildrens(Set<Comment> comments) {
+//        Set<Comment> nextSet = new HashSet<>();
+//        for (Comment c : comments) {
+//            c.setIsDeleted(true);
+//            commentRepository.save(c);
+//            if (!c.getChildren().isEmpty()) {
+//                c.getChildren().forEach(comment -> nextSet.add(comment));
+//            }
+//        }
+//        if (nextSet.isEmpty()) {
+//            return null;
+//        }
+//        return removeChildrens(nextSet);
+//    }
+
+    @Override
+    public void save(Comment comment) {
+        commentRepository.save(comment);
+    }
+
+    @Override
+    public void delete(Comment comment) {
+        commentRepository.delete(comment);
     }
 }

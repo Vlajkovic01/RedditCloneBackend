@@ -14,5 +14,6 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     Report findReportByPostAndByUser(Post post, User user);
     Report findReportByCommentAndByUser(Comment comment, User user);
+    Report findReportById(Integer reportId);
     List<Report> findAllByCommunityIdAndAcceptedIsFalse(Integer communityId);
 }

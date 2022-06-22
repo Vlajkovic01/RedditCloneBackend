@@ -1,6 +1,7 @@
 package com.example.RedditClone.Controller;
 
 import com.example.RedditClone.Model.DTO.Report.Request.ReportCreateRequestDTO;
+import com.example.RedditClone.Model.DTO.Report.Response.ReportGetAllResponseDTO;
 import com.example.RedditClone.Model.Entity.Report;
 import com.example.RedditClone.Service.LogService;
 import com.example.RedditClone.Service.ReportService;
@@ -40,6 +41,23 @@ public class ReportController {
         }
         ReportCreateRequestDTO reportDTO = modelMapper.map(newPostReport, ReportCreateRequestDTO.class);
 
+        return new ResponseEntity<>(reportDTO, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    @CrossOrigin
+    public ResponseEntity<ReportGetAllResponseDTO> acceptReport(@PathVariable Integer id){
+
+        logService.message("Report controller, acceptReport() method called.", MessageType.INFO);
+
+        Report acceptedReport = reportService.acceptReport(id);
+
+        if(acceptedReport == null){
+            logService.message("Report controller, acceptReport() method, failed to create a report.", MessageType.INFO);
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        ReportGetAllResponseDTO reportDTO = modelMapper.map(acceptedReport, ReportGetAllResponseDTO.class);
         return new ResponseEntity<>(reportDTO, HttpStatus.CREATED);
     }
 }

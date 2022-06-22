@@ -9,5 +9,6 @@ import java.util.List;
 public interface ReportService {
 
     Report createReport(ReportCreateRequestDTO reportPostRequestDTO, Authentication authentication);
+    Report acceptReport(Integer id);
     List<Report> findAllByCommunityId(Integer id);
 }

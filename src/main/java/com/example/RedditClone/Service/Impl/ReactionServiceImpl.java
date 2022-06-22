@@ -97,4 +97,9 @@ public class ReactionServiceImpl implements ReactionService {
 
         return newReaction;
     }
+
+    @Override
+    public void delete(Reaction reaction) {
+        reactionRepository.delete(reaction);
+    }
 }

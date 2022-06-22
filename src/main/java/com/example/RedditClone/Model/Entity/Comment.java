@@ -24,7 +24,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Entity
 @Table(name = "comments")
-@Where(clause = "select 1 where not exists (select 1 from reports r where comment_id = r.comment_id and r.accepted = 1)")
+@Where(clause = "select 1 where is_deleted = false and not exists (select 1 from reports r where (comment_id = r.comment_id or parent_id = r.comment_id) and r.accepted = 1)")
 public class Comment {
 
     @Id

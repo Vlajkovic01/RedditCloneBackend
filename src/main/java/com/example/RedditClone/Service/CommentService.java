@@ -15,4 +15,7 @@ public interface CommentService {
     Set<Comment> newSort(Post post);
     Set<Comment> oldSort(Post post);
     Set<Comment> topSort(Post post);
+//    Void removeChildrens(Set<Comment> comments);
+    void save(Comment comment);
+    void delete(Comment comment);
 }

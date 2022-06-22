@@ -1,6 +1,7 @@
 package com.example.RedditClone.Service.Impl;
 
 import com.example.RedditClone.Model.DTO.Report.Request.ReportCreateRequestDTO;
+import com.example.RedditClone.Model.Entity.Comment;
 import com.example.RedditClone.Model.Entity.Reaction;
 import com.example.RedditClone.Model.Entity.Report;
 import com.example.RedditClone.Model.Entity.User;
@@ -87,6 +88,26 @@ public class ReportServiceImpl implements ReportService {
         reportRepository.save(newReport);
 
         return newReport;
+    }
+
+    @Override
+    public Report acceptReport(Integer id) {
+        logService.message("Report service, acceptReport() method called.", MessageType.INFO);
+
+        Report report = reportRepository.findReportById(id);
+        if (report == null) {
+            logService.message("Report service, acceptReport() method, unable to find report.", MessageType.INFO);
+            return null;
+        }
+
+        report.setAccepted(true);
+        if (report.getComment() != null) {
+            Comment comment = commentService.findCommentById(report.getComment().getId());
+            comment.setIsDeleted(true);
+        }
+        reportRepository.save(report);
+
+        return report;
     }
 
     @Override
