@@ -13,4 +13,5 @@ public class ReportCreateRequestDTO {
     private ReportReason reason;
     private Integer postId;
     private Integer commentId;
+    private Integer communityId;
 }

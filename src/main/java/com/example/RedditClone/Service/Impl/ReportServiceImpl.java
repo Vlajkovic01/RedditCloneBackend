@@ -16,18 +16,21 @@ import java.time.LocalDate;
 
 @Service
 public class ReportServiceImpl implements ReportService {
+
+    private final CommunityService communityService;
     private final CommentService commentService;
     private final PostService postService;
     private final ReportRepository reportRepository;
     private final UserService userService;
     private final LogService logService;
 
-    public ReportServiceImpl(LogService logService, UserService userService, ReportRepository reportRepository, PostService postService, CommentService commentService) {
+    public ReportServiceImpl(LogService logService, UserService userService, ReportRepository reportRepository, PostService postService, CommentService commentService, CommunityService communityService) {
         this.logService = logService;
         this.userService = userService;
         this.reportRepository = reportRepository;
         this.postService = postService;
         this.commentService = commentService;
+        this.communityService = communityService;
     }
 
     @Override
@@ -52,6 +55,13 @@ public class ReportServiceImpl implements ReportService {
         newReport.setTimestamp(LocalDate.now());
         newReport.setAccepted(false);
         newReport.setByUser(currentLoggedUser);
+
+        if (reportCreateRequestDTO.getCommunityId() != 0) {
+            if (communityService.findCommunityById(reportCreateRequestDTO.getCommunityId()) == null) {
+                return null;
+            }
+            newReport.setCommunity(communityService.findCommunityById(reportCreateRequestDTO.getCommunityId()));
+        }
 
         if (reportCreateRequestDTO.getPostId() != 0) {
             Report reportPost = reportRepository.findReportByPostAndByUser(

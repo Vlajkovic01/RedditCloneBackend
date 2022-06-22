@@ -10,6 +10,8 @@ SELECT * FROM communities_flairs;
 SELECT * FROM banned;
 SELECT * FROM moderator;
 
+select * from reports r left join posts p on r.post_id = p.post_id;
+
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
 	VALUES ('ADMINISTRATOR', 'assets/images/user/user1.jpg', 'Admin for testing', 'stefan@gmail.com', '$2a$12$rwy22ZcqnYllFY2tih7ADeMTS1KpZ7lhASVJ5wHqVIn4ajVeU04Hy', '2022-04-11', 'Stefan', 'stefo');
 INSERT INTO users (user_type, avatar, description, email, password, registration_date, username, display_name)
@@ -117,9 +119,9 @@ INSERT INTO banned (timestamp, moderator_id, user_id, community_id)
 	VALUES ('2022-04-26', 5, 6, 2);
 
 -- Reports for posts
-INSERT INTO reports (reason, timestamp, accepted, user_id, comment_id, post_id)
-	VALUES ('COPYRIGHT_VIOLATION', '2022-04-26', false, 2, null, 4);
+INSERT INTO reports (reason, timestamp, accepted, user_id, comment_id, post_id, community_id)
+	VALUES ('COPYRIGHT_VIOLATION', '2022-04-26', false, 2, null, 4, 2);
     
 -- Reports for comments --
-INSERT INTO reports (reason, timestamp, accepted, user_id, comment_id, post_id)
-	VALUES ('HATE', '2022-04-26', false, 2, 5, null);
+INSERT INTO reports (reason, timestamp, accepted, user_id, comment_id, post_id, community_id)
+	VALUES ('HATE', '2022-04-26', false, 2, 5, null, 1);

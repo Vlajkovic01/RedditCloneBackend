@@ -47,4 +47,9 @@ public class Report {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private Post post;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "community_id", referencedColumnName = "community_id")
+    private Community community;
 }
