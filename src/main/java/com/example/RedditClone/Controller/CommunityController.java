@@ -4,6 +4,7 @@ import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateReques
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Request.CommunitySuspendRequestDTO;
 import com.example.RedditClone.Model.DTO.Community.Response.CommunityGetAllResponseDTO;
+import com.example.RedditClone.Model.DTO.Moderator.Request.ModeratorDeleteFromCommunityDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Request.PostEditRequestDTO;
 import com.example.RedditClone.Model.DTO.Post.Response.PostGetAllResponseDTO;
@@ -32,6 +33,7 @@ import java.util.Set;
 @RestController
 @RequestMapping(value = "api/communities")
 public class CommunityController {
+    private final ModeratorService moderatorService;
     private final CommentService commentService;
     private final ReportService reportService;
     private final LogService logService;
@@ -46,7 +48,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService, CommentService commentService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService, CommentService commentService, ModeratorService moderatorService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
@@ -58,6 +60,7 @@ public class CommunityController {
         this.logService = logService;
         this.reportService = reportService;
         this.commentService = commentService;
+        this.moderatorService = moderatorService;
     }
 
     @GetMapping
@@ -304,5 +307,18 @@ public class CommunityController {
         List<ReportGetAllResponseDTO> reportsDTO = modelMapper.mapAll(reports, ReportGetAllResponseDTO.class);
 
         return new ResponseEntity<>(reportsDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/moderators")
+    @CrossOrigin
+    public ResponseEntity<CommunityGetAllResponseDTO> deleteModerators(@PathVariable Integer id, @RequestBody ModeratorDeleteFromCommunityDTO moderatorDTO) {
+        logService.message("Community controller, deleteModerators() method called.", MessageType.INFO);
+
+        if (moderatorService.deleteModeratorFromCommunity(id,moderatorDTO.getModeratorId())) {
+            CommunityGetAllResponseDTO communityDTO = modelMapper.map(communityService.findCommunityById(moderatorDTO.getCommunityId()),
+                                                                      CommunityGetAllResponseDTO.class);
+            return new ResponseEntity<>(communityDTO,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
     }
 }

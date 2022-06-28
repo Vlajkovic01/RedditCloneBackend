@@ -10,4 +10,6 @@ public interface ModeratorRepository extends JpaRepository<Moderator, Integer> {
 
     @Query(nativeQuery = true, value = "select count(*) from moderator where community_id = ? and user_id = ?")
     Integer imIModerator(Integer idCommunity, Integer idUser);
+
+    Moderator findModeratorById(Integer id);
 }
