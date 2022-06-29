@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 public class ReactionServiceImpl implements ReactionService {
-
+    private final BannedService bannedService;
     private final LogService logService;
     private final CommentService commentService;
     private final PostService postService;
@@ -28,13 +28,14 @@ public class ReactionServiceImpl implements ReactionService {
 
     private final ReactionRepository reactionRepository;
 
-    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService, CommentService commentService, LogService logService) {
+    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService, CommentService commentService, LogService logService, BannedService bannedService) {
         this.reactionRepository = reactionRepository;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.postService = postService;
         this.commentService = commentService;
         this.logService = logService;
+        this.bannedService = bannedService;
     }
 
     @Override
@@ -80,7 +81,12 @@ public class ReactionServiceImpl implements ReactionService {
             if (reactionPost != null) {
                 return null;
             }
-            newReaction.setPost(postService.findPostById(reactionCreateRequestDTO.getPostId()));
+            Post post = postService.findPostById(reactionCreateRequestDTO.getPostId());
+            if (bannedService.findBannedByCommunityIdAndUserUsername(post.getCommunity().getId(), currentLoggedUser.getUsername()) != null) {
+                logService.message("Reaction service, createReaction() method, current logged user is banned from this community.", MessageType.WARN);
+                return null;
+            }
+            newReaction.setPost(post);
         }
 
         if (reactionCreateRequestDTO.getCommentId() != 0) {

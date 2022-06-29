@@ -81,20 +81,25 @@ public class BannedServiceImpl implements BannedService {
 
     @Override
     public List<Banned> findAllByCommunityId(Integer communityId) {
+        logService.message("Banned service, findAllByCommunityId() method called.", MessageType.INFO);
         return bannedRepository.findAllByCommunityId(communityId);
     }
 
     @Override
     public Banned findBannedByCommunityIdAndUserUsername(Integer communityId, String username) {
+        logService.message("Banned service, findBannedByCommunityIdAndUsername() method called.", MessageType.INFO);
         return bannedRepository.findBannedByCommunityIdAndUserUsername(communityId, username);
     }
 
     @Override
     public boolean delete(Integer communityId, String username) {
+        logService.message("Banned service, delete() method called.", MessageType.INFO);
+
         Banned banForDelete = bannedRepository.findBannedByCommunityIdAndUserUsername(communityId, username);
         System.out.println(banForDelete);
 
         if (banForDelete == null) {
+            logService.message("Banned service, createBan() method, failed to find ban.", MessageType.INFO);
             return false;
         }
 

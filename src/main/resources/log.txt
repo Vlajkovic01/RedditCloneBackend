@@ -51,3 +51,29 @@ INFO: 06-29-2022 22:55:02 Comment service, createComment() method called.
 INFO: 06-29-2022 22:55:02 User service, findByUsername() method called.
 INFO: 06-29-2022 22:55:02 Post service, findPostById() method called.
 INFO: 06-29-2022 22:55:02 Banned service, findBannedByCommunityIdAndUsername() method called.
+INFO: 06-29-2022 22:59:40 User controller, createAuthenticationToken() method called.
+INFO: 06-29-2022 22:59:41 User service, findByUsername() method called.
+INFO: 06-29-2022 23:00:00 User service, findByUsername() method called.
+INFO: 06-29-2022 23:00:00 Reaction controller, createReaction() method called.
+INFO: 06-29-2022 23:00:00 Reaction service, createReaction() method called.
+INFO: 06-29-2022 23:00:00 User service, findByUsername() method called.
+INFO: 06-29-2022 23:00:00 Post service, findPostById() method called.
+INFO: 06-29-2022 23:00:01 Post service, findPostById() method called.
+INFO: 06-29-2022 23:00:01 Banned service, findBannedByCommunityIdAndUsername() method called.
+WARN: 06-29-2022 23:00:01 Reaction service, createReaction() method, current logged user is banned from this community.
+INFO: 06-29-2022 23:00:01 Reaction controller, createReaction() method, failed to create a reaction.
+INFO: 06-29-2022 23:00:18 User service, findByUsername() method called.
+INFO: 06-29-2022 23:00:18 Reaction controller, createReaction() method called.
+INFO: 06-29-2022 23:00:18 Reaction service, createReaction() method called.
+INFO: 06-29-2022 23:00:18 User service, findByUsername() method called.
+INFO: 06-29-2022 23:00:18 Post service, findPostById() method called.
+INFO: 06-29-2022 23:00:18 Post service, findPostById() method called.
+INFO: 06-29-2022 23:00:18 Banned service, findBannedByCommunityIdAndUsername() method called.
+INFO: 06-29-2022 23:00:18 User service, findByUsername() method called.
+INFO: 06-29-2022 23:01:09 User service, findByUsername() method called.
+INFO: 06-29-2022 23:01:09 Reaction controller, createReaction() method called.
+INFO: 06-29-2022 23:01:09 Reaction service, createReaction() method called.
+INFO: 06-29-2022 23:01:09 User service, findByUsername() method called.
+INFO: 06-29-2022 23:01:09 Post service, findPostById() method called.
+INFO: 06-29-2022 23:01:09 Post service, findPostById() method called.
+INFO: 06-29-2022 23:01:09 Banned service, findBannedByCommunityIdAndUsername() method called.

@@ -6,10 +6,7 @@ import com.example.RedditClone.Model.Entity.*;
 import com.example.RedditClone.Model.Enum.ReactionType;
 import com.example.RedditClone.Repository.PostRepository;
 import com.example.RedditClone.Repository.ReactionRepository;
-import com.example.RedditClone.Service.FlairService;
-import com.example.RedditClone.Service.LogService;
-import com.example.RedditClone.Service.PostService;
-import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Service.*;
 import com.example.RedditClone.Util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +22,7 @@ import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
-
+    private final BannedService bannedService;
     private final LogService logService;
     private final ReactionRepository reactionRepository;
     private final FlairService flairService;
@@ -33,12 +30,13 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService, ReactionRepository reactionRepository, LogService logService) {
+    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService, ReactionRepository reactionRepository, LogService logService, BannedService bannedService) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.flairService = flairService;
         this.reactionRepository = reactionRepository;
         this.logService = logService;
+        this.bannedService = bannedService;
     }
 
     @Override
@@ -110,6 +108,11 @@ public class PostServiceImpl implements PostService {
 
         if (currentLoggedUser == null) {
             logService.message("Post service, createPost() method, current logged user is null.", MessageType.INFO);
+            return null;
+        }
+
+        if (bannedService.findBannedByCommunityIdAndUserUsername(community.getId(), currentLoggedUser.getUsername()) != null) {
+            logService.message("Post service, createPost() method, current logged user is banned from this community.", MessageType.WARN);
             return null;
         }
 

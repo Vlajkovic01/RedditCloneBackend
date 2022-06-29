@@ -8,10 +8,7 @@ import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Model.Enum.ReactionType;
 import com.example.RedditClone.Repository.CommentRepository;
 import com.example.RedditClone.Repository.ReactionRepository;
-import com.example.RedditClone.Service.CommentService;
-import com.example.RedditClone.Service.LogService;
-import com.example.RedditClone.Service.PostService;
-import com.example.RedditClone.Service.UserService;
+import com.example.RedditClone.Service.*;
 import com.example.RedditClone.Util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,7 +21,7 @@ import java.util.Set;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-
+    private final BannedService bannedService;
     private final LogService logService;
     private final ReactionRepository reactionRepository;
 
@@ -34,12 +31,13 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, PostService postService, ReactionRepository reactionRepository, LogService logService) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, PostService postService, ReactionRepository reactionRepository, LogService logService, BannedService bannedService) {
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.postService = postService;
         this.reactionRepository = reactionRepository;
         this.logService = logService;
+        this.bannedService = bannedService;
     }
 
     @Override
@@ -72,7 +70,12 @@ public class CommentServiceImpl implements CommentService {
         newComment.setUser(currentLoggedUser);
 
         if (commentCreateRequestDTO.getPostId() != 0) {
-            newComment.setPost(postService.findPostById(commentCreateRequestDTO.getPostId()));
+            Post post = postService.findPostById(commentCreateRequestDTO.getPostId());
+            if (bannedService.findBannedByCommunityIdAndUserUsername(post.getCommunity().getId(), currentLoggedUser.getUsername()) != null) {
+                logService.message("Comment service, createComment() method, current logged user is banned from this community.", MessageType.WARN);
+                return null;
+            }
+            newComment.setPost(post);
         }
 
         if (commentCreateRequestDTO.getParentCommentId() != 0) {
