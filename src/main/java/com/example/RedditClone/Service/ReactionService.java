@@ -14,4 +14,5 @@ public interface ReactionService {
     List<ReactionForPostAndCommentDTO> findAllByPostId(Integer id);
     Reaction createReaction(ReactionCreateRequestDTO reactionCreateRequestDTO, Authentication authentication);
     void delete(Reaction reaction);
+    void save(Reaction reaction);
 }

@@ -102,4 +102,9 @@ public class ReactionServiceImpl implements ReactionService {
     public void delete(Reaction reaction) {
         reactionRepository.delete(reaction);
     }
+
+    @Override
+    public void save(Reaction reaction) {
+        reactionRepository.save(reaction);
+    }
 }

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -50,9 +50,9 @@ public class Post {
     @JoinColumn(name = "community_id")
     private Community community;
 
-    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "post")
+    @OneToMany(cascade = {ALL, REFRESH}, fetch = EAGER, orphanRemoval = true, mappedBy = "post")
     private Set<Reaction> reactions = new HashSet<>();
 
-    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "post")
+    @OneToMany(cascade = {ALL, REFRESH}, fetch = EAGER, orphanRemoval = true, mappedBy = "post")
     private Set<Comment> comments = new HashSet<>();
 }

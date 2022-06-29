@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -54,6 +54,6 @@ public class Comment {
     @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private Post post;
 
-    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "comment")
+    @OneToMany(cascade = {ALL, REFRESH}, fetch = EAGER, orphanRemoval = true, mappedBy = "comment")
     private Set<Reaction> reactions = new HashSet<>();
 }

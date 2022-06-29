@@ -40,7 +40,7 @@ public class Community {
     @OneToMany(cascade = {ALL, REFRESH}, fetch = EAGER, orphanRemoval = true, mappedBy = "community")
     private Set<Moderator> moderators = new HashSet<>();
 
-    @OneToMany(cascade = {ALL}, fetch = EAGER, mappedBy = "community")
+    @OneToMany(cascade = {ALL, REFRESH}, fetch = EAGER, orphanRemoval = true, mappedBy = "community")
     private Set<Post> posts = new HashSet<>();
 
     @ManyToMany(fetch = EAGER)

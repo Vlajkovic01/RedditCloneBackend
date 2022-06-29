@@ -9,5 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ModeratorGetAllResponseDTO {
+    private Integer id;
     private UserGetAllResponseDTO user;
 }

@@ -189,11 +189,13 @@ public class CommunityController {
 
         postForDelete.getReactions().forEach(reaction -> {
             reaction.setPost(null);
+            reactionService.save(reaction);
             reactionService.delete(reaction);
         });
 
         postForDelete.getComments().forEach(comment -> {
             comment.setPost(null);
+            commentService.save(comment);
             commentService.delete(comment);
         });
 
@@ -309,7 +311,7 @@ public class CommunityController {
         return new ResponseEntity<>(reportsDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/moderators")
+    @PostMapping("/{id}/moderators")
     @CrossOrigin
     public ResponseEntity<CommunityGetAllResponseDTO> deleteModerators(@PathVariable Integer id, @RequestBody ModeratorDeleteFromCommunityDTO moderatorDTO) {
         logService.message("Community controller, deleteModerators() method called.", MessageType.INFO);
