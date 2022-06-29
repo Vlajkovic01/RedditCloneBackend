@@ -159,6 +159,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Integer idPost) {
         logService.message("Post service, deletePost() method called.", MessageType.INFO);
-        postRepository.deleteById(idPost);
+        postRepository.deletePost(idPost);
     }
 }

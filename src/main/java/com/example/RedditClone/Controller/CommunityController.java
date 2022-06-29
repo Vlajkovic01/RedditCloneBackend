@@ -185,22 +185,7 @@ public class CommunityController {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        postForDelete.setCommunity(null);
-
-        postForDelete.getReactions().forEach(reaction -> {
-            reaction.setPost(null);
-            reactionService.save(reaction);
-            reactionService.delete(reaction);
-        });
-
-        postForDelete.getComments().forEach(comment -> {
-            comment.setPost(null);
-            commentService.save(comment);
-            commentService.delete(comment);
-        });
-
-        postRepository.save(postForDelete);
-        postRepository.delete(postForDelete);
+        postService.deletePost(postForDelete.getId());
 
         return new ResponseEntity<>( HttpStatus.OK);
     }

@@ -4,6 +4,7 @@ import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Model.Entity.Post;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -59,4 +60,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "order by (karma * 1) - (daysdiff * 1.2) desc")
     Set<Post> findAllByCommunityOrderByKarmaAndCreationDate(Integer id);
     Post findPostById(Integer id);
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "delete from posts where post_id = ?")
+    void deletePost(Integer postId);
 }
