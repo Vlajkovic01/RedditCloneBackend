@@ -70,4 +70,18 @@ public class BannedController {
         BannedGetAllDTO bannedDTO = modelMapper.map(banned, BannedGetAllDTO.class);
         return new ResponseEntity<>(bannedDTO, HttpStatus.OK);
     }
+
+    @DeleteMapping("/community/{id}/user/{username}")
+    @CrossOrigin
+    public ResponseEntity<List<BannedGetAllDTO>> unblock(@PathVariable Integer id, @PathVariable String username) {
+        logService.message("Banned controller, unblock() method called.", MessageType.INFO);
+
+        if (bannedService.delete(id, username)) {
+            List<Banned> bans = bannedService.findAllByCommunityId(id);
+            List<BannedGetAllDTO> bannedGetAllDTO = modelMapper.mapAll(bans, BannedGetAllDTO.class);
+
+            return new ResponseEntity<>(bannedGetAllDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+    }
 }

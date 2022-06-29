@@ -88,4 +88,17 @@ public class BannedServiceImpl implements BannedService {
     public Banned findBannedByCommunityIdAndUserUsername(Integer communityId, String username) {
         return bannedRepository.findBannedByCommunityIdAndUserUsername(communityId, username);
     }
+
+    @Override
+    public boolean delete(Integer communityId, String username) {
+        Banned banForDelete = bannedRepository.findBannedByCommunityIdAndUserUsername(communityId, username);
+        System.out.println(banForDelete);
+
+        if (banForDelete == null) {
+            return false;
+        }
+
+        bannedRepository.delete(banForDelete);
+        return true;
+    }
 }

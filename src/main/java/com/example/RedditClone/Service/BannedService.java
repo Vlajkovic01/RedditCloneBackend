@@ -11,4 +11,6 @@ public interface BannedService {
     Banned createBan(BannedCreateDTO bannedCreateDTO, Authentication authentication);
     List<Banned> findAllByCommunityId(Integer communityId);
     Banned  findBannedByCommunityIdAndUserUsername(Integer communityId, String username);
+
+    boolean delete(Integer communityId, String username);
 }

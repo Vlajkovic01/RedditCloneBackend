@@ -97,6 +97,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/reports/{id}").access("@webSecurity.amIAdminOrModerator(authentication,request,#id)")
                 .antMatchers(HttpMethod.POST, "/api/banned").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/banned/community/{id}/user/{username}").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/banned/community/{id}/user/{username}").access("@webSecurity.amIAdminOrModerator(authentication,request,#id)")
                 .antMatchers(HttpMethod.GET, "/api/banned/community/{id}").permitAll()
                 .anyRequest().authenticated();
 
