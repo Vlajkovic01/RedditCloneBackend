@@ -95,6 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/comments/post/{id}/old").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/reports").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/reports/{id}").access("@webSecurity.amIAdminOrModerator(authentication,request,#id)")
+                .antMatchers(HttpMethod.POST, "/api/banned").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

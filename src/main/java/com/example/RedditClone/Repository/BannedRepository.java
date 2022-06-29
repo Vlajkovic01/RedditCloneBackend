@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BannedRepository extends JpaRepository<Banned, Integer> {
+    Banned findBannedByCommunityIdAndUserId(Integer communityId, Integer userId);
+    Banned findBannedByCommunityId(Integer communityId);
 }
