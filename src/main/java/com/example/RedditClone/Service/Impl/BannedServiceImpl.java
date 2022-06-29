@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class BannedServiceImpl implements BannedService {
@@ -76,5 +77,15 @@ public class BannedServiceImpl implements BannedService {
 
         bannedRepository.save(newBan);
         return newBan;
+    }
+
+    @Override
+    public List<Banned> findAllByCommunityId(Integer communityId) {
+        return bannedRepository.findAllByCommunityId(communityId);
+    }
+
+    @Override
+    public Banned findBannedByCommunityIdAndUserUsername(Integer communityId, String username) {
+        return bannedRepository.findBannedByCommunityIdAndUserUsername(communityId, username);
     }
 }

@@ -15,12 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/banned")
@@ -49,5 +47,27 @@ public class BannedController {
         }
         BannedGetAllDTO bannedGetAllDTO = modelMapper.map(createdBan, BannedGetAllDTO.class);
         return new ResponseEntity<>(bannedGetAllDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/community/{id}")
+    public ResponseEntity<List<BannedGetAllDTO>> getBannedForCommunity(@PathVariable Integer id) {
+        logService.message("Banned controller, getBannedForCommunity() method called.", MessageType.INFO);
+
+        List<Banned> bans = bannedService.findAllByCommunityId(id);
+
+        List<BannedGetAllDTO> bannedGetAllDTO = modelMapper.mapAll(bans, BannedGetAllDTO.class);
+        return new ResponseEntity<>(bannedGetAllDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/community/{id}/user/{username}")
+    public ResponseEntity<BannedGetAllDTO> isBanned(@PathVariable Integer id, @PathVariable String username) {
+        logService.message("Banned controller, isBanned() method called.", MessageType.INFO);
+        Banned banned = bannedService.findBannedByCommunityIdAndUserUsername(id, username);
+
+        if (banned == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        BannedGetAllDTO bannedDTO = modelMapper.map(banned, BannedGetAllDTO.class);
+        return new ResponseEntity<>(bannedDTO, HttpStatus.OK);
     }
 }
