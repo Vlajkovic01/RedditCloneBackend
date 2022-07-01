@@ -103,7 +103,6 @@ public class ReportServiceImpl implements ReportService {
         }
 
         List<Report> reports = new ArrayList<>();
-
         if (report.getPost() != null) {
             reports = reportRepository.findAllByComment_PostIdAndAcceptedIsFalseMyQuery(report.getPost().getId());
         }
