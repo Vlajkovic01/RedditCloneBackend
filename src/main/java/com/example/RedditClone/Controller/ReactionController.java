@@ -2,6 +2,7 @@ package com.example.RedditClone.Controller;
 
 import com.example.RedditClone.Model.DTO.Community.Request.CommunityCreateRequestDTO;
 import com.example.RedditClone.Model.DTO.Reaction.Request.ReactionCreateRequestDTO;
+import com.example.RedditClone.Model.DTO.Reaction.Response.ReactionForPostAndCommentDTO;
 import com.example.RedditClone.Model.Entity.Community;
 import com.example.RedditClone.Model.Entity.Reaction;
 import com.example.RedditClone.Service.LogService;
@@ -14,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 
@@ -37,7 +35,7 @@ public class ReactionController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR', 'ROLE_USER')")
-    public ResponseEntity<ReactionCreateRequestDTO> createReaction(@RequestBody ReactionCreateRequestDTO newReaction,
+    public ResponseEntity<ReactionForPostAndCommentDTO> createReaction(@RequestBody ReactionCreateRequestDTO newReaction,
                                                                     Authentication authentication) {
 
         logService.message("Reaction controller, createReaction() method called.", MessageType.INFO);
@@ -49,7 +47,27 @@ public class ReactionController {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        ReactionCreateRequestDTO reactionDTO = modelMapper.map(createdReaction, ReactionCreateRequestDTO.class);
+        ReactionForPostAndCommentDTO reactionDTO = modelMapper.map(createdReaction, ReactionForPostAndCommentDTO.class);
         return new ResponseEntity<>(reactionDTO, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRATOR', 'ROLE_USER')")
+    @CrossOrigin
+    public ResponseEntity<ReactionForPostAndCommentDTO> deleteReaction(@PathVariable Integer id, Authentication authentication) {
+
+        logService.message("Reaction controller, deleteReaction() method called.", MessageType.INFO);
+
+        Reaction reactionForDelete = reactionService.findById(id);
+
+        if(reactionForDelete == null){
+            logService.message("Reaction controller, deleteReaction() method, failed to find a reaction.", MessageType.INFO);
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        reactionService.delete(reactionForDelete);
+
+        ReactionForPostAndCommentDTO reactionDTO = modelMapper.map(reactionForDelete, ReactionForPostAndCommentDTO.class);
+        return new ResponseEntity<>(reactionDTO, HttpStatus.OK);
     }
 }

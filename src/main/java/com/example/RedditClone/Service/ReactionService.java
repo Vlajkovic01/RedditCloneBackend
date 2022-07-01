@@ -12,6 +12,7 @@ public interface ReactionService {
 
     void deleteAllByPost(Post post);
     List<ReactionForPostAndCommentDTO> findAllByPostId(Integer id);
+    Reaction findById(Integer reactionId);
     Reaction createReaction(ReactionCreateRequestDTO reactionCreateRequestDTO, Authentication authentication);
     void delete(Reaction reaction);
     void save(Reaction reaction);

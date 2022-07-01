@@ -52,6 +52,11 @@ public class ReactionServiceImpl implements ReactionService {
     }
 
     @Override
+    public Reaction findById(Integer reactionId) {
+        return reactionRepository.findReactionById(reactionId);
+    }
+
+    @Override
     public Reaction createReaction(ReactionCreateRequestDTO reactionCreateRequestDTO, Authentication authentication) {
 
         logService.message("Reaction service, createReaction() method called.", MessageType.INFO);
@@ -106,7 +111,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     @Override
     public void delete(Reaction reaction) {
-        reactionRepository.delete(reaction);
+        reactionRepository.deleteReaction(reaction.getId());
     }
 
     @Override
