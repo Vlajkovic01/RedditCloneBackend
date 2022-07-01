@@ -8,9 +8,9 @@ import com.example.RedditClone.Model.Entity.User;
 import com.example.RedditClone.Model.Enum.ReactionType;
 import com.example.RedditClone.Repository.CommentRepository;
 import com.example.RedditClone.Repository.ReactionRepository;
+import com.example.RedditClone.Repository.ReportRepository;
 import com.example.RedditClone.Service.*;
 import com.example.RedditClone.Util.MessageType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ import java.util.Set;
 
 @Service
 public class CommentServiceImpl implements CommentService {
+    private final ReportRepository reportRepository;
     private final BannedService bannedService;
     private final LogService logService;
     private final ReactionRepository reactionRepository;
@@ -31,13 +32,14 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, PostService postService, ReactionRepository reactionRepository, LogService logService, BannedService bannedService) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, PostService postService, ReactionRepository reactionRepository, LogService logService, BannedService bannedService, ReportRepository reportRepository) {
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.postService = postService;
         this.reactionRepository = reactionRepository;
         this.logService = logService;
         this.bannedService = bannedService;
+        this.reportRepository = reportRepository;
     }
 
     @Override
@@ -109,21 +111,29 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findAllByPostOrderByKarma(post.getId());
     }
 
-//    @Override
-//    public Void removeChildrens(Set<Comment> comments) {
-//        Set<Comment> nextSet = new HashSet<>();
-//        for (Comment c : comments) {
-//            c.setIsDeleted(true);
-//            commentRepository.save(c);
-//            if (!c.getChildren().isEmpty()) {
-//                c.getChildren().forEach(comment -> nextSet.add(comment));
-//            }
-//        }
-//        if (nextSet.isEmpty()) {
-//            return null;
-//        }
-//        return removeChildrens(nextSet);
-//    }
+    @Override
+    public Void removeChildren(Set<Comment> comments) {
+        Set<Comment> nextSet = new HashSet<>();
+        for (Comment c : comments) {
+
+            if (!reportRepository.findAllByCommentIdAndAcceptedFalse(c.getId()).isEmpty()) {
+                reportRepository.deleteByCommentId(c.getId());
+            }
+
+            c.setIsDeleted(true);
+            commentRepository.save(c);
+
+            if (!c.getChildren().isEmpty()) {
+                c.getChildren().forEach(comment -> nextSet.add(comment));
+            }
+        }
+
+        if (nextSet.isEmpty()) {
+            return null;
+        }
+
+        return removeChildren(nextSet);
+    }
 
     @Override
     public void save(Comment comment) {
@@ -133,5 +143,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void delete(Comment comment) {
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public void setDeletedById(Integer commentId) {
+        commentRepository.setDeletedById(commentId);
     }
 }

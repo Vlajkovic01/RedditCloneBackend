@@ -3,9 +3,11 @@ package com.example.RedditClone.Repository;
 import com.example.RedditClone.Model.Entity.Comment;
 import com.example.RedditClone.Model.Entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Repository
@@ -22,4 +24,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
             "from comments comments where comments.post_id = ? " +
             "order by karma desc")
     Set<Comment> findAllByPostOrderByKarma(Integer id);
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update comments set is_deleted = true where comment_id = ?")
+    void setDeletedById(Integer commentId);
 }

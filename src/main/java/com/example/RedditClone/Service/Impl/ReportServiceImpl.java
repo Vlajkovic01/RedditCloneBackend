@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -101,14 +102,37 @@ public class ReportServiceImpl implements ReportService {
             return null;
         }
 
-        report.setAccepted(true);
-        if (report.getComment() != null) {
-            Comment comment = commentService.findCommentById(report.getComment().getId());
-            comment.setIsDeleted(true);
-        }
-        reportRepository.save(report);
+        List<Report> reports = new ArrayList<>();
 
         if (report.getPost() != null) {
+            reports = reportRepository.findAllByComment_PostIdAndAcceptedIsFalseMyQuery(report.getPost().getId());
+        }
+
+        report.setAccepted(true);
+        reportRepository.save(report);
+
+        if (report.getComment() != null) {
+            Comment comment = commentService.findCommentById(report.getComment().getId());
+
+            commentService.removeChildren(comment.getChildren());
+            reportRepository.deleteByCommentId(comment.getId());
+
+            commentService.setDeletedById(comment.getId());
+        }
+
+        //delete all other reports on same entity after acceptance
+        if (report.getPost() != null) {
+            if (!reports.isEmpty()) {
+                for (Report r : reports) {
+                    if (r.getComment() != null) {
+
+                        commentService.removeChildren(r.getComment().getChildren());
+                        reportRepository.deleteByCommentId(r.getComment().getId());
+
+                        commentService.setDeletedById(r.getComment().getId());
+                    }
+                }
+            }
             reportRepository.deleteByPostId(report.getPost().getId());
         }
 
@@ -118,6 +142,6 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Report> findAllByCommunityId(Integer id) {
         logService.message("Report service, findAllByCommunityId() method called.", MessageType.INFO);
-        return reportRepository.findAllByCommunityIdAndAcceptedIsFalse(id);
+        return reportRepository.findAllByCommunityIdAndAcceptedIsFalseMyQuery(id);
     }
 }
