@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -106,6 +107,10 @@ public class ReportServiceImpl implements ReportService {
             comment.setIsDeleted(true);
         }
         reportRepository.save(report);
+
+        if (report.getPost() != null) {
+            reportRepository.deleteByPostId(report.getPost().getId());
+        }
 
         return report;
     }
