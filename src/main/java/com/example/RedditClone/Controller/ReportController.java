@@ -46,6 +46,7 @@ public class ReportController {
 
     @DeleteMapping("/{id}")
     @CrossOrigin
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMINISTRATOR')")
     public ResponseEntity<ReportGetAllResponseDTO> acceptReport(@PathVariable Integer id){
 
         logService.message("Report controller, acceptReport() method called.", MessageType.INFO);

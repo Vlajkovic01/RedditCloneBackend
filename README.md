@@ -1,5 +1,5 @@
 **Serverske Web Tehnologije**
-========================
+=============================
 # *RedditClone*
 
 - Stefan Vlajkovic
