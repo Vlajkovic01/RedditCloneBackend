@@ -4,5 +4,5 @@
 
 - Stefan Vlajkovic
 - Index: SR53/2020
-- Broj bodova: -/100  
+- Broj bodova: 100/100  
 - [Specifikacija projekta](ProjekatSVT2022.pdf)
