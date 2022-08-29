@@ -3,12 +3,16 @@ package com.example.RedditClone.Controller;
 import com.example.RedditClone.Service.FileUploadService;
 import com.example.RedditClone.Service.LogService;
 import com.example.RedditClone.Util.MessageType;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 @RestController
 @RequestMapping("/api/upload")
@@ -28,7 +32,7 @@ public class FileUploadController {
 
         logService.message("File upload controller, savePostImg() method called.", MessageType.INFO);
 
-        try{
+        try {
             String uploadDir = "../RedditCloneFrontend/src/assets/images/post";
             String fileName = fileUploadService.saveFile(uploadDir, image);
             return new ResponseEntity<>(fileName, HttpStatus.OK);
@@ -43,7 +47,7 @@ public class FileUploadController {
 
         logService.message("File upload controller, saveUserImg() method called.", MessageType.INFO);
 
-        try{
+        try {
             String uploadDir = "../RedditCloneFrontend/src/assets/images/user";
             String fileName = fileUploadService.saveFile(uploadDir, image);
             return new ResponseEntity<>(fileName, HttpStatus.OK);
@@ -51,6 +55,26 @@ public class FileUploadController {
             logService.message("File upload controller, saveUserImg() method, bad request.", MessageType.ERROR);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+//    @GetMapping
+//    public @ResponseBody getImage(@RequestParam(name = "path") String fileName) throws IOException {
+//        String path = "../RedditCloneFrontend/src/" + fileName;
+//
+//        InputStream in = getClass()
+//                .getResourceAsStream(path);
+//        return IOUtils.toByteArray(in);
+//    }
+
+    @GetMapping()
+    public ResponseEntity<byte[]> getImage(@RequestParam(name = "path") String fileName) throws IOException {
+        String path = "../RedditCloneFrontend/src/" + fileName;
+
+        File imgPath = new File(path);
+
+        byte[] image = Files.readAllBytes(imgPath.toPath());
+
+        return new ResponseEntity<>(image, HttpStatus.OK);
     }
 
 }
