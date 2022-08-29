@@ -57,15 +57,6 @@ public class FileUploadController {
         }
     }
 
-//    @GetMapping
-//    public @ResponseBody getImage(@RequestParam(name = "path") String fileName) throws IOException {
-//        String path = "../RedditCloneFrontend/src/" + fileName;
-//
-//        InputStream in = getClass()
-//                .getResourceAsStream(path);
-//        return IOUtils.toByteArray(in);
-//    }
-
     @GetMapping()
     public ResponseEntity<byte[]> getImage(@RequestParam(name = "path") String fileName) throws IOException {
         String path = "../RedditCloneFrontend/src/" + fileName;
