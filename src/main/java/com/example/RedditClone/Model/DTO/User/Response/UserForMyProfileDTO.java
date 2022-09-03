@@ -1,5 +1,6 @@
 package com.example.RedditClone.Model.DTO.User.Response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class UserForMyProfileDTO {
     private String email;
     private String avatar;
     private String description;
+    @JsonFormat(pattern = "YYYY-MM-dd")
     private LocalDate registrationDate;
     private String displayName;
     private Integer totalKarma;
