@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 
 @RestController
 @RequestMapping("/api/upload")
@@ -59,13 +61,16 @@ public class FileUploadController {
 
     @GetMapping()
     public ResponseEntity<byte[]> getImage(@RequestParam(name = "path") String fileName) throws IOException {
-        String path = "../RedditCloneFrontend/src/" + fileName;
 
-        File imgPath = new File(path);
+        try {
+            String path = "../RedditCloneFrontend/src/" + fileName;
+            File imgPath = new File(path);
 
-        byte[] image = Files.readAllBytes(imgPath.toPath());
-
-        return new ResponseEntity<>(image, HttpStatus.OK);
+            byte[] image = Files.readAllBytes(imgPath.toPath());
+            return new ResponseEntity<>(image, HttpStatus.OK);
+        } catch (NoSuchFileException | AccessDeniedException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
