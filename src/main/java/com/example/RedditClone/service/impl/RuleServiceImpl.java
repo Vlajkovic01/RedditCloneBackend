@@ -3,7 +3,7 @@ package com.example.RedditClone.service.impl;
 import com.example.RedditClone.model.dto.rule.response.RuleGetByCommunityResponseDTO;
 import com.example.RedditClone.model.entity.Community;
 import com.example.RedditClone.model.entity.Rule;
-import com.example.RedditClone.repository.RuleRepository;
+import com.example.RedditClone.repository.jpa.RuleRepository;
 import com.example.RedditClone.service.LogService;
 import com.example.RedditClone.service.RuleService;
 import com.example.RedditClone.model.mapper.ExtendedModelMapper;

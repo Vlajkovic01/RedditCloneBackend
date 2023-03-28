@@ -5,7 +5,7 @@ import com.example.RedditClone.model.dto.reaction.response.ReactionForPostAndCom
 import com.example.RedditClone.model.entity.Post;
 import com.example.RedditClone.model.entity.Reaction;
 import com.example.RedditClone.model.entity.User;
-import com.example.RedditClone.repository.ReactionRepository;
+import com.example.RedditClone.repository.jpa.ReactionRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.mapper.ExtendedModelMapper;
 import com.example.RedditClone.model.enumeration.MessageType;

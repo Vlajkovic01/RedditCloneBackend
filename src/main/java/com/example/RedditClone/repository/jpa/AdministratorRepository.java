@@ -1,4 +1,4 @@
-package com.example.RedditClone.repository;
+package com.example.RedditClone.repository.jpa;
 
 import com.example.RedditClone.model.entity.Administrator;
 import org.springframework.data.jpa.repository.JpaRepository;

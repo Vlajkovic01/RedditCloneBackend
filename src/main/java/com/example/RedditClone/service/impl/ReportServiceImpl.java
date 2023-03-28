@@ -4,7 +4,7 @@ import com.example.RedditClone.model.dto.report.request.ReportCreateRequestDTO;
 import com.example.RedditClone.model.entity.Comment;
 import com.example.RedditClone.model.entity.Report;
 import com.example.RedditClone.model.entity.User;
-import com.example.RedditClone.repository.ReportRepository;
+import com.example.RedditClone.repository.jpa.ReportRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.enumeration.MessageType;
 import org.springframework.security.core.Authentication;

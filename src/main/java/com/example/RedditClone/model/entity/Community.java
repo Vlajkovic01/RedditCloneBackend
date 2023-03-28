@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,6 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Entity
 @Table(name = "communities")
+@Document(indexName = "communities")
 @Where(clause = "is_suspended=false")
 public class Community {
 
@@ -27,6 +31,7 @@ public class Community {
     @Column(name = "community_id", unique = true, nullable = false)
     private Integer id;
 
+    @Field(type = FieldType.Keyword)
     @Column(nullable = false)
     private String name;
     private String description;

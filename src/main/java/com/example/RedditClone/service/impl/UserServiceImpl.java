@@ -5,7 +5,7 @@ import com.example.RedditClone.model.dto.user.request.UserEditPasswordRequestDTO
 import com.example.RedditClone.model.dto.user.request.UserEditRequestDTO;
 import com.example.RedditClone.model.dto.user.request.UserRegisterRequestDTO;
 import com.example.RedditClone.model.entity.User;
-import com.example.RedditClone.repository.UserRepository;
+import com.example.RedditClone.repository.jpa.UserRepository;
 import com.example.RedditClone.service.LogService;
 import com.example.RedditClone.service.UserService;
 import com.example.RedditClone.model.enumeration.MessageType;

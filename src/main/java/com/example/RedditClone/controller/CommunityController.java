@@ -13,8 +13,8 @@ import com.example.RedditClone.model.dto.report.response.ReportGetAllResponseDTO
 import com.example.RedditClone.model.entity.Community;
 import com.example.RedditClone.model.entity.Post;
 import com.example.RedditClone.model.entity.Report;
-import com.example.RedditClone.repository.ModeratorRepository;
-import com.example.RedditClone.repository.PostRepository;
+import com.example.RedditClone.repository.jpa.ModeratorRepository;
+import com.example.RedditClone.repository.jpa.PostRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.mapper.ExtendedModelMapper;
 import com.example.RedditClone.model.enumeration.MessageType;

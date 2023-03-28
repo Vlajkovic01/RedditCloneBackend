@@ -2,8 +2,8 @@ package com.example.RedditClone.service.impl;
 
 import com.example.RedditClone.model.entity.Community;
 import com.example.RedditClone.model.entity.Moderator;
-import com.example.RedditClone.repository.CommunityRepository;
-import com.example.RedditClone.repository.ModeratorRepository;
+import com.example.RedditClone.repository.jpa.CommunityRepository;
+import com.example.RedditClone.repository.jpa.ModeratorRepository;
 import com.example.RedditClone.service.LogService;
 import com.example.RedditClone.service.ModeratorService;
 import com.example.RedditClone.model.enumeration.MessageType;

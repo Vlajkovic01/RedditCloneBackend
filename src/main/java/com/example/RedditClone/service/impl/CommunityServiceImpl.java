@@ -4,12 +4,13 @@ import com.example.RedditClone.model.dto.community.request.CommunityCreateReques
 import com.example.RedditClone.model.dto.community.request.CommunityEditRequestDTO;
 import com.example.RedditClone.model.dto.community.request.CommunitySuspendRequestDTO;
 import com.example.RedditClone.model.entity.*;
-import com.example.RedditClone.repository.CommunityRepository;
-import com.example.RedditClone.repository.FlairRepository;
-import com.example.RedditClone.repository.ModeratorRepository;
-import com.example.RedditClone.repository.RuleRepository;
+import com.example.RedditClone.repository.jpa.CommunityRepository;
+import com.example.RedditClone.repository.jpa.FlairRepository;
+import com.example.RedditClone.repository.jpa.ModeratorRepository;
+import com.example.RedditClone.repository.jpa.RuleRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.enumeration.MessageType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,10 @@ public class CommunityServiceImpl implements CommunityService {
     private final RuleRepository ruleRepository;
     private final FlairRepository flairRepository;
     private final UserService userService;
-
     private final CommunityRepository communityRepository;
 
-    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, ModeratorService moderatorService, ModeratorRepository moderatorRepository, LogService logService) {
+
+    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, ModeratorService moderatorService, ModeratorRepository moderatorRepository, LogService logService ) {
         this.communityRepository = communityRepository;
         this.userService = userService;
         this.flairRepository = flairRepository;

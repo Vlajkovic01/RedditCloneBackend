@@ -1,7 +1,7 @@
 package com.example.RedditClone.service.impl;
 
 import com.example.RedditClone.model.entity.Flair;
-import com.example.RedditClone.repository.FlairRepository;
+import com.example.RedditClone.repository.jpa.FlairRepository;
 import com.example.RedditClone.service.FlairService;
 import com.example.RedditClone.service.LogService;
 import com.example.RedditClone.model.enumeration.MessageType;
