@@ -183,3 +183,13 @@ INFO: 09-03-2022 19:24:08 Community controller, getSingleCommunity() method call
 INFO: 09-03-2022 19:24:08 Community service, findCommunityById() method called.
 INFO: 03-28-2023 21:58:45 Community controller, getCommunities() method called.
 INFO: 03-28-2023 21:58:45 Community service, find12RandomCommunities() method called.
+INFO: 03-28-2023 22:15:34 Community controller, getCommunities() method called.
+INFO: 03-28-2023 22:15:34 Community service, findAll() method called.
+INFO: 03-28-2023 22:25:47 Community controller, getCommunities() method called.
+INFO: 03-28-2023 22:25:47 Community service, findAll() method called.
+INFO: 03-28-2023 22:26:01 Community controller, getCommunities() method called.
+INFO: 03-28-2023 22:26:01 Community service, findAll() method called.
+INFO: 03-28-2023 22:26:12 Community controller, getSingleCommunity() method called.
+INFO: 03-28-2023 22:26:12 Community service, findCommunityById() method called.
+INFO: 03-28-2023 22:26:15 Community controller, getCommunities() method called.
+INFO: 03-28-2023 22:26:15 Community service, findAll() method called.
