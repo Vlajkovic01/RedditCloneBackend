@@ -22,7 +22,7 @@ import java.util.List;
 public class IndexedCommunity {
 
     @Id
-    private Integer id;
+    private String id;
 
     @Field(type = FieldType.Text)
     private String name;

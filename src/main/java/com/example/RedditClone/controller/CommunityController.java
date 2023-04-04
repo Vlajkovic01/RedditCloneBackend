@@ -32,6 +32,8 @@ import java.util.Set;
 @RestController
 @RequestMapping(value = "api/communities")
 public class CommunityController {
+
+    private final IndexedPostService indexedPostService;
     private final ModeratorService moderatorService;
     private final CommentService commentService;
     private final ReportService reportService;
@@ -47,7 +49,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService, CommentService commentService, ModeratorService moderatorService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService, CommentService commentService, ModeratorService moderatorService, IndexedPostService indexedPostService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
@@ -60,6 +62,7 @@ public class CommunityController {
         this.reportService = reportService;
         this.commentService = commentService;
         this.moderatorService = moderatorService;
+        this.indexedPostService = indexedPostService;
     }
 
     @GetMapping
@@ -136,6 +139,7 @@ public class CommunityController {
 
         Community community = communityService.findCommunityById(id);
         Post createdPost = postService.createPost(newPost, authentication, community);
+        indexedPostService.indexPost(newPost);
 
         if(community == null || createdPost == null){
             logService.message("Community controller, createPost() method, failed to create a post.", MessageType.INFO);
