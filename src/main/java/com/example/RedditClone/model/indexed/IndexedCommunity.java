@@ -12,29 +12,24 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.util.List;
 
+
 @Setter
 @Getter
 @Builder
 @AllArgsConstructor
-@Document(indexName = "posts")
+@Document(indexName = "communities")
 @Setting(settingPath = "/analyzers/serbianAnalyzer.json")
-public class IndexedPost {
+public class IndexedCommunity {
 
     @Id
     private Integer id;
 
     @Field(type = FieldType.Text)
-    private String title;
+    private String name;
 
     @Field(type = FieldType.Text)
-    private String text;
+    private String description;
 
     @Field(type = FieldType.Nested)
-    private List<String> comments;
-
-    @Field(type = FieldType.Text)
-    private String flair;
-
-    @Field(type = FieldType.Integer)
-    private Integer karma;
+    private List<String> rules;
 }
