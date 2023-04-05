@@ -4,6 +4,10 @@ import com.example.RedditClone.model.dto.community.request.CommunityCreateReques
 import com.example.RedditClone.model.dto.community.request.CommunityEditRequestDTO;
 import com.example.RedditClone.model.dto.community.request.CommunitySuspendRequestDTO;
 import com.example.RedditClone.model.dto.community.response.CommunityGetAllResponseDTO;
+import com.example.RedditClone.model.dto.indexedCommunity.request.IndexedCommunitySearchDTO;
+import com.example.RedditClone.model.dto.indexedCommunity.response.IndexedCommunityResponseDTO;
+import com.example.RedditClone.model.dto.indexedPost.request.IndexedPostSearchDTO;
+import com.example.RedditClone.model.dto.indexedPost.response.IndexedPostResponseDTO;
 import com.example.RedditClone.model.dto.moderator.request.ModeratorDeleteFromCommunityDTO;
 import com.example.RedditClone.model.dto.post.request.PostCreateRequestDTO;
 import com.example.RedditClone.model.dto.post.request.PostEditRequestDTO;
@@ -18,6 +22,7 @@ import com.example.RedditClone.repository.jpa.PostRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.mapper.ExtendedModelMapper;
 import com.example.RedditClone.model.enumeration.MessageType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +38,7 @@ import java.util.Set;
 @RequestMapping(value = "api/communities")
 public class CommunityController {
 
+    private final IndexedCommunityService indexedCommunityService;
     private final IndexedPostService indexedPostService;
     private final ModeratorService moderatorService;
     private final CommentService commentService;
@@ -49,7 +55,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService, CommentService commentService, ModeratorService moderatorService, IndexedPostService indexedPostService) {
+    public CommunityController(ExtendedModelMapper modelMapper, CommunityService communityService, RuleService ruleService, UserService userService, PostService postService, ReactionService reactionService, PostRepository postRepository, ModeratorRepository moderatorRepository, LogService logService, ReportService reportService, CommentService commentService, ModeratorService moderatorService, IndexedPostService indexedPostService, IndexedCommunityService indexedCommunityService) {
         this.modelMapper = modelMapper;
         this.communityService = communityService;
         this.ruleService = ruleService;
@@ -63,6 +69,7 @@ public class CommunityController {
         this.commentService = commentService;
         this.moderatorService = moderatorService;
         this.indexedPostService = indexedPostService;
+        this.indexedCommunityService = indexedCommunityService;
     }
 
     @GetMapping
@@ -104,6 +111,9 @@ public class CommunityController {
             logService.message("Community controller, createCommunity() method, failed to create a community.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
+
+        indexedCommunityService.indexCommunity(createdCommunity);
+
         CommunityCreateRequestDTO communityDTO = modelMapper.map(createdCommunity, CommunityCreateRequestDTO.class);
         communityDTO.setRules(new HashSet<>(ruleService.findAllByCommunity(createdCommunity)));
         return new ResponseEntity<>(communityDTO, HttpStatus.CREATED);
@@ -139,12 +149,13 @@ public class CommunityController {
 
         Community community = communityService.findCommunityById(id);
         Post createdPost = postService.createPost(newPost, authentication, community);
-        indexedPostService.indexPost(newPost);
 
         if(community == null || createdPost == null){
             logService.message("Community controller, createPost() method, failed to create a post.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
+
+        indexedPostService.indexPost(createdPost);
 
         community.getPosts().add(createdPost);
         communityService.save(community);
@@ -310,5 +321,27 @@ public class CommunityController {
             return new ResponseEntity<>(communityDTO,HttpStatus.OK);
         }
         return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @GetMapping("/name")
+    public ResponseEntity<List<IndexedCommunityResponseDTO>> searchCommunityByName(@RequestBody IndexedCommunitySearchDTO searchDTO) {
+
+        logService.message("Community controller, searchCommunityByName() method called.", MessageType.INFO);
+
+        List<IndexedCommunityResponseDTO> communitiesDTO = modelMapper.mapAll(indexedCommunityService.findAllByName(searchDTO.getName()),
+                IndexedCommunityResponseDTO.class);
+
+        return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/description")
+    public ResponseEntity<List<IndexedCommunityResponseDTO>> searchCommunityByDescription(@RequestBody IndexedCommunitySearchDTO searchDTO) {
+
+        logService.message("Community controller, searchCommunityByDescription() method called.", MessageType.INFO);
+
+        List<IndexedCommunityResponseDTO> communitiesDTO = modelMapper.mapAll(indexedCommunityService.findAllByDescription(searchDTO.getDescription()),
+                IndexedCommunityResponseDTO.class);
+
+        return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
     }
 }

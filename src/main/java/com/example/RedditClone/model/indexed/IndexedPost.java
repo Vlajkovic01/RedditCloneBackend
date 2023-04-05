@@ -23,13 +23,16 @@ public class IndexedPost {
     @Id
     private String id;
 
+    @Field(type = FieldType.Integer)
+    private Integer mySqlId;
+
     @Field(type = FieldType.Text)
     private String title;
 
     @Field(type = FieldType.Text)
     private String text;
 
-    @Field(type = FieldType.Nested)
+    @Field(type = FieldType.Text)
     private List<String> comments;
 
     @Field(type = FieldType.Text)

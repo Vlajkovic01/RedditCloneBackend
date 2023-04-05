@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IndexedPostRepository extends ElasticsearchRepository<IndexedPost, Integer> {
+public interface IndexedPostRepository extends ElasticsearchRepository<IndexedPost, String> {
 
     List<IndexedPost> findAllByTitle(String title);
     List<IndexedPost> findAllByText(String text);

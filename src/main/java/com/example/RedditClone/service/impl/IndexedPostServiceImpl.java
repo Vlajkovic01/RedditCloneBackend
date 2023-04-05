@@ -4,6 +4,7 @@ import com.example.RedditClone.lucene.search.SearchQueryGenerator;
 import com.example.RedditClone.lucene.search.SimpleQueryEs;
 import com.example.RedditClone.model.dto.indexedPost.request.IndexedPostSearchDTO;
 import com.example.RedditClone.model.dto.post.request.PostCreateRequestDTO;
+import com.example.RedditClone.model.entity.Post;
 import com.example.RedditClone.model.indexed.IndexedPost;
 import com.example.RedditClone.model.mapper.IndexedPostMapper;
 import com.example.RedditClone.repository.elasticsearch.IndexedPostRepository;
@@ -32,8 +33,8 @@ public class IndexedPostServiceImpl implements IndexedPostService {
 
 
     @Override
-    public void indexPost(PostCreateRequestDTO postCreateRequestDTO) {
-        indexedPostRepository.save(IndexedPostMapper.mapIndexedPost(postCreateRequestDTO));
+    public void indexPost(Post post) {
+        indexedPostRepository.save(IndexedPostMapper.mapIndexedPost(post));
     }
 
     @Override
