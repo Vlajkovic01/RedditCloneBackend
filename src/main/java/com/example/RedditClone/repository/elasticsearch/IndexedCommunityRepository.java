@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IndexedCommunityRepository extends ElasticsearchRepository<IndexedCommunity, String> {
+public interface IndexedCommunityRepository extends ElasticsearchRepository<IndexedCommunity, Integer> {
 
     List<IndexedCommunity> findAllByName(String name);
     List<IndexedCommunity> findAllByDescription(String description);

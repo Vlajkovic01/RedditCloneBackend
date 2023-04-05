@@ -13,7 +13,7 @@ public class IndexedPostMapper {
 
     public static IndexedPost mapIndexedPost(Post post){
         return IndexedPost.builder()
-                .mySqlId(post.getId())
+                .id(post.getId())
                 .title(post.getTitle())
                 .text(post.getText())
                 .flair(post.getFlair().getName())

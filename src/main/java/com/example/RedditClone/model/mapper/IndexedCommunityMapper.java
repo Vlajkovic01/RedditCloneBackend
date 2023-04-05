@@ -12,7 +12,7 @@ public class IndexedCommunityMapper {
 
     public static IndexedCommunity mapIndexedCommunity(Community community){
         return IndexedCommunity.builder()
-                .mySqlId(community.getId())
+                .id(community.getId())
                 .name(community.getName())
                 .description(community.getDescription())
                 .rules(community.getRules().stream().map(Rule::getDescription).toList())

@@ -19,10 +19,7 @@ import java.util.List;
 public class IndexedCommunity {
 
     @Id
-    private String id;
-
-    @Field(type = FieldType.Integer)
-    private Integer mySqlId;
+    private Integer id;
 
     @Field(type = FieldType.Text)
     private String name;

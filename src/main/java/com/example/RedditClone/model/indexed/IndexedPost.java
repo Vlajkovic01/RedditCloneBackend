@@ -21,10 +21,7 @@ import java.util.List;
 public class IndexedPost {
 
     @Id
-    private String id;
-
-    @Field(type = FieldType.Integer)
-    private Integer mySqlId;
+    private Integer id;
 
     @Field(type = FieldType.Text)
     private String title;
