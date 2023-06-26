@@ -38,8 +38,8 @@ public class IndexedCommunityServiceImpl implements IndexedCommunityService {
     }
 
     @Override
-    public void indexCommunity(Community community) {
-        indexedCommunityRepository.save(IndexedCommunityMapper.mapIndexedCommunity(community));
+    public void indexCommunity(Community community, String pdfText) {
+        indexedCommunityRepository.save(IndexedCommunityMapper.mapIndexedCommunity(community, pdfText));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class IndexedCommunityServiceImpl implements IndexedCommunityService {
     }
 
     private void validateAndAddRangeFields(Map<String, String> params, List<SearchQuery> queries) {
-        if (params.containsKey("avgKarmaFrom") || params.containsKey("avgKarmaTo")){
+        if (params.containsKey("avgKarmaFrom") || params.containsKey("avgKarmaTo")) {
             Integer karmaFrom = 0;
             Integer karmaTo = RANGE_TO_MAX;
             if(params.containsKey("avgKarmaFrom")){

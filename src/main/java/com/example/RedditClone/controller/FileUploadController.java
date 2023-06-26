@@ -1,8 +1,11 @@
 package com.example.RedditClone.controller;
 
+import com.example.RedditClone.lucene.handlers.PDFHandler;
+import com.example.RedditClone.model.dto.pdf.PDFResponseDTO;
 import com.example.RedditClone.service.FileUploadService;
 import com.example.RedditClone.service.LogService;
 import com.example.RedditClone.model.enumeration.MessageType;
+import com.example.RedditClone.service.PDFService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/upload")
@@ -21,10 +25,14 @@ public class FileUploadController {
 
     private final LogService logService;
     private final FileUploadService fileUploadService;
+    private final PDFService pdfService;
+    private final PDFHandler pdfHandler;
 
-    public FileUploadController(FileUploadService fileUploadService, LogService logService) {
+    public FileUploadController(FileUploadService fileUploadService, LogService logService, PDFService pdfService) {
         this.fileUploadService = fileUploadService;
         this.logService = logService;
+        this.pdfService = pdfService;
+        this.pdfHandler = new PDFHandler();
     }
 
     @PostMapping("/posts/image")
@@ -69,6 +77,21 @@ public class FileUploadController {
         } catch (NoSuchFileException | AccessDeniedException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/pdf")
+    public ResponseEntity<PDFResponseDTO> savePDF(@RequestParam MultipartFile pdf) throws IOException {
+        String type = pdf.getOriginalFilename()
+                .substring(pdf.getOriginalFilename().lastIndexOf(".")
+                        ,pdf.getOriginalFilename().length());
+        UUID uuid = UUID.randomUUID();
+        String filename = uuid+type;
+        if (pdfService.savePDF(pdf, filename)) {
+            String pdfText = pdfHandler.getContent(pdf).toString();
+            PDFResponseDTO pdfResponse = new PDFResponseDTO(filename, pdfText);
+            return new ResponseEntity<>(pdfResponse, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.RedditClone.service.impl;
 
+import com.example.RedditClone.lucene.handlers.PDFHandler;
 import com.example.RedditClone.model.dto.community.request.CommunityCreateRequestDTO;
 import com.example.RedditClone.model.dto.community.request.CommunityEditRequestDTO;
 import com.example.RedditClone.model.dto.community.request.CommunitySuspendRequestDTO;
@@ -10,36 +11,37 @@ import com.example.RedditClone.repository.jpa.ModeratorRepository;
 import com.example.RedditClone.repository.jpa.RuleRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.enumeration.MessageType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class CommunityServiceImpl implements CommunityService {
 
     private final LogService logService;
-    private final ModeratorRepository moderatorRepository;
-
-    private final ModeratorService moderatorService;
     private final RuleRepository ruleRepository;
     private final FlairRepository flairRepository;
     private final UserService userService;
-
     private final CommunityRepository communityRepository;
+    private final IndexedCommunityService indexedCommunityService;
+    private final PDFService pdfService;
 
-    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, ModeratorService moderatorService, ModeratorRepository moderatorRepository, LogService logService) {
+    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, LogService logService, IndexedCommunityService indexedCommunityService, PDFService pdfService) {
         this.communityRepository = communityRepository;
         this.userService = userService;
         this.flairRepository = flairRepository;
         this.ruleRepository = ruleRepository;
-        this.moderatorService = moderatorService;
-        this.moderatorRepository = moderatorRepository;
         this.logService = logService;
+        this.indexedCommunityService = indexedCommunityService;
+        this.pdfService = pdfService;
     }
 
     @Override
@@ -122,6 +124,15 @@ public class CommunityServiceImpl implements CommunityService {
 
         newCommunity.setRules(rules);
         finalNewCommunity.setRules(rules);
+
+        if (communityCreateRequestDTO.getPdf() == null) {
+            indexedCommunityService.indexCommunity(newCommunity, "");
+        } else {
+            newCommunity.setPdfFileName(communityCreateRequestDTO.getPdf().getFilename());
+            newCommunity = communityRepository.save(newCommunity);
+            indexedCommunityService.indexCommunity(newCommunity, communityCreateRequestDTO.getPdf().getPdfText());
+            System.out.println(communityCreateRequestDTO.getPdf());
+        }
 
         return newCommunity;
     }

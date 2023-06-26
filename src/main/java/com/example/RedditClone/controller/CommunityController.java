@@ -100,7 +100,7 @@ public class CommunityController {
 
         return new ResponseEntity<>(communityDTO, HttpStatus.OK);
     }
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<CommunityCreateRequestDTO> createCommunity(@RequestBody @Validated CommunityCreateRequestDTO newCommunity,
                                                                      Authentication authentication) {
 
@@ -112,8 +112,6 @@ public class CommunityController {
             logService.message("Community controller, createCommunity() method, failed to create a community.", MessageType.INFO);
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-
-        indexedCommunityService.indexCommunity(createdCommunity);
 
         CommunityCreateRequestDTO communityDTO = modelMapper.map(createdCommunity, CommunityCreateRequestDTO.class);
         communityDTO.setRules(new HashSet<>(ruleService.findAllByCommunity(createdCommunity)));

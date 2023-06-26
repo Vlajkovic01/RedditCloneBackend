@@ -10,13 +10,15 @@ import java.util.List;
 
 public class IndexedCommunityMapper {
 
-    public static IndexedCommunity mapIndexedCommunity(Community community){
+    public static IndexedCommunity mapIndexedCommunity(Community community, String pdfText){
         return IndexedCommunity.builder()
                 .id(community.getId())
                 .name(community.getName())
                 .description(community.getDescription())
                 .rules(community.getRules().stream().map(Rule::getDescription).toList())
                 .numOfPosts(community.getPosts().size())
+                .avgKarma(0)
+                .pdfText(pdfText)
                 .build();
     }
 

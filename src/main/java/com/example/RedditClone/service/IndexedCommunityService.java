@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface IndexedCommunityService {
 
-    void indexCommunity(Community community);
+    void indexCommunity(Community community, String pdfText);
 
     List<IndexedCommunityResponseDTO> search (Map<String ,String> params) throws IllegalArgumentException;
 }
