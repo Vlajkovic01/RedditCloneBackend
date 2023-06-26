@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SimpleQueryEs {
+public class SearchQuery {
     private String field;
     private String value;
+    private SearchType searchType;
+    private BoolOperator operator;
 }

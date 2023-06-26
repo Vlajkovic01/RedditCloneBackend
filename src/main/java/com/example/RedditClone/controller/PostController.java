@@ -15,11 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/posts")
 public class PostController {
+
+    private static final int MAX_SEARCH_FIELDS = 5 ;
     private final IndexedPostService indexedPostService;
     private final LogService logService;
     private final ExtendedModelMapper modelMapper;
@@ -81,36 +84,17 @@ public class PostController {
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<IndexedPostResponseDTO>> searchPosts(@RequestBody IndexedPostSearchDTO searchDTO) {
+    @GetMapping("/search/{communityId}")
+    public ResponseEntity<List<IndexedPostResponseDTO>> search(@RequestParam Map<String,String> searchParams, @PathVariable("communityId") Integer communityId) {
+        if (searchParams.isEmpty() || searchParams.size() > MAX_SEARCH_FIELDS){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try{
+            List<IndexedPostResponseDTO> posts = indexedPostService.search(searchParams,communityId);
+            return new ResponseEntity<>(posts,HttpStatus.OK);
+        } catch (IllegalArgumentException e){
+            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
-        logService.message("Post controller, searchPosts() method called.", MessageType.INFO);
-
-        List<IndexedPostResponseDTO> postsDTO = modelMapper.mapAll(indexedPostService.findAllByTitleText(searchDTO),
-                IndexedPostResponseDTO.class);
-
-        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
-    }
-
-    @GetMapping("/title")
-    public ResponseEntity<List<IndexedPostResponseDTO>> searchPostsByTitle(@RequestBody IndexedPostSearchDTO searchDTO) {
-
-        logService.message("Post controller, searchPostByTitle() method called.", MessageType.INFO);
-
-        List<IndexedPostResponseDTO> postsDTO = modelMapper.mapAll(indexedPostService.findAllByTitle(searchDTO.getTitle()),
-                IndexedPostResponseDTO.class);
-
-        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
-    }
-
-    @GetMapping("/text")
-    public ResponseEntity<List<IndexedPostResponseDTO>> searchPostsByText(@RequestBody IndexedPostSearchDTO searchDTO) {
-
-        logService.message("Post controller, searchPostByText() method called.", MessageType.INFO);
-
-        List<IndexedPostResponseDTO> postsDTO = modelMapper.mapAll(indexedPostService.findAllByText(searchDTO.getText()),
-                IndexedPostResponseDTO.class);
-
-        return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }
 }

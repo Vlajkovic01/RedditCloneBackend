@@ -32,12 +32,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/communities")
 public class CommunityController {
-
+    private static final int MAX_SEARCH_FIELDS = 6;
     private final IndexedCommunityService indexedCommunityService;
     private final IndexedPostService indexedPostService;
     private final ModeratorService moderatorService;
@@ -323,25 +324,16 @@ public class CommunityController {
         return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @GetMapping("/name")
-    public ResponseEntity<List<IndexedCommunityResponseDTO>> searchCommunityByName(@RequestBody IndexedCommunitySearchDTO searchDTO) {
-
-        logService.message("Community controller, searchCommunityByName() method called.", MessageType.INFO);
-
-        List<IndexedCommunityResponseDTO> communitiesDTO = modelMapper.mapAll(indexedCommunityService.findAllByName(searchDTO.getName()),
-                IndexedCommunityResponseDTO.class);
-
-        return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
-    }
-
-    @GetMapping("/description")
-    public ResponseEntity<List<IndexedCommunityResponseDTO>> searchCommunityByDescription(@RequestBody IndexedCommunitySearchDTO searchDTO) {
-
-        logService.message("Community controller, searchCommunityByDescription() method called.", MessageType.INFO);
-
-        List<IndexedCommunityResponseDTO> communitiesDTO = modelMapper.mapAll(indexedCommunityService.findAllByDescription(searchDTO.getDescription()),
-                IndexedCommunityResponseDTO.class);
-
-        return new ResponseEntity<>(communitiesDTO, HttpStatus.OK);
+    @GetMapping("/search")
+    public ResponseEntity<List<IndexedCommunityResponseDTO>> search(@RequestParam Map<String,String> searchParams) {
+        if (searchParams.isEmpty() || searchParams.size() > MAX_SEARCH_FIELDS){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try{
+            List<IndexedCommunityResponseDTO> communities = indexedCommunityService.search(searchParams);
+            return new ResponseEntity<>(communities,HttpStatus.OK);
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

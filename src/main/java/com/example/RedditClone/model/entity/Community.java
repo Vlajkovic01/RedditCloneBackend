@@ -32,6 +32,7 @@ public class Community {
     private String description;
     private LocalDate creationDate;
     private Boolean isSuspended;
+    private String pdfFileName;
 
     @Column()
     private String suspendedReason;

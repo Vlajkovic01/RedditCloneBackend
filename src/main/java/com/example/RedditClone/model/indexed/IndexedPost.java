@@ -24,10 +24,16 @@ public class IndexedPost {
     private Integer id;
 
     @Field(type = FieldType.Text)
+    private Integer communityId;
+
+    @Field(type = FieldType.Text)
     private String title;
 
     @Field(type = FieldType.Text)
     private String text;
+
+    @Field(type = FieldType.Text)
+    private String pdfText;
 
     @Field(type = FieldType.Text)
     private List<String> comments;

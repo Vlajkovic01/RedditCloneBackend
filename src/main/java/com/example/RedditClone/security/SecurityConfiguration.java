@@ -55,12 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
-        //Naglasavamo browser-u da ne cache-ira podatke koje dobije u header-ima
-        //detaljnije: https://www.baeldung.com/spring-security-cache-control-headers
         httpSecurity.headers().cacheControl().disable();
-        //Neophodno da ne bi proveravali autentifikaciju kod Preflight zahteva
         httpSecurity.cors();
-        //sledeca linija je neophodna iskljucivo zbog nacina na koji h2 konzola komunicira sa aplikacijom
         httpSecurity.headers().frameOptions().disable();
         httpSecurity.csrf().disable()
                 .sessionManagement()
@@ -71,17 +67,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/posts/new").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/posts/top").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/posts/hot").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/posts/title").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/posts/text").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/posts/search").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/posts/search/{id}").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/{id}").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users/password").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/communities/name").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/communities/description").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/communities/search").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}/posts/new").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/communities/{id}/posts/top").permitAll()

@@ -35,6 +35,7 @@ public class Post {
     private String text;
     private LocalDate creationDate;
     private String imagePath;
+    private String pdfFileName;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)

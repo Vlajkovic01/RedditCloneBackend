@@ -32,4 +32,10 @@ public class IndexedCommunity {
 
     @Field(type = FieldType.Integer)
     private Integer numOfPosts;
+
+    @Field(type = FieldType.Integer)
+    private Integer avgKarma;
+
+    @Field(type = FieldType.Text)
+    private String pdfText;
 }
