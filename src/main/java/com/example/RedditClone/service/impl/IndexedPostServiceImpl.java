@@ -45,7 +45,7 @@ public class IndexedPostServiceImpl implements IndexedPostService {
     }
 
     @Override
-    public List<IndexedPostResponseDTO> search(Map<String, String> params, Integer communityId) throws IllegalArgumentException{
+    public List<IndexedPostResponseDTO> search(Map<String, String> params) throws IllegalArgumentException{
         List< SearchQuery> queries = new ArrayList<>();
         if (!params.containsKey("logic") && params.size() > 2){
             throw  new IllegalArgumentException("You must provide logic for multiple search fields");
@@ -57,7 +57,7 @@ public class IndexedPostServiceImpl implements IndexedPostService {
                 queries.add(new SearchQuery(entry.getKey(),entry.getValue(), QueryBuilderCustom.generateType(entry.getValue(),Boolean.parseBoolean(params.get("fuzzy"))),QueryBuilderCustom.genereateBoolOperator(params.get("logic"))));
             }
         }
-        SearchHits<IndexedPost> posts = searchQuery(QueryBuilderCustom.buildQuery(queries),communityId);
+        SearchHits<IndexedPost> posts = searchQuery(QueryBuilderCustom.buildQuery(queries));
         List<IndexedPostResponseDTO> returnList = new ArrayList<>();
 
         for (SearchHit<IndexedPost> hit : posts.getSearchHits()){
@@ -108,14 +108,14 @@ public class IndexedPostServiceImpl implements IndexedPostService {
     }
 
 
-    private SearchHits<IndexedPost> searchQuery(QueryBuilder queryBuilder,Integer communityId){
+    private SearchHits<IndexedPost> searchQuery(QueryBuilder queryBuilder){
         HighlightBuilder highlightBuilder = new HighlightBuilder()
                 .field("text")
                 .field("pdfText")
                 .preTags("<strong>")
                 .postTags("</strong>");
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.boolQuery().must(queryBuilder).must((QueryBuilders.matchQuery("communityId",communityId))))
+                .withQuery(queryBuilder)
                 .withHighlightBuilder(highlightBuilder)
                 .build();
         return elasticsearchRestTemplate.search(searchQuery, IndexedPost.class,  IndexCoordinates.of("posts"));

@@ -84,13 +84,13 @@ public class PostController {
         return new ResponseEntity<>(postsDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/search/{communityId}")
-    public ResponseEntity<List<IndexedPostResponseDTO>> search(@RequestParam Map<String,String> searchParams, @PathVariable("communityId") Integer communityId) {
+    @GetMapping("/search")
+    public ResponseEntity<List<IndexedPostResponseDTO>> search(@RequestParam Map<String,String> searchParams) {
         if (searchParams.isEmpty() || searchParams.size() > MAX_SEARCH_FIELDS){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try{
-            List<IndexedPostResponseDTO> posts = indexedPostService.search(searchParams,communityId);
+            List<IndexedPostResponseDTO> posts = indexedPostService.search(searchParams);
             return new ResponseEntity<>(posts,HttpStatus.OK);
         } catch (IllegalArgumentException e){
             return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
