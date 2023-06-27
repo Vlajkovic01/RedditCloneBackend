@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface IndexedPostRepository extends ElasticsearchRepository<IndexedPost, Integer> {
-
-    List<IndexedPost> findAllByTitle(String title);
-    List<IndexedPost> findAllByText(String text);
+    void deleteById(Integer id);
+    void deleteIndexedPostsByCommunityId(Integer communityId);
 }

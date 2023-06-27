@@ -9,7 +9,9 @@ import java.util.Map;
 public interface IndexedCommunityService {
 
     void indexCommunity(Community community, String pdfText);
-    void updateNumOfPostAndAvgKarma(Community community);
+    void updateNumOfPostAndAvgKarma(Community community, Integer numPosts);
     void updateAvgKarma(Community community);
     List<IndexedCommunityResponseDTO> search (Map<String ,String> params) throws IllegalArgumentException;
+
+    void deleteById(Integer id);
 }

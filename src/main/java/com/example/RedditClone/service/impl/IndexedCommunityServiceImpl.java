@@ -43,14 +43,15 @@ public class IndexedCommunityServiceImpl implements IndexedCommunityService {
 
     @Override
     public void indexCommunity(Community community, String pdfText) {
-        indexedCommunityRepository.save(IndexedCommunityMapper.mapIndexedCommunity(community, pdfText));
+        indexedCommunityRepository
+                .save(IndexedCommunityMapper.mapIndexedCommunity(community, calculateKarma(community), pdfText));
     }
 
     @Override
-    public void updateNumOfPostAndAvgKarma(Community community) {
+    public void updateNumOfPostAndAvgKarma(Community community, Integer numPosts) {
         Optional<IndexedCommunity> indexedCommunity = indexedCommunityRepository.findById(community.getId());
         if (indexedCommunity.isPresent()) {
-            indexedCommunity.get().setNumOfPosts(indexedCommunity.get().getNumOfPosts() + 1);
+            indexedCommunity.get().setNumOfPosts(indexedCommunity.get().getNumOfPosts() + numPosts);
             indexedCommunity.get().setAvgKarma(calculateKarma(community));
             indexedCommunityRepository.save(indexedCommunity.get());
         }
@@ -122,6 +123,11 @@ public class IndexedCommunityServiceImpl implements IndexedCommunityService {
             returnList.add(new IndexedCommunityResponseDTO(hit.getContent().getId(),hit.getContent().getName(),hit.getContent().getNumOfPosts(),hit.getContent().getAvgKarma(),highlightText.toString()));
         }
         return returnList;
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        indexedCommunityRepository.deleteById(id);
     }
 
     private void validateAndAddRangeFields(Map<String, String> params, List<SearchQuery> queries) {

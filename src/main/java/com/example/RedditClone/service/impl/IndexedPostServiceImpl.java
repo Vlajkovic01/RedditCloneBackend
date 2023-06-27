@@ -75,6 +75,16 @@ public class IndexedPostServiceImpl implements IndexedPostService {
         return returnList;
     }
 
+    @Override
+    public void deleteIndexedPostsByCommunityId(Integer communityId) {
+        indexedPostRepository.deleteIndexedPostsByCommunityId(communityId);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        indexedPostRepository.deleteById(id);
+    }
+
     private  void validateAndAddRangeFields(Map<String, String> params, List<SearchQuery> queries) {
         if (params.containsKey("karmaFrom") || params.containsKey("karmaTo")){
             Integer karmaFrom = 0;

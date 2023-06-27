@@ -32,16 +32,16 @@ public class CommunityServiceImpl implements CommunityService {
     private final UserService userService;
     private final CommunityRepository communityRepository;
     private final IndexedCommunityService indexedCommunityService;
-    private final PDFService pdfService;
+    private final IndexedPostService indexedPostService;
 
-    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, LogService logService, IndexedCommunityService indexedCommunityService, PDFService pdfService) {
+    public CommunityServiceImpl(CommunityRepository communityRepository, UserService userService, FlairRepository flairRepository, RuleRepository ruleRepository, LogService logService, IndexedCommunityService indexedCommunityService, IndexedPostService indexedPostService) {
         this.communityRepository = communityRepository;
         this.userService = userService;
         this.flairRepository = flairRepository;
         this.ruleRepository = ruleRepository;
         this.logService = logService;
         this.indexedCommunityService = indexedCommunityService;
-        this.pdfService = pdfService;
+        this.indexedPostService = indexedPostService;
     }
 
     @Override
@@ -166,7 +166,14 @@ public class CommunityServiceImpl implements CommunityService {
         }).collect(Collectors.toSet());
         community.setRules(rules);
 
-        community = communityRepository.save(community);
+        if (communityEditRequestDTO.getPdf() == null) {
+            community = communityRepository.save(community);
+            indexedCommunityService.indexCommunity(community, "");
+        } else {
+            community.setPdfFileName(communityEditRequestDTO.getPdf().getFilename());
+            community = communityRepository.save(community);
+            indexedCommunityService.indexCommunity(community, communityEditRequestDTO.getPdf().getPdfText());
+        }
         return community;
     }
 
@@ -190,6 +197,8 @@ public class CommunityServiceImpl implements CommunityService {
         community.setSuspendedReason(communitySuspendRequestDTO.getSuspendedReason());
 
         communityRepository.save(community);
+        indexedCommunityService.deleteById(community.getId());
+        indexedPostService.deleteIndexedPostsByCommunityId(community.getId());
     }
 
 }

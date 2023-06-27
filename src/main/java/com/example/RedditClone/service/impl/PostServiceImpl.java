@@ -148,7 +148,7 @@ public class PostServiceImpl implements PostService {
 
         community.getPosts().add(newPost);
         communityService.save(community);
-        indexedCommunityService.updateNumOfPostAndAvgKarma(community);
+        indexedCommunityService.updateNumOfPostAndAvgKarma(community, +1);
 
         newReaction = reactionRepository.save(newReaction);
         return newPost;
@@ -169,13 +169,26 @@ public class PostServiceImpl implements PostService {
             postForEdit.setFlair(flairService.findFlairByName(postEditRequestDTO.getFlair().getName()));
         }
 
-        postForEdit = postRepository.save(postForEdit);
+        if (postEditRequestDTO.getPdf() == null) {
+            postForEdit = postRepository.save(postForEdit);
+            indexedPostService.indexPost(postForEdit, "");
+        } else {
+            postForEdit.setPdfFileName(postEditRequestDTO.getPdf().getFilename());
+            postForEdit = postRepository.save(postForEdit);
+            indexedPostService.indexPost(postForEdit, postEditRequestDTO.getPdf().getPdfText());
+        }
         return postForEdit;
     }
 
     @Override
     public void deletePost(Integer idPost) {
         logService.message("Post service, deletePost() method called.", MessageType.INFO);
+
+        Integer communityId = postRepository.findPostById(idPost).getCommunity().getId();
         postRepository.deletePost(idPost);
+
+        indexedPostService.deleteById(idPost);
+        indexedCommunityService.
+                updateNumOfPostAndAvgKarma(communityService.findCommunityById(communityId), -1);
     }
 }

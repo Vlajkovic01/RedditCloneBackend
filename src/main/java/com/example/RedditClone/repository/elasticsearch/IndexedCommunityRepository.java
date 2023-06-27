@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface IndexedCommunityRepository extends ElasticsearchRepository<IndexedCommunity, Integer> {
     Optional<IndexedCommunity> findById(Integer id);
+    void deleteById(Integer id);
 }

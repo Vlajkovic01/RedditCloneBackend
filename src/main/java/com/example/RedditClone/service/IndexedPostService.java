@@ -12,5 +12,7 @@ import java.util.Map;
 public interface IndexedPostService {
     void indexPost(Post post, String pdfText);
     List<IndexedPostResponseDTO> search(Map<String, String> params, Integer communityId) throws IllegalArgumentException;
+    void deleteIndexedPostsByCommunityId(Integer communityId);
+    void deleteById(Integer id);
 
 }

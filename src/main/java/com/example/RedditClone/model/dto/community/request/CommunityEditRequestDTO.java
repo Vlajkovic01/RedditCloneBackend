@@ -1,6 +1,7 @@
 package com.example.RedditClone.model.dto.community.request;
 
 import com.example.RedditClone.model.dto.flair.response.FlairGetAllResponseDTO;
+import com.example.RedditClone.model.dto.pdf.PDFResponseDTO;
 import com.example.RedditClone.model.dto.rule.response.RuleGetByCommunityResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,5 @@ public class CommunityEditRequestDTO {
     private Set<FlairGetAllResponseDTO> flairs = new HashSet<>();
     @NotEmpty(message = "Rules is mandatory")
     private Set<RuleGetByCommunityResponseDTO> rules = new HashSet<>();
+    private PDFResponseDTO pdf;
 }
