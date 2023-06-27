@@ -69,7 +69,8 @@ public class IndexedPostServiceImpl implements IndexedPostService {
                     highlightText.append(s);
                 }
             }
-            returnList.add(new IndexedPostResponseDTO(hit.getContent().getId(),hit.getContent().getTitle(),hit.getContent().getText(),hit.getContent().getFlair(),highlightText.toString()));
+            returnList.add(new IndexedPostResponseDTO(hit.getContent().getId(),hit.getContent().getCommunityId(),
+                    hit.getContent().getTitle(),hit.getContent().getText(),hit.getContent().getFlair(),highlightText.toString()));
         }
         return returnList;
     }

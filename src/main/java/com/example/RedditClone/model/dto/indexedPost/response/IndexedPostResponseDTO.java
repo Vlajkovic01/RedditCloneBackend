@@ -12,6 +12,7 @@ import lombok.Setter;
 public class IndexedPostResponseDTO {
 
     private Integer id;
+    private Integer communityId;
     private String title;
     private String text;
     private String flair;
