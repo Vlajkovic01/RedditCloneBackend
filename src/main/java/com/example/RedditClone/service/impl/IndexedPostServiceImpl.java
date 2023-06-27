@@ -29,7 +29,6 @@ import java.util.Map;
 
 @Service
 public class IndexedPostServiceImpl implements IndexedPostService {
-
     public static final int RANGE_TO_MAX = 100000000;
     private final IndexedPostRepository indexedPostRepository;
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
@@ -83,6 +82,11 @@ public class IndexedPostServiceImpl implements IndexedPostService {
     @Override
     public void deleteById(Integer id) {
         indexedPostRepository.deleteById(id);
+    }
+
+    @Override
+    public IndexedPost findById(Integer id) {
+        return indexedPostRepository.findById(id).orElse(null);
     }
 
     private  void validateAndAddRangeFields(Map<String, String> params, List<SearchQuery> queries) {

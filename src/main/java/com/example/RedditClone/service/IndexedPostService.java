@@ -14,5 +14,6 @@ public interface IndexedPostService {
     List<IndexedPostResponseDTO> search(Map<String, String> params, Integer communityId) throws IllegalArgumentException;
     void deleteIndexedPostsByCommunityId(Integer communityId);
     void deleteById(Integer id);
+    IndexedPost findById(Integer id);
 
 }

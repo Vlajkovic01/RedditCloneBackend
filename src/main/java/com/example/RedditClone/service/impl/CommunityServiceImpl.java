@@ -5,6 +5,7 @@ import com.example.RedditClone.model.dto.community.request.CommunityCreateReques
 import com.example.RedditClone.model.dto.community.request.CommunityEditRequestDTO;
 import com.example.RedditClone.model.dto.community.request.CommunitySuspendRequestDTO;
 import com.example.RedditClone.model.entity.*;
+import com.example.RedditClone.model.indexed.IndexedCommunity;
 import com.example.RedditClone.repository.jpa.CommunityRepository;
 import com.example.RedditClone.repository.jpa.FlairRepository;
 import com.example.RedditClone.repository.jpa.ModeratorRepository;
@@ -168,7 +169,8 @@ public class CommunityServiceImpl implements CommunityService {
 
         if (communityEditRequestDTO.getPdf() == null) {
             community = communityRepository.save(community);
-            indexedCommunityService.indexCommunity(community, "");
+            IndexedCommunity indexedCommunity = indexedCommunityService.findById(community.getId());
+            indexedCommunityService.indexCommunity(community, indexedCommunity.getPdfText());
         } else {
             community.setPdfFileName(communityEditRequestDTO.getPdf().getFilename());
             community = communityRepository.save(community);

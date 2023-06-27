@@ -5,6 +5,7 @@ import com.example.RedditClone.model.dto.post.request.PostCreateRequestDTO;
 import com.example.RedditClone.model.dto.post.request.PostEditRequestDTO;
 import com.example.RedditClone.model.entity.*;
 import com.example.RedditClone.model.enumeration.ReactionType;
+import com.example.RedditClone.model.indexed.IndexedPost;
 import com.example.RedditClone.repository.jpa.PostRepository;
 import com.example.RedditClone.repository.jpa.ReactionRepository;
 import com.example.RedditClone.service.*;
@@ -171,7 +172,8 @@ public class PostServiceImpl implements PostService {
 
         if (postEditRequestDTO.getPdf() == null) {
             postForEdit = postRepository.save(postForEdit);
-            indexedPostService.indexPost(postForEdit, "");
+            IndexedPost indexedPost = indexedPostService.findById(postForEdit.getId());
+            indexedPostService.indexPost(postForEdit, indexedPost.getPdfText());
         } else {
             postForEdit.setPdfFileName(postEditRequestDTO.getPdf().getFilename());
             postForEdit = postRepository.save(postForEdit);

@@ -130,6 +130,12 @@ public class IndexedCommunityServiceImpl implements IndexedCommunityService {
         indexedCommunityRepository.deleteById(id);
     }
 
+    @Override
+    public IndexedCommunity findById(Integer id) {
+        Optional<IndexedCommunity> indexedCommunity = indexedCommunityRepository.findById(id);
+        return indexedCommunity.orElse(null);
+    }
+
     private void validateAndAddRangeFields(Map<String, String> params, List<SearchQuery> queries) {
         if (params.containsKey("avgKarmaFrom") || params.containsKey("avgKarmaTo")) {
             Integer karmaFrom = 0;
