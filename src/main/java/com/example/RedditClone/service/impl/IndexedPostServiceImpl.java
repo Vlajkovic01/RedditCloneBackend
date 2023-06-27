@@ -41,8 +41,8 @@ public class IndexedPostServiceImpl implements IndexedPostService {
 
 
     @Override
-    public void indexPost(Post post) {
-        indexedPostRepository.save(IndexedPostMapper.mapIndexedPost(post));
+    public void indexPost(Post post, String pdfText) {
+        indexedPostRepository.save(IndexedPostMapper.mapIndexedPost(post, pdfText));
     }
 
     @Override

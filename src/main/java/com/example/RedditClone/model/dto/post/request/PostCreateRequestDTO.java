@@ -1,6 +1,7 @@
 package com.example.RedditClone.model.dto.post.request;
 
 import com.example.RedditClone.model.dto.flair.response.FlairGetAllResponseDTO;
+import com.example.RedditClone.model.dto.pdf.PDFResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,4 +22,5 @@ public class PostCreateRequestDTO {
     private String text;
     private String imagePath;
     private FlairGetAllResponseDTO flair;
+    private PDFResponseDTO pdf;
 }

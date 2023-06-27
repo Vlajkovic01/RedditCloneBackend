@@ -131,7 +131,6 @@ public class CommunityServiceImpl implements CommunityService {
             newCommunity.setPdfFileName(communityCreateRequestDTO.getPdf().getFilename());
             newCommunity = communityRepository.save(newCommunity);
             indexedCommunityService.indexCommunity(newCommunity, communityCreateRequestDTO.getPdf().getPdfText());
-            System.out.println(communityCreateRequestDTO.getPdf());
         }
 
         return newCommunity;

@@ -9,6 +9,7 @@ import com.example.RedditClone.repository.jpa.ReactionRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.mapper.ExtendedModelMapper;
 import com.example.RedditClone.model.enumeration.MessageType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,10 @@ public class ReactionServiceImpl implements ReactionService {
     private final PostService postService;
     private final UserService userService;
     private final ExtendedModelMapper modelMapper;
-
     private final ReactionRepository reactionRepository;
+    private final IndexedCommunityService indexedCommunityService;
 
-    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService, CommentService commentService, LogService logService, BannedService bannedService) {
+    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService, CommentService commentService, LogService logService, BannedService bannedService, IndexedCommunityService indexedCommunityService) {
         this.reactionRepository = reactionRepository;
         this.modelMapper = modelMapper;
         this.userService = userService;
@@ -35,6 +36,7 @@ public class ReactionServiceImpl implements ReactionService {
         this.commentService = commentService;
         this.logService = logService;
         this.bannedService = bannedService;
+        this.indexedCommunityService = indexedCommunityService;
     }
 
     @Override
@@ -104,6 +106,10 @@ public class ReactionServiceImpl implements ReactionService {
         }
 
         reactionRepository.save(newReaction);
+
+        if (newReaction.getPost() != null) {
+            indexedCommunityService.updateAvgKarma(newReaction.getPost().getCommunity());
+        }
 
         return newReaction;
     }

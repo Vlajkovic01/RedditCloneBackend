@@ -154,10 +154,6 @@ public class CommunityController {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        indexedPostService.indexPost(createdPost);
-
-        community.getPosts().add(createdPost);
-        communityService.save(community);
         PostGetAllResponseDTO postDTO = modelMapper.map(createdPost, PostGetAllResponseDTO.class);
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }

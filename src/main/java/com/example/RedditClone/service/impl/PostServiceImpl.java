@@ -1,5 +1,6 @@
 package com.example.RedditClone.service.impl;
 
+import com.example.RedditClone.model.dto.pdf.PDFResponseDTO;
 import com.example.RedditClone.model.dto.post.request.PostCreateRequestDTO;
 import com.example.RedditClone.model.dto.post.request.PostEditRequestDTO;
 import com.example.RedditClone.model.entity.*;
@@ -8,6 +9,7 @@ import com.example.RedditClone.repository.jpa.PostRepository;
 import com.example.RedditClone.repository.jpa.ReactionRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.enumeration.MessageType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,21 +20,26 @@ import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
+    private final CommunityService communityService;
+    private final IndexedPostService indexedPostService;
+    private final IndexedCommunityService indexedCommunityService;
     private final BannedService bannedService;
     private final LogService logService;
     private final ReactionRepository reactionRepository;
     private final FlairService flairService;
     private final UserService userService;
-
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService, ReactionRepository reactionRepository, LogService logService, BannedService bannedService) {
+    public PostServiceImpl(PostRepository postRepository, UserService userService, FlairService flairService, ReactionRepository reactionRepository, LogService logService, BannedService bannedService, IndexedPostService indexedPostService, CommunityService communityService, IndexedCommunityService indexedCommunityService) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.flairService = flairService;
         this.reactionRepository = reactionRepository;
         this.logService = logService;
         this.bannedService = bannedService;
+        this.indexedPostService = indexedPostService;
+        this.communityService = communityService;
+        this.indexedCommunityService = indexedCommunityService;
     }
 
     @Override
@@ -130,8 +137,19 @@ public class PostServiceImpl implements PostService {
         newReaction.setUser(currentLoggedUser);
         newReaction.setPost(newPost);
 
+        if (postCreateRequestDTO.getPdf() == null) {
+            newPost = postRepository.save(newPost);
+            indexedPostService.indexPost(newPost, "");
+        } else {
+            newPost.setPdfFileName(postCreateRequestDTO.getPdf().getFilename());
+            newPost = postRepository.save(newPost);
+            indexedPostService.indexPost(newPost, postCreateRequestDTO.getPdf().getPdfText());
+        }
 
-        newPost = postRepository.save(newPost);
+        community.getPosts().add(newPost);
+        communityService.save(community);
+        indexedCommunityService.updateNumOfPostAndAvgKarma(community);
+
         newReaction = reactionRepository.save(newReaction);
         return newPost;
     }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IndexedPostService {
-    void indexPost(Post post);
+    void indexPost(Post post, String pdfText);
     List<IndexedPostResponseDTO> search(Map<String, String> params, Integer communityId) throws IllegalArgumentException;
 
 }

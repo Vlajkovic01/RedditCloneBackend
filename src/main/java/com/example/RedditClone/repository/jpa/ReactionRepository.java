@@ -23,7 +23,6 @@ public interface ReactionRepository extends JpaRepository<Reaction, Integer> {
     void deleteReaction(Integer reactionId);
 
     List<Reaction> findAllByPostId(Integer id);
-
     Reaction findReactionByPostAndUser(Post post, User user);
     Reaction findReactionByCommentAndUser(Comment comment, User user);
     Reaction findReactionById(Integer reactionId);

@@ -11,11 +11,13 @@ import java.util.List;
 
 public class IndexedPostMapper {
 
-    public static IndexedPost mapIndexedPost(Post post){
+    public static IndexedPost mapIndexedPost(Post post, String pdfText){
         return IndexedPost.builder()
                 .id(post.getId())
+                .communityId(post.getCommunity().getId())
                 .title(post.getTitle())
                 .text(post.getText())
+                .pdfText(pdfText)
                 .flair(post.getFlair().getName())
                 .comments(post.getComments().stream().map(Comment::getText).toList())
                 .karma(1)

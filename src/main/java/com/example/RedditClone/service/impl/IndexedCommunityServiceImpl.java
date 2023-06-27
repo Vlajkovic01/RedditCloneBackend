@@ -4,16 +4,17 @@ import com.example.RedditClone.lucene.search.BoolOperator;
 import com.example.RedditClone.lucene.search.QueryBuilderCustom;
 import com.example.RedditClone.lucene.search.SearchQuery;
 import com.example.RedditClone.lucene.search.SearchType;
-import com.example.RedditClone.model.dto.community.request.CommunityCreateRequestDTO;
 import com.example.RedditClone.model.dto.indexedCommunity.response.IndexedCommunityResponseDTO;
 import com.example.RedditClone.model.entity.Community;
+import com.example.RedditClone.model.entity.Post;
+import com.example.RedditClone.model.entity.Reaction;
 import com.example.RedditClone.model.indexed.IndexedCommunity;
 import com.example.RedditClone.model.mapper.IndexedCommunityMapper;
 import com.example.RedditClone.repository.elasticsearch.IndexedCommunityRepository;
+import com.example.RedditClone.repository.jpa.ReactionRepository;
 import com.example.RedditClone.service.IndexedCommunityService;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -25,21 +26,70 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class IndexedCommunityServiceImpl implements IndexedCommunityService {
     public static final int RANGE_TO_MAX = 100000000;
     private final IndexedCommunityRepository indexedCommunityRepository;
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
+    private final ReactionRepository reactionRepository;
 
-    public IndexedCommunityServiceImpl(IndexedCommunityRepository indexedCommunityRepository, ElasticsearchRestTemplate elasticsearchRestTemplate) {
+    public IndexedCommunityServiceImpl(IndexedCommunityRepository indexedCommunityRepository, ElasticsearchRestTemplate elasticsearchRestTemplate, ReactionRepository reactionRepository) {
         this.indexedCommunityRepository = indexedCommunityRepository;
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;
+        this.reactionRepository = reactionRepository;
     }
 
     @Override
     public void indexCommunity(Community community, String pdfText) {
         indexedCommunityRepository.save(IndexedCommunityMapper.mapIndexedCommunity(community, pdfText));
+    }
+
+    @Override
+    public void updateNumOfPostAndAvgKarma(Community community) {
+        Optional<IndexedCommunity> indexedCommunity = indexedCommunityRepository.findById(community.getId());
+        if (indexedCommunity.isPresent()) {
+            indexedCommunity.get().setNumOfPosts(indexedCommunity.get().getNumOfPosts() + 1);
+            indexedCommunity.get().setAvgKarma(calculateKarma(community));
+            indexedCommunityRepository.save(indexedCommunity.get());
+        }
+    }
+
+    @Override
+    public void updateAvgKarma(Community community) {
+        Optional<IndexedCommunity> indexedCommunity = indexedCommunityRepository.findById(community.getId());
+        if (indexedCommunity.isPresent()) {
+            indexedCommunity.get().setAvgKarma(calculateKarma(community));
+            indexedCommunityRepository.save(indexedCommunity.get());
+        }
+    }
+
+    private Integer calculateKarma(Community community){
+        Integer retVal = 0;
+        if (community.getPosts().isEmpty()){
+            return retVal;
+        }
+        for (Post p: community.getPosts()){
+            retVal += getPostKarma(p.getId());
+        }
+        return Math.round((float) retVal /community.getPosts().size());
+    }
+
+    private Integer getPostKarma(Integer postId) {
+        List<Reaction> reactions = reactionRepository.findAllByPostId(postId);
+        Integer retVal = 0;
+        for (Reaction r: reactions) {
+            switch (r.getType()){
+                case UPVOTE:
+                    retVal = retVal + 1;
+                    break;
+                case DOWNVOTE:
+                    retVal = retVal - 1;
+                    break;
+            }
+        }
+        return retVal;
     }
 
     @Override
