@@ -5,6 +5,7 @@ import com.example.RedditClone.model.dto.reaction.response.ReactionForPostAndCom
 import com.example.RedditClone.model.entity.Post;
 import com.example.RedditClone.model.entity.Reaction;
 import com.example.RedditClone.model.entity.User;
+import com.example.RedditClone.model.enumeration.ReactionType;
 import com.example.RedditClone.repository.jpa.ReactionRepository;
 import com.example.RedditClone.service.*;
 import com.example.RedditClone.model.mapper.ExtendedModelMapper;
@@ -27,8 +28,9 @@ public class ReactionServiceImpl implements ReactionService {
     private final ExtendedModelMapper modelMapper;
     private final ReactionRepository reactionRepository;
     private final IndexedCommunityService indexedCommunityService;
+    private final IndexedPostService indexedPostService;
 
-    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService, CommentService commentService, LogService logService, BannedService bannedService, IndexedCommunityService indexedCommunityService) {
+    public ReactionServiceImpl(ReactionRepository reactionRepository, ExtendedModelMapper modelMapper, UserService userService, PostService postService, CommentService commentService, LogService logService, BannedService bannedService, IndexedCommunityService indexedCommunityService, IndexedPostService indexedPostService) {
         this.reactionRepository = reactionRepository;
         this.modelMapper = modelMapper;
         this.userService = userService;
@@ -37,6 +39,7 @@ public class ReactionServiceImpl implements ReactionService {
         this.logService = logService;
         this.bannedService = bannedService;
         this.indexedCommunityService = indexedCommunityService;
+        this.indexedPostService = indexedPostService;
     }
 
     @Override
@@ -109,6 +112,7 @@ public class ReactionServiceImpl implements ReactionService {
 
         if (newReaction.getPost() != null) {
             indexedCommunityService.updateAvgKarma(newReaction.getPost().getCommunity());
+            indexedPostService.updateKarma(newReaction.getPost(), ReactionType.UPVOTE);
         }
 
         return newReaction;
@@ -117,6 +121,10 @@ public class ReactionServiceImpl implements ReactionService {
     @Override
     public void delete(Reaction reaction) {
         reactionRepository.deleteReaction(reaction.getId());
+        if (reaction.getPost() != null) {
+            indexedCommunityService.updateAvgKarma(reaction.getPost().getCommunity());
+            indexedPostService.updateKarma(reaction.getPost(), ReactionType.DOWNVOTE);
+        }
     }
 
     @Override

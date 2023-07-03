@@ -7,6 +7,7 @@ import com.example.RedditClone.lucene.search.SearchType;
 import com.example.RedditClone.model.dto.indexedPost.request.IndexedPostSearchDTO;
 import com.example.RedditClone.model.dto.indexedPost.response.IndexedPostResponseDTO;
 import com.example.RedditClone.model.entity.Post;
+import com.example.RedditClone.model.enumeration.ReactionType;
 import com.example.RedditClone.model.indexed.IndexedPost;
 import com.example.RedditClone.model.mapper.IndexedPostMapper;
 import com.example.RedditClone.repository.elasticsearch.IndexedPostRepository;
@@ -83,6 +84,20 @@ public class IndexedPostServiceImpl implements IndexedPostService {
     @Override
     public void deleteById(Integer id) {
         indexedPostRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateKarma(Post post, ReactionType reactionType) {
+        IndexedPost indexedPost = findById(post.getId());
+        if (reactionType == ReactionType.UPVOTE) {
+            indexedPost.setKarma(indexedPost.getKarma() + 1);
+        }
+
+        if (reactionType == ReactionType.DOWNVOTE) {
+            indexedPost.setKarma(indexedPost.getKarma() - 1);
+        }
+
+        indexedPostRepository.save(indexedPost);
     }
 
     @Override

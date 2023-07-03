@@ -4,6 +4,7 @@ import com.example.RedditClone.model.dto.indexedPost.request.IndexedPostSearchDT
 import com.example.RedditClone.model.dto.indexedPost.response.IndexedPostResponseDTO;
 import com.example.RedditClone.model.dto.post.request.PostCreateRequestDTO;
 import com.example.RedditClone.model.entity.Post;
+import com.example.RedditClone.model.enumeration.ReactionType;
 import com.example.RedditClone.model.indexed.IndexedPost;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public interface IndexedPostService {
     List<IndexedPostResponseDTO> search(Map<String, String> params) throws IllegalArgumentException;
     void deleteIndexedPostsByCommunityId(Integer communityId);
     void deleteById(Integer id);
+    void updateKarma(Post post, ReactionType reactionType);
     IndexedPost findById(Integer id);
 
 }
