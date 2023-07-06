@@ -17,6 +17,7 @@ To have some initial test data go to `application.properties` and check these tw
 ```
     spring.jpa.hibernate.ddl-auto = create-drop
     spring.sql.init.mode=always
+    spring.jpa.defer-datasource-initialization=true
     
     //Demo passwords in this script all are 123456
 ```
