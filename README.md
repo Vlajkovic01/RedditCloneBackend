@@ -39,7 +39,7 @@ and you can install it by running the command (in the bin folder also):
 ``` 
 
 ## Features
-- Login/Register
+- Login/Register with JWT
 - Multiple user roles(User,Mod,Admin)
 - Create/Edit Community
 - Create post(txt + img + pdf) with flairs
